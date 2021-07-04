@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAA;EACP,OAAO,EAAC,IAAI;CACf",
+    "sources": [
+        "../../scss/pages/postPage.scss"
+    ],
+    "names": [],
+    "file": "postPage.css"
+}

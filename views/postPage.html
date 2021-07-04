@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="../static/css/postPage.css">
+    <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> -->
+    <script src="/tinymce/tinymce.min.js" ></script>
+    <title>Document</title>
+</head>
+<body class="bg-primary-light">
+    <header class="bg-primary">
+        <nav class="container">
+            <h1>
+                <!-- <img src="./圖片.jpg" alt="" width=50 height=50> -->
+            </h1>
+            <input type="text" placeholder="搜尋">
+            <ul class="header-nav-list">
+                <li>Sign in</li>
+                <li>Sign up</li>
+                <li>
+                    <a href="./postPage.html">新增貼文</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    
+   
+    <div class="postPage-main container">
+        <form action="" id="postForm">
+            <h2>編輯或發布新文章</h2>
+            <div class="inputGroup ">
+               <label for="title">文章標題 :&nbsp;</label>
+               <input type="text" id="title" required>
+            </div>
+            <div class="inputGroup ">
+                <label for="">上傳照片 :&nbsp;</label>
+                <input type="file" required>
+             </div>
+
+            <div class="inputGroup">
+                <label for="">文章內容 :&nbsp;</label>
+                <textarea id="editor" required>Hello, World!</textarea>
+             </div>
+             <input type="submit"></input>
+        </form>
+        
+    </div>
+
+    <footer class="bg-secondary">
+        <div class="container">
+            <b>Copyright © 2021 Ru 版權所有</b>
+        </div>
+    </footer>
+
+    
+</body>
+
+<script type="module" src="../static/js/postPage.js"></script>
+
+
+</html>

@@ -1,0 +1,67 @@
+<%- include('includes/head') -%>
+<title>文章列表</title>
+<link rel="stylesheet" href="../public/css/article.css">
+</head>
+
+<body class="bg-primary-light">
+<%- include('includes/header') -%>
+
+
+<div class="index-main container article">
+    <main>
+        <div class="article-title h1"></div>
+        <div class="author-info">
+            <a href="" class="author-link">
+                <img class="avatar" src="../public/images/圖片.jpg" alt="" width="50" height="50">
+                <h3  class="name">林威儒</h3>
+            </a>
+            <span class="date">2021/7/2</span>
+        </div>
+        
+        <!-- <img class="testImg" src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/32f8f1e6e5f4e85227e6729fb138e809" alt=""> -->
+        <div class="article-content"></div>
+
+        
+
+        <div class="article-features mb-3">
+            <i class="likeIcon bi bi-hand-thumbs-up"></i>12
+            <i class="bi bi-chat-dots"></i>2
+        </div>
+
+        <div class="messageBoard">
+            劉演版
+        </div>
+          
+
+    </main>
+    
+
+    <aside class="asideBar  px-3">
+        <h3>未完成</h3>
+        <!-- <ul class="aside-list">
+            <li class="mb-4">
+                <div class="d-flex">
+                    <img src="../public/images/圖片.jpg" alt="" with="120" height="120">
+                    <div>
+                        <h3 class="newPost-title mb-2">Mini GT civic</h3>
+                        <span  class="newPost-price mb-2">$1200</span>
+                    </div>
+                </div>
+                
+                <div class="newPost-summary">
+                    <h3 class="newPost-description mb-3">Lorem, ipsum dolor sit ameusantium ea? Pariatur accusantium sapiente sequi fugiat?</h3>  
+                </div>
+                
+            </li>
+        </ul> -->
+        
+    </aside>
+</div>
+
+<%- include('includes/footer') %>
+
+
+
+</body>
+<script type="module" src="../public/js/article.js"></script>
+</html>

@@ -1,0 +1,52 @@
+
+    <%- include('includes/head') -%>
+    <script src="/tinymce/tinymce.min.js" ></script>
+    <title>發布文章</title>
+</head>
+
+<body class="bg-primary-light">
+    <%- include('includes/header') -%>
+
+    
+    <div class="postPage-main container">
+        <form action="" id="postForm">
+            <h2 class="h1 my-4">發布新文章</h2>
+            <div class="inputGroup mb-4">
+               <label for="title">文章標題 :&nbsp;</label>
+               <input type="text" id="title" required>
+            </div>
+            <div class="inputGroup mb-4">
+                <label for="">上傳照片 :&nbsp;</label>
+                <input type="file" id="coverPhoto" name="coverphoto" accept="image/gif, image/jpeg, image/png" required>
+            </div>
+
+            <div class="inputGroup mb-4">
+                <label for="">入手價格 :&nbsp;</label>
+                <input type="number" id="price">
+            </div>
+
+            <div class="inputGroup mb-4">
+                <label for="">文章內容 :&nbsp;</label>
+                <textarea id="editor" required>Hello, World!</textarea>
+             </div>
+             <div class="inputGroup mb-4 text-right ">
+                <input type="submit" class="bg-obvious tex-white rounded px-3 py-2"></input>
+             </div>
+             
+            <input type="button" id="submitPostBtn">按鈕</input>
+        </form>
+        
+    </div>
+    
+   
+<%- include('includes/footer') %>
+
+    
+  
+</body>
+<script type="module" src="../public/js/postPage.js"></script>
+</html>
+
+
+
+    
