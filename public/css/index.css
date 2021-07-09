@@ -66,6 +66,7 @@ header nav {
 header nav .header-nav-list {
   display: flex;
   flex-direction: row-reverse;
+  align-items: center;
   color: white;
 }
 
@@ -79,6 +80,14 @@ header nav .header-nav-list li a {
 
 header nav .header-nav-list li:first-child {
   margin-right: 0;
+}
+
+header nav .header-nav-list .member-only, header nav .header-nav-list .visitor-only {
+  display: none;
+}
+
+header nav .header-nav-list .member-only.active, header nav .header-nav-list .visitor-only.active {
+  display: block;
 }
 
 footer {

@@ -18,6 +18,7 @@ router.post('/api/article', upload.single('coverPhoto'), async function(req, res
   let coverPhoto = req.file;
   let content    = req.body.content;
   let price      = req.body.price;
+  let summary      = req.body.summary;
 
   let getS3Url = await uploadToS3(coverPhoto)
   // result 格式
@@ -35,7 +36,8 @@ router.post('/api/article', upload.single('coverPhoto'), async function(req, res
                   title = '${title}',
                   content = '${content}',
                   coverPhoto = '${getS3Url.Location}',
-                  price = ${price ? price : null}`
+                  price = ${price ? price : null},
+                  summary = '${summary}'`
     conn.query(sql, function(err, result){
       if (err) throw err;
       console.log(result)
@@ -51,18 +53,35 @@ router.post('/api/article', upload.single('coverPhoto'), async function(req, res
 
 // 取得文章列表 最新-最舊
 router.get('/api/articles', function(req, res){
-    
+    let articles = [];
+    console.log('articles')
+    let tags = [];
     pool.getConnection(function(err, conn){
       conn.query(`SELECT * FROM articles
                   INNER JOIN users
                   ON articles.user_id = users.user_id
                   ORDER BY articles.create_time DESC;`, function(err, result){
         
-        // 分頁系統
-        res.send({
-          'ok':true,
-          'data':result,
+        // // 分頁系統
+        // res.send({
+        //   'ok':true,
+        //   'data':result,
+        // })
+        
+        articles = result;
+        // 取得
+        conn.query(`SELECT * FROM tags`, function(err, result){
+          tags = result;
+          
+          res.send({
+            'ok':true,
+            'data':{
+              'articles':articles,
+              'tags':tags
+            }
+          })
         })
+        
       })
       pool.releaseConnection(conn);
     })
@@ -149,7 +168,7 @@ router.post('/api/like', function(req, res){
 
 // 取得熱門文章
 router.get('/api/hotpost', function(req, res){
-  console.log('api/hotpost')
+  
   
   pool.getConnection( (err, conn) => {
     conn.query(`
@@ -176,7 +195,7 @@ router.get('/api/hotpost', function(req, res){
 
 // 取得最新貼文
 router.get('/api/newpost', function(req, res){
-  console.log('api/newpost')
+  
   
   pool.getConnection( (err, conn) => {
     conn.query(`

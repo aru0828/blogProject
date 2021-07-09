@@ -5,10 +5,10 @@ fetch('/api/articles', {
 })
 .then(response => response.json())
 .then(result => {
-    
+    console.log(result)
     model.mainListData = result;
     view.renderMainList();
-    console.log(result)
+    view.renderTags();
 }) 
 
 // 最新資料
@@ -17,7 +17,7 @@ fetch('/api/newpost')
 .then(result => {
     model.asideListData = result;
     view.renderAsideList();
-    console.log(result)
+    
 })
 
 
@@ -65,7 +65,7 @@ let view = {
     renderMainList:function(){
         let frag = document.createDocumentFragment();
         let mainList = document.querySelector('.main-list');
-        model.mainListData.data.forEach(article => {   
+        model.mainListData.data.articles.forEach(article => {   
             let li = document.createElement('li');
             let a  = document.createElement('a');
             let coverPhoto = document.createElement('img');
@@ -102,12 +102,13 @@ let view = {
     
             title.classList.add('title');
             title.textContent = article.title;
-
-            content.classList.add('content');
-            content.textContent = article.content;
-
+            price.textContent = `${article.price ? `$ ${article.price}` : '價格不公開'}`
             price.classList.add('price');
-            price.textContent = article.price;
+            content.classList.add('content');
+            content.textContent = article.summary;
+
+            
+        
 
             features.classList.add('features');
             thumbsIcon.classList.add('bi', 'bi-hand-thumbs-up')
@@ -121,8 +122,8 @@ let view = {
 
             summary.appendChild(author);
             summary.appendChild(title);
-            summary.appendChild(content);
             summary.appendChild(price);
+            summary.appendChild(content);
             summary.appendChild(features);
 
             a.setAttribute('href', `/article?articleid=${article.article_id}`);
@@ -180,6 +181,20 @@ let view = {
         //     </div> -->
         
         // </li>
+    },
+
+    renderTags:function(){
+        let tagGroup = document.querySelector('.tagGroup');
+        console.log(model)
+        model.mainListData.data.tags.forEach(tag => {
+            
+            let tagLink  = document.createElement('a');
+            tagLink.classList.add('badge', 'rounded-pill' , 'bg-dark');
+            tagLink.textContent = tag.tag;
+            tagGroup.appendChild(tagLink);
+        })
+        
+        // <a class="badge rounded-pill bg-dark">tomica</a>
     }
 
 }

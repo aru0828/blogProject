@@ -1,0 +1,147 @@
+.signin {
+  display: flex;
+  justify-content: center;
+}
+
+.signin .signinForm.active {
+  display: block;
+}
+
+.signin .signinForm {
+  width: 60%;
+  background: white;
+  padding: 60px 48px 0px 48px;
+  margin-top: 60px;
+  margin-bottom: 100px;
+  border-right: 40px solid #4286F5;
+  box-shadow: 0 0 8px gray;
+  display: none;
+}
+
+.signin .signinForm .inputGroup {
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.signin .signinForm label {
+  font-size: 12px;
+  margin-bottom: 8px;
+  letter-spacing: 0.125rem;
+}
+
+.signin .signinForm input {
+  background: #E5E5E5;
+  border: 0;
+  line-height: 30px;
+  padding: 0 5px;
+}
+
+.signin .signinForm h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4286F5;
+  margin-bottom: 20px;
+  letter-spacing: 0.125rem;
+}
+
+.signin .signinForm .signinBtn {
+  display: block;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 15px;
+  font-weight: bold;
+  letter-spacing: 0.125rem;
+  line-height: 1rem;
+  width: 100%;
+  background: #4286F5;
+  color: white;
+}
+
+.signin .signinForm .signinBtn i {
+  font-size: 1rem;
+}
+
+.signin .signinForm .serarate {
+  margin-top: 15px;
+}
+
+.signin .signinForm .fbBtn {
+  background: #1877F2;
+}
+
+.signin .signinForm .googleBtn {
+  background: #DF4930;
+}
+
+.signin .signinForm .toggleBtn {
+  margin: 40px 0px 20px 0px;
+  font-size: 14px;
+}
+
+.signin .signinForm .toggleBtn a {
+  color: gray;
+}
+
+@media (max-width: 992px) {
+  .signin {
+    display: flex;
+    justify-content: center;
+  }
+  .signin .signinForm {
+    width: 80%;
+  }
+  .signin .signinForm .inputGroup {
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  .signin .signinForm label {
+    font-size: 12px;
+    margin-bottom: 8px;
+    letter-spacing: 0.125rem;
+  }
+  .signin .signinForm input {
+    background: #E5E5E5;
+    border: 0;
+    line-height: 30px;
+    padding: 0 5px;
+  }
+  .signin .signinForm h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4286F5;
+    margin-bottom: 20px;
+    letter-spacing: 0.125rem;
+  }
+  .signin .signinForm .SigninBtn {
+    display: block;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 15px;
+    font-weight: bold;
+    letter-spacing: 0.125rem;
+    line-height: 1rem;
+    width: 100%;
+    background: #4286F5;
+    color: white;
+  }
+  .signin .signinForm .SigninBtn i {
+    font-size: 1rem;
+  }
+  .signin .signinForm .serarate {
+    margin-top: 15px;
+  }
+  .signin .signinForm .fbBtn {
+    background: #1877F2;
+  }
+  .signin .signinForm .googleBtn {
+    background: #DF4930;
+  }
+  .signin .signinForm .toggleBtn {
+    margin: 40px 0px 20px 0px;
+    font-size: 14px;
+  }
+  .signin .signinForm .toggleBtn a {
+    color: gray;
+  }
+}
+/*# sourceMappingURL=signin.css.map */

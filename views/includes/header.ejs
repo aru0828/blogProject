@@ -9,14 +9,29 @@
         
         <input type="text" placeholder="搜尋">
         <ul class="header-nav-list">
-            <li>登入</li>
-            <li>註冊</li>
-            <li>
-                <a class="text-white member-only" href="/articles">文章列表</a>
+            <li class="member-only">
+                <a class="text-white" href="/member">
+                    <img class="rounded-circle" width="30" height="32" src="https://lh3.googleusercontent.com/a/AATXAJzEfmaKrkMGShzwYDv8nixCyyyWHd9wDi7Iig6a=s96-c" alt="">
+                </a>
             </li>
-            <li>
-                <a class="text-white member-only" href="/post">新增文章</a>
+
+            <li class="member-only">
+                <a class="text-white logoutBtn" href="" >登出</a>    
             </li>
+            <li class="visitor-only">
+                <a class="text-white" href="/signin">登入</a>    
+            </li>
+        
+            <li>
+                <a class="text-white" href="/articles">看看別人的收藏</a>
+            </li>
+            <li class="member-only">
+                <a class="text-white" href="/post">發布收藏</a>
+            </li>
+
+            
+            
         </ul>
     </nav>
 </header>
+

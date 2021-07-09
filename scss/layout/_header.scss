@@ -8,6 +8,7 @@ header{
         .header-nav-list{
             display: flex;
             flex-direction: row-reverse;
+            align-items: center;
             color: white;
 
             li{
@@ -18,6 +19,13 @@ header{
             }
             li:first-child{
                 margin-right: 0;
+            }
+
+            .member-only, .visitor-only{
+                display:none;
+            }
+            .member-only.active, .visitor-only.active{
+                display:block;
             }
         }
     }

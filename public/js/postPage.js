@@ -15,14 +15,15 @@ postForm.addEventListener('submit', function(e){
     let coverPhoto = document.querySelector('#coverPhoto').files[0];
     let content = tinymce.get('editor').getContent();
     let price = document.querySelector('#price').value;
-    console.log(`入手價格 : ${price}`)
-    console.log(content);
+    let summary = document.querySelector('#summary').value;
+    
+
     let formData = new FormData();
     formData.append('title', title);
     formData.append('coverPhoto', coverPhoto);
     formData.append('content', content);
     formData.append('price', price);
-
+    formData.append('summary', summary);
     fetch('/api/article', {
       method:'POST',
       body:formData,

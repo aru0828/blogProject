@@ -1,0 +1,56 @@
+.member-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px auto 48px auto;
+}
+
+.member-info {
+  width: 80%;
+  height: 200px;
+  border-bottom: 1px solid gray;
+  display: flex;
+  margin-bottom: 48px;
+}
+
+.member-info .member-summary {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 40%;
+  padding: 15px 0px;
+  border: 1px solid black;
+}
+
+.member-info .member-summary .d-flex p {
+  padding: 4px 8px;
+  letter-spacing: 0.025rem;
+}
+
+.member-info .member-description {
+  width: 60%;
+  padding: 30px 30px 15px 30px;
+  border: 1px solid black;
+}
+
+.member-post {
+  width: 80%;
+  padding: 0 0 0 0;
+  border: 1px solid gray;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px 2px;
+}
+
+.member-post li {
+  width: 30%;
+}
+
+.member-post li a img {
+  object-fit: cover;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+}
+/*# sourceMappingURL=member.css.map */

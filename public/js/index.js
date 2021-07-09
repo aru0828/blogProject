@@ -1,8 +1,6 @@
 fetch('/api/hotpost')
 .then(response => response.json())
 .then(result => {
-    console.log('最熱門')
-    console.log(result)
     model.mainListData = result
     view.renderMainList();
 })
@@ -12,8 +10,6 @@ fetch('/api/hotpost')
 fetch('/api/newpost')
 .then(response => response.json())
 .then(result => {
-    console.log('最新')
-    console.log(result)
     model.asideListData = result;
     view.renderAsideList();
 })
@@ -31,6 +27,7 @@ let view = {
         console.log(model.mainListData)
         let frag = document.createDocumentFragment();
         let mainList = document.querySelector('.main-list');
+        console.log(mainList)
         model.mainListData.forEach(article => {   
             let li = document.createElement('li');
             let a  = document.createElement('a');
@@ -96,6 +93,7 @@ let view = {
 
             frag.appendChild(li);
         })
+        
         mainList.appendChild(frag);
     },
 
@@ -128,6 +126,7 @@ let view = {
             link.setAttribute('href', `/article?articleid=${newPost.article_id}`)
             li.appendChild(link);
             let asideList = document.querySelector('.aside-list');
+           
             asideList.appendChild(li);
         })
         
