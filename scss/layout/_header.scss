@@ -1,0 +1,24 @@
+
+header{
+    nav{
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0px;
+        .header-nav-list{
+            display: flex;
+            flex-direction: row-reverse;
+            color: white;
+
+            li{
+                margin-right: 10px;
+                a{
+                    padding:4px;
+                }
+            }
+            li:first-child{
+                margin-right: 0;
+            }
+        }
+    }
+}

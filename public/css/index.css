@@ -1,0 +1,251 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0px;
+}
+
+header nav .header-nav-list {
+  display: flex;
+  flex-direction: row-reverse;
+  color: white;
+}
+
+header nav .header-nav-list li {
+  margin-right: 10px;
+}
+
+header nav .header-nav-list li a {
+  padding: 4px;
+}
+
+header nav .header-nav-list li:first-child {
+  margin-right: 0;
+}
+
+footer {
+  height: 150px;
+  color: white;
+}
+
+footer .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.banner {
+  height: 500px;
+  margin: 0 auto 36px auto;
+}
+
+.banner .carousel-item {
+  width: 100%;
+  height: 100%;
+}
+
+.banner .carousel-item img {
+  object-fit: contain;
+}
+
+i {
+  font-size: 24px;
+}
+
+.index-main {
+  display: flex;
+  margin-bottom: 48px;
+  padding-top: 30px;
+}
+
+.index-main main {
+  width: 70%;
+  margin-right: 32px;
+  border-right: 1px solid gray;
+}
+
+.index-main .main-list {
+  padding-right: 32px;
+}
+
+.index-main .main-list li {
+  margin-bottom: 48px;
+}
+
+.index-main .main-list li > a {
+  display: flex;
+}
+
+.index-main .main-list li .coverPhoto {
+  width: 225px;
+  height: 225px;
+  padding: 8px;
+  border: 1px solid black;
+}
+
+.index-main .main-list li .summary {
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.index-main .main-list li .summary .author {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.index-main .main-list li .summary .author img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.index-main .main-list li .summary .author h3 {
+  margin-right: 8px;
+}
+
+.index-main .main-list li .summary .title {
+  margin-bottom: 16px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.index-main .main-list li .summary .price {
+  margin-bottom: 16px;
+}
+
+.index-main .main-list li .summary .content {
+  margin-bottom: 16px;
+  line-height: 24px;
+  display: block;
+  display: -webkit-box;
+  height: 72px;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.index-main .main-list li .summary .features {
+  justify-self: flex-end;
+  display: flex;
+  margin-top: auto;
+  width: 100%;
+}
+
+.index-main .main-list li .summary .features i {
+  display: block;
+  margin-right: 8px;
+}
+
+.index-main .main-list li .summary .features .date {
+  margin-left: auto;
+}
+
+.index-main aside {
+  width: 30%;
+}
+
+.index-main aside .aside-list {
+  padding: 0px 8px;
+}
+
+.index-main aside .aside-list li {
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.index-main aside .aside-list img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.newPost-summary {
+  overflow: hidden;
+}
+
+.newPost-description {
+  display: block;
+  display: -webkit-box;
+  height: 50px;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.newPost-info {
+  display: flex;
+  align-items: center;
+}
+
+.newPost-info img {
+  margin-right: 8px;
+}
+
+.newPost-info h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+/*# sourceMappingURL=index.css.map */
