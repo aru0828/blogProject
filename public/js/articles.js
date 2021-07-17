@@ -1,70 +1,57 @@
 
-// 取得main文章列表
-fetch('/api/articles', {
-    method:'GET'
-})
-.then(response => response.json())
-.then(result => {
-    console.log(result)
-    model.mainListData = result;
-    view.renderMainList();
-    view.renderTags();
-}) 
 
-// 最新資料
-fetch('/api/newpost')
-.then(response => response.json())
-.then(result => {
-    model.asideListData = result;
-    view.renderAsideList();
-    
-})
-
-
-// <li>
-//     <img class="main-list-coverPhoto" src="../public/images/圖片.jpg" alt="">
-//     <div class="main-list-summary">
-//         <h3 class="main-list-author">
-//             <a href="#">aru0828</a>     
-//         </h3>
-    
-//         <h3 class="main-list-title">Mini GT civic</h3>
-//         <p  class="main-list-price">$1200</p>                 
-//         <h3 class="main-list-description">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quae, voluptatum ea? Veritatis impedit accusantium ea? Pariatur accusantium sapiente sequi fugiat?</h3>               
-
-//         <div class="main-list-features">
-//             <i class="bi bi-hand-thumbs-up"></i>
-//             <i class="bi bi-chat-dots"></i>
-//             <p class="main-list-date">2021/06/20</p>
-//         </div>
-//     </div>        
-// </li>
-
-// 取得aside文章列表
-// fetch('/api/newarticles', {
-//     method:'GET'
-// })
-// .then(response => response.json())
-// .then(result => {
-//     console.log(result)
-//     let div = document.querySelector('div');
-//     result.forEach(articleSummary => {   
+// // 取得main文章列表
+// function getMainList(){
+//     fetch('/api/articles', {
+//         method:'GET'
 //     })
-    
-// }) 
+//     .then(response => response.json())
+//     .then(result => {
+//         console.log(result)
+//         model.mainListData = result;
+//         view.renderMainList();
+//         // view.renderTags();
+//     }) 
+// }
 
+// getMainList();
+
+
+// 隨機資料
 
 
 
 let model = {
     mainListData:null,
     asideListData:null,
+
+    getMainListData:function(){
+        return fetch('/api/articles')
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result)
+                    model.mainListData = result;
+                    view.renderMainList();
+                    // view.renderTags();
+                }) 
+    },
+
+    getAsideListData:function(){
+        return fetch('/api/randompost')
+        .then(response => response.json())
+        .then(result => {
+            model.asideListData = result;
+            view.renderAsideList();
+
+        })
+    }
 }
 
 let view = {
     renderMainList:function(){
         let frag = document.createDocumentFragment();
         let mainList = document.querySelector('.main-list');
+        mainList.innerHTML="";
         model.mainListData.data.articles.forEach(article => {   
             let li = document.createElement('li');
             let a  = document.createElement('a');
@@ -79,6 +66,7 @@ let view = {
             let content = document.createElement('p');
             let features = document.createElement('div');
             let thumbsIcon = document.createElement('i');
+            let likes   = document.createElement('span');
             let messageIcon = document.createElement('i');
             let date = document.createElement('p');
 
@@ -102,7 +90,7 @@ let view = {
     
             title.classList.add('title');
             title.textContent = article.title;
-            price.textContent = `${article.price ? `$ ${article.price}` : '價格不公開'}`
+            price.textContent = `${article.price ? `入手價格: ${article.price}` : '入手價格: 不公開'}`
             price.classList.add('price');
             content.classList.add('content');
             content.textContent = article.summary;
@@ -111,11 +99,43 @@ let view = {
         
 
             features.classList.add('features');
-            thumbsIcon.classList.add('bi', 'bi-hand-thumbs-up')
-            messageIcon.classList.add('bi', 'bi-chat-dots')
             
-            // date.classList.add('date');
-            // date.textContent = article.create_time;
+            if(article.user_isliked === 'yes'){
+                thumbsIcon.classList.add('bi', 'bi-heart-fill');
+            }
+            else{
+                thumbsIcon.classList.add('bi', 'bi-heart');
+            }
+            
+            messageIcon.classList.add('bi', 'bi-chat-dots')
+
+            likes.textContent = article.likes === 0 ? "" : article.likes;
+            thumbsIcon.appendChild(likes);
+            thumbsIcon.setAttribute('data-artid', article.article_id);
+
+            thumbsIcon.addEventListener('click', function(e){
+                console.log(e.target.dataset.artid)
+                fetch('/api/like',{
+                    'method':'POST',
+                    'body':JSON.stringify({
+                        'article_id':e.target.dataset.artid
+                    }),
+                    'headers':{
+                        'content-type':'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result)
+                    if(result.ok){
+                        controller.getMainList();
+                    }
+                    else if(result.error){
+                        alert('登入會員才能按讚哦~')
+                    }
+                })
+            })
+            
             features.appendChild(thumbsIcon);
             features.appendChild(messageIcon);
             features.appendChild(date);
@@ -126,9 +146,10 @@ let view = {
             summary.appendChild(content);
             summary.appendChild(features);
 
-            a.setAttribute('href', `/article?articleid=${article.article_id}`);
-            a.appendChild(summary);
+            a.setAttribute('href', `/article/${article.article_id}`);
+            // a.appendChild(summary);
             li.appendChild(a);
+            li.appendChild(summary);
 
             frag.appendChild(li);
         })
@@ -152,7 +173,7 @@ let view = {
             h3.classList.add('newPost-title');
             h3.textContent = newPost.title;
             span.classList.add('newPost-price');
-            span.textContent = newPost.price ? `$ ${newPost.price}` : `$ 秘密`;
+            span.textContent = newPost.price ? `入手價格: ${newPost.price}` : `入手價格: 不公開`;
 
             div2.appendChild(h3);
             div2.appendChild(span);
@@ -161,7 +182,7 @@ let view = {
             div1.classList.add('newPost-info');
 
             link.appendChild(div1)
-            link.setAttribute('href', `/article?articleid=${newPost.article_id}`)
+            link.setAttribute('href', `/article/${newPost.article_id}`)
             li.appendChild(link);
             let asideList = document.querySelector('.aside-list');
             asideList.appendChild(li);
@@ -201,5 +222,20 @@ let view = {
 
 
 let controller = {
+    init:function(){
+        controller.getMainList();
+        controller.getAsideList();
+    },
 
+    getMainList:async function(){
+        await model.getMainListData();
+        view.renderMainList();
+    },
+
+    getAsideList:async function(){
+        await model.getAsideListData();
+        view.renderAsideList();
+    }
 }
+
+controller.init()

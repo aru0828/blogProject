@@ -37,6 +37,8 @@ let model = {
             'password':password,
             'source':'local'
         }
+
+        console.log('login')
         fetch('/api/user', {
             method:'PATCH',
             body: JSON.stringify(requestData),
@@ -101,6 +103,7 @@ view.toLoginBtn.addEventListener('click', function(e){
 
 view.loginBtn.addEventListener('click', function(e){
     e.preventDefault();
+    
     controller.login();
 })
 

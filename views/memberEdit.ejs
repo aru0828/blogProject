@@ -1,0 +1,51 @@
+<%- include('includes/head') -%>
+<title>文章列表</title>
+<link rel="stylesheet" href="../public/css/memberEdit.css">
+</head>
+
+<body class="bg-primary-light">
+    <%- include('includes/header') -%>
+
+
+    <div class="memberEdit container">
+        <form class="member-card">
+            <div class="avatar">
+                <img src="../public/images/圖片.jpg" alt="" width="150" height="150">
+                <input type="file" title="變更大頭貼照">
+            </div>
+            <div class="info">
+                <div class="inputGroup">
+                    <label for="">電子郵件</label>
+                    <input type="text" value="test@yahoo.com.tw" readonly>
+                </div>
+
+                <div class="inputGroup">
+                    <label for="">用戶名稱</label>
+                    <input type="text" value="aru">
+                </div>
+
+                <div class="inputGroup">
+                    <label for="">自我介紹</label>
+                    <textarea id="story" name="story" rows="5" cols="33">
+               
+                    </textarea>
+                </div>
+
+                <div class="inputGroup">
+                    <label for=""></label>
+                    <input type="submit" class="px-3 py-2">
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <%- include('includes/footer') %>
+
+
+
+</body>
+<script type="module" src="../public/js/layout.js"></script>
+<script type="module" src="../public/js/memberEdit.js"></script>
+
+</html>

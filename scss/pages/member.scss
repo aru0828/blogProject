@@ -9,16 +9,17 @@
 .member-info{
     width: 80%;
     height: 200px;
-    border-bottom:1px solid gray;
+    // border-bottom:1px solid gray;
     display:flex;
     margin-bottom: 48px;
+    background: #f4f4f4;
     .member-summary{
         display:flex;
         align-items: center;
         flex-direction: column;
         width: 40%;
         padding:15px 0px;
-        border:1px solid black;
+        // border:1px solid black;
         .d-flex{
             p{
                 padding:4px 8px;
@@ -29,7 +30,7 @@
     .member-description{
         width: 60%;
         padding:30px 30px 15px 30px;
-        border:1px solid black;
+        // border:1px solid black;
     }
 }
 
@@ -37,20 +38,48 @@
     width: 80%;
     
     padding:0 0 0 0 ;
-    border:1px solid gray;
+    
     display:flex;
     justify-content: space-between;
     flex-wrap: wrap;
     gap:30px 2px;
     li{
-        width: 30%;
+        width: 31.5%;
+        position: relative;
+       
+        img{
+            object-fit: cover;
+            max-width: 100%;
+            width: 100%;
+            height: 100%;
+        }
         a{
-            img{
-                object-fit: cover;
-                max-width: 100%;
-                width: 100%;
-                height: 100%;
+            display: block;
+        }
+        .hover-effect{
+            position: absolute;
+            bottom:0;
+            top:0;
+            left:0;
+            right:0;
+            
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            padding:0 20%;
+            color:white;
+            p{
+                display:none;
+                width: 50%;
+                text-align: center;
             }
         }
+    }
+
+    li:hover .hover-effect{
+        background: rgba(0,0,0, 0.3)
+    }
+    li:hover p{
+        display:block;
     }
 }

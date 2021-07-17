@@ -4,9 +4,11 @@ const fs = require('fs');
 const app = express();
 const path = require('path');
 const articlesAPI = require('./routes/articleAPI');
-const memberAPI = require('./routes/memberAPI');
+const userAPI = require('./routes/userAPI');
 const oauthAPI  = require('./routes/oauthAPI');
-
+const memberAPI  = require('./routes/memberAPI');
+const commentAPI  = require('./routes/commentAPI');
+const likeAPI  = require('./routes/likeAPI');
 // 第一個參數為虛擬目錄 url 須 localhost/static
 // 第二個參數為static資料夾名稱
 app.use('/public', express.static('public'));
@@ -14,9 +16,11 @@ app.use("/", express.static('node_modules'));
 app.set('view engine', 'ejs');
 
 app.use(articlesAPI);
-app.use(memberAPI);
+app.use(userAPI);
 app.use(oauthAPI);
-
+app.use(memberAPI);
+app.use(commentAPI);
+app.use(likeAPI);
 app.set();
 app.get('/', function(req, res) {
   // res.sendFile(path.join(__dirname,'/templates/index.html'));
@@ -29,12 +33,18 @@ app.get('/articles', function(req, res){
   res.render('articles');
 })
 // 單筆文章
-app.get('/article', function(req, res){
+app.get('/article/:articleid', function(req, res){
+  console.log(req.params.articleId)
   res.render('article');
 })
 
-app.get('/member', function(req, res){
+app.get('/member/:useremail', function(req, res){
+  console.log(req.params.id)
   res.render('member');
+})
+
+app.get('/account/edit', function(req, res){
+  res.render('memberEdit');
 })
 
 

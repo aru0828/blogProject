@@ -1,16 +1,29 @@
 
 header{
+    border:0.5px solid #cacaca;
+    background: white;
     nav{
         display:flex;
         justify-content: space-between;
         align-items: center;
         padding: 8px 0px;
+        position: relative;
+        color:black;
+        background: white;
+        h1{
+            width: 30%;
+        }
+
         .header-nav-list{
             display: flex;
             flex-direction: row-reverse;
             align-items: center;
-            color: white;
-
+            color: black;
+            width: 30%;
+            
+            .memberImg{
+                border-radius: 50%;
+            }
             li{
                 margin-right: 10px;
                 a{
@@ -26,6 +39,36 @@ header{
             }
             .member-only.active, .visitor-only.active{
                 display:block;
+            }
+
+
+            .collapase.active{
+                transform: scaleY(1);
+            }
+            .collapase{
+                position: absolute;
+                top:100%;
+                bottom:50px;
+                right:0px;
+                z-index: 99;
+                transform: scaleY(0);
+                transition: all 0.3s;
+                ul{
+                    display:flex;
+                    flex-direction: column;
+                    background: rgb(45,62,78);
+                    border-radius: 5px;
+                    overflow: hidden;
+
+                    li{
+                        margin-right: 0;
+                        a{
+                            display: block;
+                            padding: 15px ;
+                            color:white;
+                        }
+                    }
+                }
             }
         }
     }

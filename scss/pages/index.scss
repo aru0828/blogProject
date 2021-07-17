@@ -33,29 +33,109 @@ i{
 }
 
 
+.article{
+    background: white;
+    border: 1px solid rgba(var(--b6a,219,219,219),1);
+    margin-bottom: 24px;
+    .article-header{
+        display:flex;
+        justify-content: space-between;
+        padding:16px;
+        .author{
+            display:flex;
+            align-items:center;
+            img{
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                margin-right: 8px;
+            }
+        }
+        
+    }
+    .article-coverPhoto img{
+        width: 100%;
+        height: auto;
+        
+    }
+
+    .article-features{
+        padding:0 16px;
+        margin-bottom:4px;
+    }
+    .article-content{
+        padding:0 16px;
+        margin-bottom: 4px;
+    }
+
+    .show-comment{
+        padding:0 16px;
+        margin-bottom: 4px;
+    }
+    .article-time{
+        padding:0 16px;
+        margin-bottom: 4px;
+    }
+    .article-comment{
+        padding:0 16px;
+        margin-bottom: 8px;
+        .commentRow{
+            display:flex;
+
+            margin-bottom: 4px;
+            i{
+                margin-left: auto;
+                font-size: 12px;
+            }
+        }
+    }
+    .article-comment-input{
+        padding:0 16px;
+        display:flex;
+        border-top: 1px solid black;
+        
+        padding:8px 16px;
+
+        .user-avatar{
+            width: 25px;
+            height: 25px;
+        }
+        textarea{
+            width: auto;
+            flex-grow: 1;
+            resize: vertical;
+            border: none;
+            overflow: auto;
+            outline: none;
+            box-shadow: none;
+        }
+    }
+}
+
 .index-main{
     display:flex;
     margin-bottom: 48px;
     padding-top: 30px;
+    align-items: flex-start;
     main{
         width: 70%;
         margin-right: 32px;
-        border-right:1px solid gray;
+        background: white;
+        padding:30px 15px;
+        border-radius: 5px;
     }
     .main-list{
         padding-right:32px;
         li{
-            // display:flex;
+            display:flex;
            
             margin-bottom: 48px;
-            >a{
-                display:flex;
-            }
+            
             .coverPhoto{
                 width: 225px;
                 height: 225px;
-                padding:8px;
-                border:1px solid black;
+                // padding:8px;
+                // border:1px solid black;
             }
             .summary{
                 padding: 8px 16px;
@@ -65,7 +145,8 @@ i{
                 .author{
                     display:flex;
                     align-items: center;
-                    margin-bottom: 16px;
+                    
+                    margin-bottom: 12px;
                     
                     img{
                         width: 25px;
@@ -76,20 +157,29 @@ i{
 
                     h3{
                         margin-right: 8px;
+                        font-size: 14px;
+                    }
+
+                    // 時間
+                    span{
+                        font-size: 12px;
                     }
                 }
 
                 .title{
-                    margin-bottom: 16px;
-                    font-size: 22px;
+                    margin-bottom: 12px;
+                    font-size: 18px;
                     font-weight: bold;
                 }
                 .price{
-                    margin-bottom: 16px;
+                    margin-bottom: 12px;
+                    color: rgba(117, 117, 117, 1);
+                    font-size: 12px;
                 }
 
                 .content{
-                    margin-bottom: 16px;
+                    color: rgba(117, 117, 117, 1);
+                    margin-bottom: 12px;
                     line-height: 24px;
                     display: block;
                     display: -webkit-box;
@@ -101,6 +191,7 @@ i{
                 }
 
                 .features{
+                    font-size: 16px;
                     justify-self: flex-end;
                     display: flex;
                     margin-top: auto;
@@ -109,6 +200,7 @@ i{
                     i{
                         display:block;
                         margin-right:8px;
+                        font-size: 16px;
                     }
                     .date{
                         margin-left: auto;
@@ -119,9 +211,17 @@ i{
     }
     aside{
         width: 30%;
-        
+        background: white;
+        padding:30px 15px;
+        border-radius: 5px;
+        .aside-title{
+            border-left:3px solid blue;
+            
+            padding-left: 8px;
+        }
         .aside-list{
-            padding:0px 8px;
+           
+            padding:24px 8px 0 8px;
             li{
                 display:flex;
                 margin-bottom: 24px;
@@ -156,7 +256,11 @@ i{
         margin-right: 8px;
     }
     h3{
-        font-size: 18px;
+        font-size: 16px;
+        margin-bottom: 8px;
         font-weight: bold;
+    }
+    .newPost-price{
+        font-size: 12px;
     }
 }

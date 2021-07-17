@@ -1,35 +1,58 @@
-<header class="bg-primary">
+<header class="">
     <nav class="container">
-        <a href="/" class="text-white">
-            <h1>
-                <!-- <img src="./圖片.jpg" alt="" width=50 height=50> -->
+        <h1>
+            <!-- <img src="./圖片.jpg" alt="" width=50 height=50> -->
+            <a href="/" class="">
                 收藏部落格
-            </h1>
-        </a>
+            </a>
+            
+        </h1>
+        
         
         <input type="text" placeholder="搜尋">
         <ul class="header-nav-list">
             <li class="member-only">
-                <a class="text-white" href="/member">
-                    <img class="rounded-circle" width="30" height="32" src="https://lh3.googleusercontent.com/a/AATXAJzEfmaKrkMGShzwYDv8nixCyyyWHd9wDi7Iig6a=s96-c" alt="">
+                <a class="memberLink" href="/member">
+                    <img class="memberImg" width="30" height="32" src="https://lh3.googleusercontent.com/a/AATXAJzEfmaKrkMGShzwYDv8nixCyyyWHd9wDi7Iig6a=s96-c" alt="">
                 </a>
             </li>
 
-            <li class="member-only">
-                <a class="text-white logoutBtn" href="" >登出</a>    
-            </li>
+            <!-- <li class="member-only">
+                <a class=" logoutBtn" href="" >登出</a>    
+            </li> -->
             <li class="visitor-only">
-                <a class="text-white" href="/signin">登入</a>    
+                <a class="" href="/signin">登入</a>    
             </li>
         
             <li>
-                <a class="text-white" href="/articles">看看別人的收藏</a>
+                <a class="" href="/articles">看看別人的收藏</a>
             </li>
             <li class="member-only">
-                <a class="text-white" href="/post">發布收藏</a>
+                <a class="" href="/post">發布收藏</a>
             </li>
 
-            
+            <li class="collapase">
+                <ul>
+                    <li>
+                        <a class="toMember" href="" class="">
+                            <i class="bi bi-person-circle"></i>
+                            個人檔案
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/account/edit" class="">
+                            <i class="bi bi-pencil-square"></i>
+                            編輯個人檔案
+                        </a>
+                    </li>
+                    <li>
+                        <a class="logoutBtn" href="" >
+                            <i class="bi bi-x-octagon"></i>
+                            登出
+                        </a>    
+                    </li>
+                </ul>
+            </li>
             
         </ul>
     </nav>

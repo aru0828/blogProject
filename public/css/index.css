@@ -2,6 +2,7 @@
    v2.0 | 20110126
    License: none (public domain)
 */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&display=swap");
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -56,18 +57,48 @@ a {
   text-decoration: none;
 }
 
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.container {
+  max-width: 975px;
+  margin: 0 auto;
+}
+
+.bi-heart-fill {
+  color: red;
+}
+
+header {
+  border: 0.5px solid #cacaca;
+  background: white;
+}
+
 header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 0px;
+  position: relative;
+  color: black;
+  background: white;
+}
+
+header nav h1 {
+  width: 30%;
 }
 
 header nav .header-nav-list {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  color: white;
+  color: black;
+  width: 30%;
+}
+
+header nav .header-nav-list .memberImg {
+  border-radius: 50%;
 }
 
 header nav .header-nav-list li {
@@ -88,6 +119,38 @@ header nav .header-nav-list .member-only, header nav .header-nav-list .visitor-o
 
 header nav .header-nav-list .member-only.active, header nav .header-nav-list .visitor-only.active {
   display: block;
+}
+
+header nav .header-nav-list .collapase.active {
+  transform: scaleY(1);
+}
+
+header nav .header-nav-list .collapase {
+  position: absolute;
+  top: 100%;
+  bottom: 50px;
+  right: 0px;
+  z-index: 99;
+  transform: scaleY(0);
+  transition: all 0.3s;
+}
+
+header nav .header-nav-list .collapase ul {
+  display: flex;
+  flex-direction: column;
+  background: #2d3e4e;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+header nav .header-nav-list .collapase ul li {
+  margin-right: 0;
+}
+
+header nav .header-nav-list .collapase ul li a {
+  display: block;
+  padding: 15px;
+  color: white;
 }
 
 footer {
@@ -120,16 +183,105 @@ i {
   font-size: 24px;
 }
 
+.article {
+  background: white;
+  border: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
+  margin-bottom: 24px;
+}
+
+.article .article-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.article .article-header .author {
+  display: flex;
+  align-items: center;
+}
+
+.article .article-header .author img {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.article .article-coverPhoto img {
+  width: 100%;
+  height: auto;
+}
+
+.article .article-features {
+  padding: 0 16px;
+  margin-bottom: 4px;
+}
+
+.article .article-content {
+  padding: 0 16px;
+  margin-bottom: 4px;
+}
+
+.article .show-comment {
+  padding: 0 16px;
+  margin-bottom: 4px;
+}
+
+.article .article-time {
+  padding: 0 16px;
+  margin-bottom: 4px;
+}
+
+.article .article-comment {
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+
+.article .article-comment .commentRow {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+.article .article-comment .commentRow i {
+  margin-left: auto;
+  font-size: 12px;
+}
+
+.article .article-comment-input {
+  padding: 0 16px;
+  display: flex;
+  border-top: 1px solid black;
+  padding: 8px 16px;
+}
+
+.article .article-comment-input .user-avatar {
+  width: 25px;
+  height: 25px;
+}
+
+.article .article-comment-input textarea {
+  width: auto;
+  flex-grow: 1;
+  resize: vertical;
+  border: none;
+  overflow: auto;
+  outline: none;
+  box-shadow: none;
+}
+
 .index-main {
   display: flex;
   margin-bottom: 48px;
   padding-top: 30px;
+  align-items: flex-start;
 }
 
 .index-main main {
   width: 70%;
   margin-right: 32px;
-  border-right: 1px solid gray;
+  background: white;
+  padding: 30px 15px;
+  border-radius: 5px;
 }
 
 .index-main .main-list {
@@ -137,18 +289,13 @@ i {
 }
 
 .index-main .main-list li {
-  margin-bottom: 48px;
-}
-
-.index-main .main-list li > a {
   display: flex;
+  margin-bottom: 48px;
 }
 
 .index-main .main-list li .coverPhoto {
   width: 225px;
   height: 225px;
-  padding: 8px;
-  border: 1px solid black;
 }
 
 .index-main .main-list li .summary {
@@ -161,7 +308,7 @@ i {
 .index-main .main-list li .summary .author {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .index-main .main-list li .summary .author img {
@@ -173,20 +320,28 @@ i {
 
 .index-main .main-list li .summary .author h3 {
   margin-right: 8px;
+  font-size: 14px;
+}
+
+.index-main .main-list li .summary .author span {
+  font-size: 12px;
 }
 
 .index-main .main-list li .summary .title {
-  margin-bottom: 16px;
-  font-size: 22px;
+  margin-bottom: 12px;
+  font-size: 18px;
   font-weight: bold;
 }
 
 .index-main .main-list li .summary .price {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  color: #757575;
+  font-size: 12px;
 }
 
 .index-main .main-list li .summary .content {
-  margin-bottom: 16px;
+  color: #757575;
+  margin-bottom: 12px;
   line-height: 24px;
   display: block;
   display: -webkit-box;
@@ -197,6 +352,7 @@ i {
 }
 
 .index-main .main-list li .summary .features {
+  font-size: 16px;
   justify-self: flex-end;
   display: flex;
   margin-top: auto;
@@ -206,6 +362,7 @@ i {
 .index-main .main-list li .summary .features i {
   display: block;
   margin-right: 8px;
+  font-size: 16px;
 }
 
 .index-main .main-list li .summary .features .date {
@@ -214,10 +371,18 @@ i {
 
 .index-main aside {
   width: 30%;
+  background: white;
+  padding: 30px 15px;
+  border-radius: 5px;
+}
+
+.index-main aside .aside-title {
+  border-left: 3px solid blue;
+  padding-left: 8px;
 }
 
 .index-main aside .aside-list {
-  padding: 0px 8px;
+  padding: 24px 8px 0 8px;
 }
 
 .index-main aside .aside-list li {
@@ -254,7 +419,12 @@ i {
 }
 
 .newPost-info h3 {
-  font-size: 18px;
+  font-size: 16px;
+  margin-bottom: 8px;
   font-weight: bold;
+}
+
+.newPost-info .newPost-price {
+  font-size: 12px;
 }
 /*# sourceMappingURL=index.css.map */
