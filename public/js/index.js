@@ -1,104 +1,166 @@
-fetch('/api/hotpost')
-.then(response => response.json())
-.then(result => {
-    console.log('最熱門')
-    console.log(result)
-    model.mainListData = result
-    view.renderMainList();
+
+
+import {checkUser} from './checkUser.js';
+
+let queryString = window.location.search;
+let params = new URLSearchParams(queryString);
+let q = params.get("display"); // is the number 123
+
+
+let sendComment = document.querySelectorAll('.sendComment');
+// console.log(sendComment);
+
+
+let toggleShow = document.querySelectorAll('.toggleShow li');
+toggleShow.forEach(item=>{
+    item.addEventListener('click', function(e){
+        console.log(e.target.dataset.display)
+        let display = e.target.dataset.display;
+        if(!display){
+            window.location.href= `${window.location.pathname}`
+        }
+        else{
+            window.location.href= `${window.location.pathname}?display=${display}`
+        }
+        console.log(`${window.location.pathname}?display=${display}`)
+        
+    })
+    
 })
 
 
 
-fetch('/api/newpost')
-.then(response => response.json())
-.then(result => {
-    console.log('最新')
-    console.log(result)
-    model.asideListData = result;
-    view.renderAsideList();
-})
+
+
+
 
 
 
 let model = {
-    mainListData:null,
-    asideListData:null
+    mainData:null,
+    asideListData:null,
+    // key = like_id, value = article_id
+    userLikes:[],
+    userData:{},
+
+    checkUser:function(){
+        return  checkUser().then(result => {
+            if(result.data){
+                model.isLogined = true;
+                model.userData = result.data;
+            }
+        });
+    },
+    getMainData:function(keyword = null){
+        return fetch('/api/index')
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            model.mainData = result.data;
+        })
+    },
+
+
+    getAsideData:function(){
+        return fetch('/api/randompost')
+        .then(response => response.json())
+        .then(result => {
+            model.asideListData = result;
+        })
+    },
+
+    getUserLikes:function(){
+        return fetch('/api/like')
+        .then(response => response.json())
+        .then(result =>{
+            model.userLikes = result;
+        })
+    },
+
+    submitComment:function(artId, comment, parent=null){
+        // 隨html結構變化
+
+        let requsetData = {
+            'article_id':artId,
+            'comment':comment,
+            'parent':parent,
+        }
+        console.log(requsetData);
+        return fetch('/api/comment',{
+            'method':'POST',
+            'body':JSON.stringify(requsetData),
+            'headers':{
+                'content-type':'application/json'
+            }
+        })
+        .then(response => response.json())
+        
+        // 利用e get 該篇文章的留言input內容
+        // console.log(e.path[1].children[1].value);
+    },
+
+    
 }
 
 
 let view = {
-    renderMainList:function(){
-        console.log(model.mainListData)
-        let frag = document.createDocumentFragment();
-        let mainList = document.querySelector('.main-list');
-        model.mainListData.forEach(article => {   
+    // <div class="index-section-articles">
+    //                 <ul class="article-list">
+    //                     <li>
+    //                         <a href="">
+    //                             <div class="article-img">
+    //                             <img 
+    //                             src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+    //                              </div>
+    //                            
+    //                             alt="">
+    //                         </a>
+                            
+    //                         <div class="article-content">
+    //                              article-title
+    //                             【影評人】《破處》　褲子都脫了給我看這個
+    //                         </div>
+    //                     </li>
+
+    //                 </ul>
+    //             </div>
+    renderMain:function(dataSource){
+        let indexSectionArticles = document.querySelector('.index-section-articles');
+        let articleList = document.querySelector(`.${dataSource}-article-list`);
+        console.log(dataSource);
+
+        model.mainData[`${dataSource}Articles`].forEach(article => {
             let li = document.createElement('li');
-            let a  = document.createElement('a');
-            let coverPhoto = document.createElement('img');
-            let summary = document.createElement('div');
-            let author = document.createElement('a');
-            let avatar = document.createElement('img');
-            let username = document.createElement('h3');
-            let createTime = document.createElement('span');
-            let title = document.createElement('h3');
-            let price = document.createElement('p');
-            let content = document.createElement('p');
-            let features = document.createElement('div');
-            let thumbsIcon = document.createElement('i');
-            let messageIcon = document.createElement('i');
-            let date = document.createElement('p');
 
-            coverPhoto.classList.add('coverPhoto')
-            coverPhoto.setAttribute('src', article.coverPhoto);
-            a.appendChild(coverPhoto);
+            let imgLink = document.createElement('a');
+            let imgDiv = document.createElement('div');
+            imgDiv.classList.add('article-img');
+            imgLink.setAttribute('href', `/article/${article.article_id}`);
+            let img = document.createElement('img');
+            img.setAttribute('src', article.coverPhoto);
+            imgDiv.appendChild(img);
+            imgLink.appendChild(imgDiv);
 
-            summary.classList.add('summary');
-            author.classList.add('author');
-            // author.textContent = article.user_id;
-          
-            // 如果使用者沒有avatar就使用預設照片
-            avatar.setAttribute('src', article.avatar ?  article.avatar : '../public/images/default-user-icon.jpg');
-            username.textContent = article.username;
-            let dateArray = article.create_time.split(/[T|\.|\:]/)
-            createTime.textContent = `${dateArray[0]} ${parseInt(dateArray[1])+8}:${dateArray[2]}`
-            author.appendChild(avatar);
-            author.appendChild(username);
-            author.appendChild(createTime);
-    
-            title.classList.add('title');
-            title.textContent = article.title;
+            let articleContent = document.createElement('div');
+            articleContent.classList.add('article-content')
 
-            content.classList.add('content');
-            content.textContent = article.content;
+            let articleTitle = document.createElement('p');
+            articleTitle.classList.add('article-title');
+            articleTitle.textContent = article.title;
 
-            price.classList.add('price');
-            price.textContent = article.price;
+            // let articleSummary = document.createElement('p');
+            // articleSummary.classList.add('article-summary');
+            // articleSummary.textContent = article.summary;
 
-            features.classList.add('features');
-            thumbsIcon.classList.add('bi', 'bi-hand-thumbs-up')
-            messageIcon.classList.add('bi', 'bi-chat-dots')
-            
-            // date.classList.add('date');
-            // date.textContent = article.create_time;
-            features.appendChild(thumbsIcon);
-            features.appendChild(messageIcon);
-            features.appendChild(date);
+            articleContent.appendChild(articleTitle);
+            // articleContent.appendChild(articleSummary);
 
-            summary.appendChild(author);
-            summary.appendChild(title);
-            summary.appendChild(content);
-            summary.appendChild(price);
-            summary.appendChild(features);
-
-            a.setAttribute('href', `/article?articleid=${article.article_id}`);
-            a.appendChild(summary);
-            li.appendChild(a);
-
-            frag.appendChild(li);
+            li.appendChild(imgLink);
+            li.appendChild(articleContent);
+            articleList.appendChild(li);
         })
-        mainList.appendChild(frag);
-    },
 
+    },
 
     renderAsideList: function(){
 
@@ -125,9 +187,10 @@ let view = {
             div1.classList.add('newPost-info');
 
             link.appendChild(div1)
-            link.setAttribute('href', `/article?articleid=${newPost.article_id}`)
+            link.setAttribute('href', `/article/${newPost.article_id}`)
             li.appendChild(link);
             let asideList = document.querySelector('.aside-list');
+           
             asideList.appendChild(li);
         })
         
@@ -148,3 +211,36 @@ let view = {
     }
 
 }
+
+
+let controller = {
+    init:async function(){
+        await model.checkUser();
+        await model.getMainData();
+        await model.getAsideData();
+        // view.renderArticle();
+        // view.renderMainList();
+        view.renderAsideList()
+        view.renderMain('newest');
+        view.renderMain('popular');
+        view.renderMain('discussion');
+        
+    },
+
+    keyWorkSearch:async function(){
+        console.log('keyword')
+    },
+
+    rerenderMain: async function(){
+        await model.getMainData();
+        await model.getUserLikes();
+        // view.renderArticle();
+        view.renderMain('newest');
+        view.renderMain('polular');
+        view.renderMain('discussion');
+        console.log('renderart')
+    }
+}
+
+controller.init();
+

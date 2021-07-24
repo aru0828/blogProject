@@ -1,48 +1,183 @@
-<script src="../public/js/index.js"></script>
 <%- include('includes/head') -%>
 <title>首頁</title>
 </head>
 
-<body class="bg-primary-light">
+<body class="">
     <%- include('includes/header') -%>
 
 
-
-    <div class="banner">
-
-        <div class="banner-img"></div>
-        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="../public/images/photo-1416339134316-0e91dc9ded92.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="..." class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="..." class="d-block w-100" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-
-
+    <div class="banner ">
+        <img src="/public/images/banner210722.jpg" alt="">
     </div>
 
 
-    <div class="index-main container">
+    <!-- <ul class="toggleShow container">
+        <li>最新文章</li>
+        <li data-display="hot">熱門文章</li>
+        <li data-display="following">追蹤中</li>
+    </ul> -->
+
+
+    <div class="index-main container main">
+
         <main>
+            <div class="index-section">
+                <div class="index-section-header">
+                    <h3>最新文章</h3>
+                    <a href="/articles">查看更多</a>
+                </div>
+                <div class="index-section-articles">
+                    <ul class="newest-article-list ">
+                        <!-- <li>
+                            <a href="">
+                                <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            </a>
+                            
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li> -->
+
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="index-section">
+                <div class="index-section-header">
+                    <h3>人氣最高 <i class="fas fa-crown"></i> </h3>
+                    <a href="/articles?display=hot">查看更多</a>
+                </div>
+                <div class="index-section-articles">
+                    <ul class="popular-article-list">
+                        <!-- <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li>
+
+                        <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                台東最威親子飯店【禾風新棧度假飯店】是台東市區於 2019 年才新開幕的親子度假飯店，鄰近台東火車站，
+
+                                飯店有球池遊戲室、氣墊床樂園、卡丁車賽道、露天SPA泳池...休閒設施超豐富，小朋友很有得玩，
+
+                                還有溜滑梯主題房、四單床房型、聯通八人房～適合各種族群入住。下午時段還有免費冰
+                            </p>
+                        </li>
+
+                        <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="index-section">
+                <div class="index-section-header">
+                    <h3>討論度最高 <i class="fas fa-fire-alt"></i></h3>
+                    <!-- <a href="">查看更多</a> -->
+                </div>
+                <div class="index-section-articles">
+                    <ul class="discussion-article-list">
+                        <!-- <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li>
+
+                        <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                台東最威親子飯店【禾風新棧度假飯店】是台東市區於 2019 年才新開幕的親子度假飯店，鄰近台東火車站，
+
+                                飯店有球池遊戲室、氣墊床樂園、卡丁車賽道、露天SPA泳池...休閒設施超豐富，小朋友很有得玩，
+
+                                還有溜滑梯主題房、四單床房型、聯通八人房～適合各種族群入住。下午時段還有免費冰
+                            </p>
+                        </li>
+
+                        <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+
+
+
+        </main>
+
+        <!-- <main>
+
+            <div class="article">
+                <div class="article-header">
+                    <div class="author">
+                        <img src="../public/images/default-user-icon.jpg" alt="" width="30" height="30">
+                        <h3>ARU</h3>
+                    </div>
+                    <div class="features">
+                        <i class="bi bi-three-dots"></i>
+                    </div>
+                </div>
+                <div class="article-coverPhoto">
+                    <img src="../public/images/photo-1416339134316-0e91dc9ded92.jpg" alt="">
+                </div>
+                <div class="article-features">
+                    <i class="bi bi-heart"></i>
+                    <i class="bi bi-chat-dots"></i>
+                    <p>44個讚</p>
+                </div>
+                <div class="article-content">
+                    aru title
+                    <p></p>
+                    summary
+                </div>
+
+                <p class="show-comment">查看更多留言</p>
+                <div class="article-comment">
+                    <div class="commentRow">
+                        <span class="comment-author">test</span> <span>好開心1234</span>
+                        <i class="bi bi-heart"></i>
+                    </div>
+                    <div class="commentRow">
+                        <span class="comment-author">test</span> <span>好開心1234</span>
+                        <i class="bi bi-heart"></i>
+                    </div>
+                </div>
+
+                <div class="article-time">2019-23-32</div>
+                <div class="article-comment-input">
+                    <img src="../public/images/圖片.jpg" width="25" height="25" alt="" class="user-avatar">
+                    <textarea name="" id="comment" cols="30" rows="1" placeholder="留言..."></textarea>
+                    <a href="" class="sendComment" data-artid=1>發佈</a>
+                </div>
+            </div>
             <ul class="main-list">
-                <!-- <li>
+                <li>
                     <a href="">
                         <img class="coverPhoto" src="../public/images/圖片.jpg" alt="">
                         <div class="summary">
@@ -53,7 +188,8 @@
                             <h3 class="title">Mini GT civic</h3>
                             <p class="price">$1200</p>
                             <h3 class="description">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                                Quae, voluptatum ea? Veritatis impedit accusantium ea? Pariatur accusantium sapiente sequi
+                                Quae, voluptatum ea? Veritatis impedit accusantium ea? Pariatur accusantium sapiente
+                                sequi
                                 fugiat?</h3>
 
                             <div class="features">
@@ -63,15 +199,16 @@
                             </div>
                         </div>
                     </a>
-                    
-                </li> -->
+
+                </li>
 
 
             </ul>
-        </main>
+        </main> -->
 
 
         <aside class="asideBar">
+            <h3 class="aside-title">發現有趣的收藏</h3>
             <ul class="aside-list">
                 <!-- <li>
                     <img src="../public/images/圖片.jpg" alt="" >
@@ -95,7 +232,11 @@
     <%- include('includes/footer') %>
 
 
+    <style>
 
+    </style>
+    <script type="module" src="../public/js/layout.js"></script>
+    <script type="module" src="../public/js/index.js"></script>
 </body>
 
 </html>

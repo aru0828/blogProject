@@ -1,33 +1,248 @@
-.article .article-title {
-  margin-bottom: 30px;
+.article-main main {
+  margin-top: 30px;
+  margin-right: 0;
+  padding: 0;
+  width: 70%;
 }
 
-.article .author-info {
+.article-main main .article {
+  padding-top: 30px;
+}
+
+.article-main main .article-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 30px;
+  padding: 0 16px;
 }
 
-.article .author-info .author-link {
+.article-main main .article-header .author {
   display: flex;
   align-items: center;
 }
 
-.article .author-info .avatar {
+.article-main main .article-header .author img {
+  margin-right: 8px;
   border-radius: 50%;
-  margin-right: 8px;
 }
 
-.article .author-info .name {
-  margin-right: 8px;
-}
-
-.article .article-content {
+.article-main main .article-title {
+  margin-bottom: 16px;
+  padding-left: 16px;
   font-size: 20px;
-  margin-bottom: 30px;
+  font-weight: bold;
 }
 
-.article img {
+.article-main main .article-summary {
+  padding-left: 16px;
+  margin-bottom: 16px;
+}
+
+.article-main main .article-coverPhoto {
+  margin-bottom: 30px;
+  text-align: center;
+  background: #000;
+}
+
+.article-main main .article-coverPhoto img {
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.article-main main .article-content {
+  margin-bottom: 15px;
+  padding: 0 16px;
+}
+
+.article-main main .article-content img {
   max-width: 100%;
+}
+
+.article-main main .article-create-time {
+  padding: 0 16px;
+}
+
+.article-main main .article-features {
+  display: flex;
+  margin: 15px 0;
+  padding: 0 16px;
+}
+
+.article-main main .article-features .article-features-box {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.article-main main .article-features .article-features-box i {
+  margin-right: 4px;
+}
+
+.article-main aside {
+  margin-top: 30px;
+  padding: 0px;
+  width: 30%;
+}
+
+.article-header {
+  position: relative;
+}
+
+.author-feature-collapase.active {
+  transform: scaleY(1);
+}
+
+.author-feature-collapase {
+  font-size: 14px;
+  position: absolute;
+  bottom: 40px;
+  right: 20px;
+  z-index: 99;
+  transform: scaleY(0);
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  background: #2d3e4e;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.author-feature-collapase li a {
+  display: block;
+  color: white;
+  padding: 8px;
+}
+
+aside {
+  border: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
+  border-top: 0;
+  position: sticky;
+  top: 0;
+}
+
+aside img {
+  border-radius: 50%;
+}
+
+aside .commentBoard-title {
+  padding: 16px;
+  line-height: 30px;
+  border: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
+  display: flex;
+  align-items: center;
+}
+
+aside .commentBoard-title i {
+  font-size: 14px;
+  display: inline-block;
+  margin-right: 16px;
+}
+
+aside .commentBoard-title .cancel-currentCommentId {
+  margin-left: auto;
+}
+
+aside .commentBoard {
+  padding: 16px;
+  height: 500px;
+  overflow-y: scroll;
+}
+
+aside .commentBoard .replyTo {
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+aside .commentBoard .comments .sub-comment {
+  padding-left: 37px;
+}
+
+aside .commentBoard .comments .comment {
+  display: flex;
+  padding-bottom: 16px;
+}
+
+aside .commentBoard .comments .comment .comment-author-img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+aside .commentBoard .comments .comment .comment-content {
+  word-break: break-all;
+  padding: 0 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+aside .commentBoard .comments .comment .comment-content p {
+  margin-bottom: 8px;
+}
+
+aside .commentBoard .comments .comment .comment-content .comment-info {
+  display: flex;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+aside .commentBoard .comments .comment .comment-content .comment-info p {
+  margin-right: 12px;
+}
+
+aside .commentBoard .comments .comment .comment-content .comment-info p:last-child {
+  margin-right: 0;
+}
+
+aside .commentBoard .comments .comment i {
+  margin-left: auto;
+  font-size: 12px;
+  align-self: center;
+}
+
+aside .article-comment-input {
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid black;
+  padding: 8px 16px;
+}
+
+aside .article-comment-input .user-avatar {
+  width: 25px;
+  height: 25px;
+}
+
+aside .article-comment-input textarea {
+  width: auto;
+  flex-grow: 1;
+  resize: vertical;
+  border: none;
+  overflow: auto;
+  outline: none;
+  box-shadow: none;
+  padding: 8px;
+  margin-right: 8px;
+  height: 48px;
+}
+
+aside .article-comment-input textarea::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .index-main {
+    flex-direction: column;
+    padding: 0 16px;
+  }
+  .index-main main {
+    width: 100%;
+  }
+  .index-main aside {
+    display: block;
+    margin-top: 0px;
+    width: 100%;
+  }
 }
 /*# sourceMappingURL=article.css.map */

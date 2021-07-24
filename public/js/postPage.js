@@ -1,4 +1,6 @@
 
+import {checkUser} from './checkUser.js';
+
 
 
 let postForm = document.querySelector('#postForm');
@@ -9,32 +11,111 @@ coverPhoto.addEventListener('change', function(e){
   console.log(e);
 })
 
+
 postForm.addEventListener('submit', function(e){
-    e.preventDefault();
+
+
+  e.preventDefault();
+    
+    
+    
+    let tagChecked = document.querySelectorAll('.tagGroup input:checked')
+    let tagArray = [];
+    tagChecked.forEach(item => {
+      tagArray.push(parseInt(item.value));
+    })
+
+    console.log(tagArray);
+
     let title   = document.querySelector('#title').value;
     let coverPhoto = document.querySelector('#coverPhoto').files[0];
     let content = tinymce.get('editor').getContent();
     let price = document.querySelector('#price').value;
-    console.log(`入手價格 : ${price}`)
-    console.log(content);
+    let summary = document.querySelector('#summary').value;
+    
+
     let formData = new FormData();
     formData.append('title', title);
     formData.append('coverPhoto', coverPhoto);
     formData.append('content', content);
     formData.append('price', price);
-
+    formData.append('summary', summary);
+    formData.append('tagArray', tagArray);
     fetch('/api/article', {
       method:'POST',
       body:formData,
     })
     .then(response => response.json())
     .then(result => {
+      console.log(result)
       if(result.ok){
-        window.location.href=`/article?articleid=${result.article_id}`;
+        window.location.href=`/article/${result.article_id}`;
       }
     })
   
 })
+
+
+let model = {
+  userData:{},
+  tags:[],
+  getUserData:function(){
+    return checkUser().then(result => {
+      if(result.message==='登入中'){
+        model.userData = result.data;
+      }else{
+        window.location.href='/';
+      }
+      // 未登入導覽至首頁or login
+    })
+  },
+
+  getTagData:async function(){
+    return fetch('/api/tag')
+    .then(response => response.json())
+    .then(result  => {
+      if(result.ok){
+        model.tags = result.data;
+      }
+    })
+  },
+}
+
+let view = {
+  renderTags:function(){
+    console.log('render')
+    let tagGroup = document.querySelector('.tagGroup');
+    console.log(model.tagss)
+    model.tags.forEach(item=>{
+      let tag = document.createElement('div');
+      tag.classList.add('tag');
+      let checkBox = document.createElement('input');
+      let label  =document.createElement('label');
+      checkBox.setAttribute('type', 'checkBox');
+      checkBox.setAttribute('value', item.tag_id);
+      label.textContent = item.tag;
+
+      tag.appendChild(checkBox);
+      tag.appendChild(label);
+
+      tagGroup.appendChild(tag);
+      
+    })
+    // s<input type="checkbox" value="模型車">模型車
+  }
+}
+
+let controller = {
+  init:async function(){
+    await model.getUserData();
+    await model.getTagData();
+    view.renderTags();
+  }
+}
+
+
+controller.init();
+
 tinymce.init({
     selector: 'textarea',  
     plugins: 'image link media emoticons',  

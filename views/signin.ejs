@@ -1,0 +1,82 @@
+<%- include('includes/head') -%>
+<link rel="stylesheet" href="../public/css/signin.css">
+<title>首頁</title>
+</head>
+
+<body class="bg-primary-light">
+  <%- include('includes/header') -%>
+  <div class="container signin main">
+
+    <!-- 登入 -->
+    <form action="" class="signinForm  active" id="login">
+      <h2>會員登入</h2>
+      <div class="inputGroup">
+        <label for="">電子郵件</label>
+        <input type="email" class="" id="loginEmail" required>
+      </div>
+        
+      <div class="inputGroup">
+        <label for="">登入密碼</label>
+        <input type="password" class="" id="loginPassword" required>
+      </div>
+
+      <!-- <div class="">
+        <input type="checkbox" class=" mr-2">
+        <label for="" class="mb-0">記住帳號</label>
+      </div> -->
+      <button type="submit" value="登入" class="loginBtn signinBtn">登入</button>
+      
+      <p class="serarate text-center" >OR</p>
+      <a href="" class="signinBtn fbBtn "><i class="bi bi-facebook"></i> 使用 Facebook 登入</a>
+      <a href="/auth/google" class="signinBtn googleBtn "><i class="bi bi-google"></i> 使用 Google 登入</a>
+
+      <p class="toggleBtn">
+        <a href="" class="toRegister">還沒有帳號嗎? 點此註冊</a>
+      </p>
+      
+    </form>
+  
+    <!-- 註冊 -->
+    <form action="" class="signinForm rounded" id="register">
+      <h2>會員註冊</h2>
+      <div class="inputGroup">
+        <label for="">電子郵件</label>
+        <input type="text" class="rounded" id="regEmail">
+      </div>
+        
+      <div class="inputGroup">
+        <label for="">登入密碼</label>
+        <input type="text" class="rounded" id="regPassword">
+      </div>
+
+      <div class="inputGroup">
+        <label for="">使用者名稱</label>
+        <input type="text" class="rounded" id="regName">
+      </div>
+     
+
+      <a href="" class="registerBtn signinBtn rounded">註冊</a>
+      
+      <p class="serarate text-center">OR</p>
+      <a href="" class="signinBtn fbBtn rounded"><i class="bi bi-facebook"></i> 使用 Facebook 註冊</a>
+      <a href="/auth/google" class="signinBtn googleBtn rounded"><i class="bi bi-google"></i> 使用 Google 註冊</a>
+
+
+
+      <p class="text-center toggleBtn">
+        <a href="" class="toLogin">已經有帳號了嗎? 點此登入</a>
+      </p>
+      
+    </form>
+  </div>
+  
+
+
+  <%- include('includes/footer') %>
+
+  <script type="module" src="../public/js/layout.js"></script>
+  <script type="module" src="../public/js/signin.js"></script>
+  
+</body>
+
+</html>
