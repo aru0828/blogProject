@@ -8,10 +8,12 @@ router.use(express.json());
 // 要按讚須帶入userId, articleId
 router.post('/api/like', function (req, res) {
     if (req.session.user) {
-        let articleId = req.body.articleId;
+        let articleId = req.body.article_id;
         pool.getConnection(function (err, conn) {
             conn.query(`SELECT like_id FROM article_likes WHERE article_id = ${articleId} AND  user_id = ${req.session.user.user_id}`, function (err, rows) {
-                // if (err) { throw err; }
+                console.log('案讚api')
+                console.log(`SELECT id FROM comment_likes WHERE article_id = ${articleId} AND  user_id = ${req.session.user.user_id}`);
+
 
                 if (err) {
                     res.send({
@@ -93,9 +95,9 @@ router.post('/api/commentlike', function (req, res) {
         let commentId = req.body.comment_id;
 
         pool.getConnection(function (err, conn) {
-            conn.query(`SELECT id FROM comment_likes WHERE comment_id = ${commentId} AND  user_id = ${req.session.user.user_id}`, function (err, rows) {
+                        conn.query(`SELECT id FROM comment_likes WHERE comment_id = ${commentId} AND  user_id = ${req.session.user.user_id}`, function (err, rows) {
                 // if (err) { throw err; }
-
+                
                 if (err) {
                     res.send({
                         'error': true,

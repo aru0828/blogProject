@@ -56,7 +56,8 @@ passport.use(new GoogleStrategy({
                             'user_id': result[0].user_id,
                             'email': result[0].email,
                             'username': result[0].username,
-                            'avatar': result[0].avatar
+                            'avatar': result[0].avatar,
+                            'description':result[0].description
                         };
                         console.log(req.session.user)
 

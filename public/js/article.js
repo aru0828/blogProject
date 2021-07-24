@@ -1,6 +1,9 @@
 // const { text } = require("express");
 import {checkUser} from './checkUser.js';
 
+
+
+
 let cancelCurrentCommentId = document.querySelector('.cancel-currentCommentId');
 let prevCurrentCommentId = document.querySelector('.prev-currentCommentId');
 prevCurrentCommentId.addEventListener('click', function(){
@@ -9,6 +12,16 @@ prevCurrentCommentId.addEventListener('click', function(){
 cancelCurrentCommentId.addEventListener('click', function(){
     controller.cancelSubCommentMode();
 })
+
+let threeDots = document.querySelector('.bi-three-dots');
+let authorFeatureCollapase = document.querySelector('.author-feature-collapase');
+
+threeDots.addEventListener('click', function(e){
+    e.preventDefault();
+    console.log('toggle')
+    authorFeatureCollapase.classList.toggle('active');
+})
+
 
 
 
@@ -24,6 +37,25 @@ let pathParams = window.location.pathname.split("/");
 let articleId = pathParams[pathParams.length-1];
 // let queryString = new URLSearchParams(window.location.search)
 // let articleId = queryString.get("articleid")
+
+//作者進行編輯or刪除
+let authorDel = document.querySelector('.author-feature-del');
+let authorEdit = document.querySelector('.author-feature-edit');
+
+
+authorDel.addEventListener('click', function(){
+    let confirmResult = confirm('確定要刪除文章嗎?');
+    if(confirmResult){
+        controller.delArticle();
+    }
+})
+
+authorEdit.addEventListener('click', function(e){
+    e.preventDefault();
+    console.log('edit click')
+    
+    window.location.href = `/post/edit/${articleId}`;
+})
 
 
 let sendCommentBtn = document.querySelector('.sendComment')
@@ -54,17 +86,17 @@ let limit = 80;
 
 
 let model = {
-    user:{},
+    userData:{},
     article:{},
     comments:[],
     // commentlikes:[],
     //新增完記得設為null
-    currentCommentId:[],
+    commentLevels:[],
 
     checkUser:async function(){
         let result = await checkUser();
         if(result.message ==='登入中'){
-            model.user = result.data;
+            model.userData = result.data;
         }
     },
 
@@ -72,7 +104,10 @@ let model = {
         return fetch(`/api/article/${articleId}`)
         .then(response =>response.json())
         .then(result => {
-            let dateArray = result.data.article.create_time.split(/[T|\.|\:]/)
+            console.log(result)
+            if(result.error){
+                window.location.href= "/articles"
+            }
             model.article = result.data.article;
     
             // if(result.ok){
@@ -83,6 +118,7 @@ let model = {
             //     // authorAvatar.setAttribute('src', article.avatar);
             //     publishTime.textContent = `${dateArray[0]} ${parseInt(dateArray[1])+8}:${dateArray[2]}`;
             // }
+
             
         })
     },
@@ -98,8 +134,8 @@ let model = {
 
     getSubComments:function(){
         // fetch 
-        console.log(model.currentCommentId)
-        return fetch(`/api/childcomments/${model.currentCommentId[model.currentCommentId.length-1]}`)
+        console.log(model.commentLevels)
+        return fetch(`/api/childcomments/${model.commentLevels[model.commentLevels.length-1]}`)
         .then(response => response.json())
         .then(result => {
             model.comments = result.data;
@@ -120,8 +156,8 @@ let model = {
 
     submitComment:function(artId, comment, parent=null){
         console.log('送出留言' + parent);
-        console.log(model.user)
-        if(model.user === {}){
+        console.log(model.userData)
+        if(model.userData === {}){
             alert('登入後才能使用留言功能~');
             return;
         }
@@ -157,10 +193,11 @@ let model = {
     },
 
     likeEvent:function(){
+        console.log()
         let requestBody = {
             // 改由後端利用session取得userid
             // 'userId':1,
-            'articleId':articleId,
+            'article_id':articleId,
         }
 
         return fetch('/api/like',{
@@ -191,6 +228,18 @@ let model = {
         })
         .then(response => response.json())
        
+    },
+
+    delArticle:function(){
+        return fetch('/api/article',{
+            'method':'DELETE',
+            'body':JSON.stringify({'article_id':articleId}),
+            'headers':{
+                'content-type':'application/json'
+            }
+        })
+        .then(response => response.json())
+        
     }
 
 }
@@ -199,12 +248,17 @@ let view = {
 
     renderArticle:function(){
         let article = model.article;
-        console.log(model.article)
+        console.log(article)
+        
+        if(model.userData.user_id !== article.author.user_id){
+            threeDots.remove();
+        }
+       
         let authorLink = document.querySelector('.author');
         authorLink.setAttribute('href', `/member/${article.author.user_id}`);
 
         let authorImg = document.querySelector('.author img');
-        authorImg.setAttribute('src', article.author.avatar);
+        authorImg.setAttribute('src', article.author.avatar ? article.author.avatar : '../public/images/default-user-icon.jpg');
         let authorName = document.querySelector('.author h3');
         authorName.textContent = article.author.username;
 
@@ -221,13 +275,17 @@ let view = {
         let articleContent = document.querySelector('.article-content');
         articleContent.innerHTML = article.content;
 
+        let dateArray = article.create_time.split(/[T|\.|\:]/);
+        let articleTime = document.querySelector('.article-create-time');
+        articleTime.textContent = `${dateArray[0]} ${parseInt(dateArray[1])+8}:${dateArray[2]}`
+        
         
     },
 
     renderArticleFeatrues:function(){
         let heartIcon = document.querySelector('.likeIcon');
-        console.log(model.article)
-        if(model.article.likes.hasOwnProperty(model.user.user_id)){
+
+        if(model.article.user_is_liked === 'yes'){
             heartIcon.classList.remove('bi-heart');
             heartIcon.classList.add('bi-heart-fill');
         }
@@ -237,7 +295,7 @@ let view = {
         }
         
         let articleLikeQty = document.querySelector('.articleLikeQty');
-        articleLikeQty.textContent = Object.keys(model.article.likes).length;
+        articleLikeQty.textContent = model.article.likeQty;
     },
     renderComments:function() {
         
@@ -245,10 +303,9 @@ let view = {
         let frag = document.createDocumentFragment();
         let commentTextArea = document.getElementById('comment');
         let replyTo = document.querySelector('.replyTo');
-        // replyTo.textContent = model.currentCommentId ? `正在回覆${model.comments[0].username}` : '';
+        replyTo.textContent = model.commentLevels.length > 0 ? `正在回覆${model.comments[0].username}...` : '';
         comments.innerHTML = "";
         commentTextArea.value = "";          
-        console.log(model.comments)
         model.comments.forEach((comment, index) => {
             // li
             let commentLi = document.createElement('li');
@@ -294,7 +351,7 @@ let view = {
             commentContent.appendChild(commentInfo);
 
             let likeIcon = document.createElement('i');
-            if(comment.user_is_liked){
+            if(comment.user_is_liked ){
                 likeIcon.classList.add('bi', 'bi-heart-fill');
             }
             else{
@@ -312,10 +369,10 @@ let view = {
             commentLi.appendChild(likeIcon);
 
             // 回覆留言模式額外設定
-            if(model.currentCommentId.length && index !== 0){
+            if(model.commentLevels.length && index !== 0){
                 commentLi.classList.add('sub-comment');
             }
-            if(model.currentCommentId.length && index === 0){
+            if(model.commentLevels.length && index === 0){
                 commentBtn.textContent = '';
             }
 
@@ -341,24 +398,29 @@ let controller = {
         view.renderArticleFeatrues();
         await model.getLevelOneComments();
         view.renderComments();
+
+        let commentAuthorImg = document.querySelector('.user-avatar');
+        console.log(model.userData)
+        commentAuthorImg.setAttribute('src', model.userData  ? model.userData.avatar : '../public/images/default-user-icon.jpg');
+      
     },
 
     submitComment:async function(artId, comment) {
-        console.log('送出留言 parent = ' + model.currentCommentId);
-        // 利用if判斷目前是回覆文章or留言
-        if(model.currentCommentId.length){
+        console.log('送出留言 parent = ' + model.commentLevels);
+        // 回覆留言
+        if(model.commentLevels.length){
             // 第三個參數為回覆的留言ID = 資料庫中的parent
-            await model.submitComment(artId, comment, model.currentCommentId[-1])
-                  .then(result => {
-                      console.log(result);
-                  });
+            let result = await model.submitComment(artId, comment, model.commentLevels[model.commentLevels.length-1])
+            
+            if(result.error){
+                alert(result.message);
+                return;
+            }
+
             await model.getSubComments();
             view.renderComments();
-            // 現在能依照currentCommentId正確存入子層留言 下面再處理view
-            
-            // await model.getLevelOneComments();
-            // view.renderComments();
         }
+        // 回覆文章
         else{
             let result = await model.submitComment(artId, comment);
             console.log(result)
@@ -366,7 +428,7 @@ let controller = {
                 alert(result.message);
                 return;
             }
-            await model.getSubComments();
+            await model.getLevelOneComments();
             view.renderComments();
         }
        
@@ -374,20 +436,20 @@ let controller = {
     },
 
     subCommentMode:async function(commentId) {
-      model.currentCommentId.push(commentId);
+      model.commentLevels.push(commentId);
       await model.getSubComments();
       view.renderComments();
     },
 
     cancelSubCommentMode: async function(){
-        model.currentCommentId = [];
+        model.commentLevels = [];
         console.log('取消回覆留言')
         await model.getLevelOneComments();
         view.renderComments();
     },
     prevSubComment:async function(){
-        model.currentCommentId.pop();
-        if(!model.currentCommentId.length){
+        model.commentLevels.pop();
+        if(!model.commentLevels.length){
             await model.getLevelOneComments();   
         }
         else{
@@ -397,9 +459,9 @@ let controller = {
     },
 
     likeEvent:async function(){
-        
+        console.log('按讚事件')
         let likeResult =await model.likeEvent();
-        await model.getLikeData();
+        await model.getArticleData();
         if(likeResult.error){
             alert(likeResult.message);
             return;
@@ -414,7 +476,7 @@ let controller = {
             return;
         }
 
-        if(!model.currentCommentId.length){
+        if(!model.commentLevels.length){
             await model.getLevelOneComments();   
         }
         else{
@@ -422,6 +484,14 @@ let controller = {
         }
         view.renderComments();
         
+    },
+
+    delArticle:async function(){
+        let result = await model.delArticle();
+        if(result.ok){
+            window.location.href="/";
+        }
+        alert(result.message);
     }
 
     // submitSubComment: async function(artId, comment, parent) {

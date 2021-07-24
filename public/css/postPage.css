@@ -1,4 +1,51 @@
-.inputGroup {
+.postPage-main {
+  margin-top: 60px;
+}
+
+#postForm {
+  width: 75%;
+  background: white;
+  margin: 0 auto;
+}
+
+#postForm .tagGroup {
+  gap: 8px;
+}
+
+#postForm .tagGroup .tag {
   display: flex;
+}
+
+#postForm .inputGroup {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
+}
+
+#postForm .inputGroup input {
+  border: 0px;
+  padding: 5px;
+  flex-grow: 1;
+}
+
+#postForm .inputGroup input:focus-visible {
+  outline: 0;
+}
+
+.postPage-main h2 {
+  background: #4286F5;
+  padding: 8px 0;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.postPage-main .submitBtn {
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  background: #4286F5;
 }
 /*# sourceMappingURL=postPage.css.map */

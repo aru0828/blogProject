@@ -9,6 +9,7 @@ const oauthAPI  = require('./routes/oauthAPI');
 const memberAPI  = require('./routes/memberAPI');
 const commentAPI  = require('./routes/commentAPI');
 const likeAPI  = require('./routes/likeAPI');
+const followAPI  = require('./routes/followAPI');
 // 第一個參數為虛擬目錄 url 須 localhost/static
 // 第二個參數為static資料夾名稱
 app.use('/public', express.static('public'));
@@ -21,6 +22,7 @@ app.use(oauthAPI);
 app.use(memberAPI);
 app.use(commentAPI);
 app.use(likeAPI);
+app.use(followAPI);
 app.set();
 app.get('/', function(req, res) {
   // res.sendFile(path.join(__dirname,'/templates/index.html'));
@@ -57,6 +59,9 @@ app.get('/post',  function(req, res) {
   res.render('postPage', {'title': '首頁',});
 });
 
+app.get('/post/edit/:articleId',  function(req, res) {
+  res.render('editPage', {'title': '首頁',});
+});
 
 
 app.listen(3000, function() {

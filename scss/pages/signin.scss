@@ -22,13 +22,16 @@
         label{
             font-size: 12px;
             margin-bottom: 8px;
+            display: inline-block;
             letter-spacing: 0.125rem;
+
         }
         input{
             background: #E5E5E5;
             border:0;
             line-height: 30px;
             padding:0 5px;
+            width: 100%;
         }
 
         h2{
@@ -40,6 +43,9 @@
         }
 
         .signinBtn{
+            cursor: pointer;
+            border:0px;
+            font-size: 16px;
             display:block;
             text-align: center;
             padding:10px 0;
@@ -57,6 +63,8 @@
 
         .serarate{
             margin-top: 15px;
+            text-align: center;
+            color:gray;
         }
         .fbBtn{
             background: #1877F2;
@@ -66,8 +74,8 @@
         }
 
         .toggleBtn{
-            
-            margin:40px 0px 20px 0px;
+            text-align: center;
+            margin:30px 0px 30px 0px;
             font-size: 14px;
             a{
                 color:gray;
@@ -77,72 +85,21 @@
 }
 
 @media(max-width:992px){
+   .signin{
+
+    .signinForm{
+        width: 80%;
+    }
+   }
+    
+}
+
+@media(max-width:576px){
     .signin{
-        display:flex;
-        justify-content: center;
-        
+
         .signinForm{
-            width: 80%;
-            
-    
-            .inputGroup{
-                flex-direction: column;
-                margin-bottom: 15px;
-            }
-            label{
-                font-size: 12px;
-                margin-bottom: 8px;
-                letter-spacing: 0.125rem;
-            }
-            input{
-                background: #E5E5E5;
-                border:0;
-                line-height: 30px;
-                padding:0 5px;
-            }
-    
-            h2{
-                font-size: 24px;
-                font-weight: bold;
-                color:#4286F5;
-                margin-bottom: 20px;
-                letter-spacing: 0.125rem;
-            }
-    
-            .SigninBtn{
-                display:block;
-                text-align: center;
-                padding:10px 0;
-                margin-top: 15px;
-                font-weight: bold;
-                letter-spacing: 0.125rem;
-                line-height: 1rem;
-                width: 100%;
-                background:#4286F5;
-                color:white;
-                i{
-                    font-size: 1rem;
-                }
-            }
-    
-            .serarate{
-                margin-top: 15px;
-            }
-            .fbBtn{
-                background: #1877F2;
-            }
-            .googleBtn{
-                background: #DF4930;
-            }
-    
-            .toggleBtn{
-                
-                margin:40px 0px 20px 0px;
-                font-size: 14px;
-                a{
-                    color:gray;
-                }
-            }
+            padding: 30px 12px 0px 12px;
+            border-right:24px solid #4286F5;
         }
     }
     

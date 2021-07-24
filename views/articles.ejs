@@ -7,23 +7,30 @@
 <%- include('includes/header') -%>
 
 
-<div class="index-main container">
+<div class="index-main container main">
+    
     <main>
-        <div class="showSettings">
-            <div class="tagGroup">
-                <!-- <a class="badge rounded-pill bg-dark">tomica</a>
-                <a class="badge rounded-pill bg-dark">航海王</a> -->
-                
-            </div>
-            <div class="sortGroup">
-                <select name="" id="">
-                    <option value="">發布時間 近-遠</option>
-                    <option value="">發布時間 遠-近</option>
-                    <option value="">依照讚數 多-少</option>
-                    <option value="">依照讚數 少-多</option>
-                </select>
-            </div>
-        </div>
+        <ul class="tags">
+            <!-- <li><a href="#" class="tag">HTML</a></li>
+            <li><a href="#" class="tag">CSS</a></li>
+            <li><a href="#" class="tag">JavaScript</a></li> -->
+        </ul>
+
+      
+        <ul class="toggleShow container">
+            <li>
+                <a href="" class="newest">最新文章</a>  
+            </li>
+            <li >
+                <a href="" data-display="hot" class="hot">熱門文章</a>
+            </li>
+            <li class="displayFollowingBtn" >
+                <a href="" data-display="following" class="following">追蹤中</a>
+            </li>
+        </ul>
+        
+
+        
        
         <ul class="main-list">
             <!-- <li>

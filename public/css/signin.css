@@ -26,6 +26,7 @@
 .signin .signinForm label {
   font-size: 12px;
   margin-bottom: 8px;
+  display: inline-block;
   letter-spacing: 0.125rem;
 }
 
@@ -34,6 +35,7 @@
   border: 0;
   line-height: 30px;
   padding: 0 5px;
+  width: 100%;
 }
 
 .signin .signinForm h2 {
@@ -45,6 +47,9 @@
 }
 
 .signin .signinForm .signinBtn {
+  cursor: pointer;
+  border: 0px;
+  font-size: 16px;
   display: block;
   text-align: center;
   padding: 10px 0;
@@ -63,6 +68,8 @@
 
 .signin .signinForm .serarate {
   margin-top: 15px;
+  text-align: center;
+  color: gray;
 }
 
 .signin .signinForm .fbBtn {
@@ -74,7 +81,8 @@
 }
 
 .signin .signinForm .toggleBtn {
-  margin: 40px 0px 20px 0px;
+  text-align: center;
+  margin: 30px 0px 30px 0px;
   font-size: 14px;
 }
 
@@ -83,65 +91,15 @@
 }
 
 @media (max-width: 992px) {
-  .signin {
-    display: flex;
-    justify-content: center;
-  }
   .signin .signinForm {
     width: 80%;
   }
-  .signin .signinForm .inputGroup {
-    flex-direction: column;
-    margin-bottom: 15px;
-  }
-  .signin .signinForm label {
-    font-size: 12px;
-    margin-bottom: 8px;
-    letter-spacing: 0.125rem;
-  }
-  .signin .signinForm input {
-    background: #E5E5E5;
-    border: 0;
-    line-height: 30px;
-    padding: 0 5px;
-  }
-  .signin .signinForm h2 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4286F5;
-    margin-bottom: 20px;
-    letter-spacing: 0.125rem;
-  }
-  .signin .signinForm .SigninBtn {
-    display: block;
-    text-align: center;
-    padding: 10px 0;
-    margin-top: 15px;
-    font-weight: bold;
-    letter-spacing: 0.125rem;
-    line-height: 1rem;
-    width: 100%;
-    background: #4286F5;
-    color: white;
-  }
-  .signin .signinForm .SigninBtn i {
-    font-size: 1rem;
-  }
-  .signin .signinForm .serarate {
-    margin-top: 15px;
-  }
-  .signin .signinForm .fbBtn {
-    background: #1877F2;
-  }
-  .signin .signinForm .googleBtn {
-    background: #DF4930;
-  }
-  .signin .signinForm .toggleBtn {
-    margin: 40px 0px 20px 0px;
-    font-size: 14px;
-  }
-  .signin .signinForm .toggleBtn a {
-    color: gray;
+}
+
+@media (max-width: 576px) {
+  .signin .signinForm {
+    padding: 30px 12px 0px 12px;
+    border-right: 24px solid #4286F5;
   }
 }
 /*# sourceMappingURL=signin.css.map */

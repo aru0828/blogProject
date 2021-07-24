@@ -3,25 +3,29 @@
 <link rel="stylesheet" href="../public/css/memberEdit.css">
 </head>
 
-<body class="bg-primary-light">
+<body class="">
     <%- include('includes/header') -%>
 
 
-    <div class="memberEdit container">
+    <div class="memberEdit container main">
         <form class="member-card">
             <div class="avatar">
-                <img src="../public/images/圖片.jpg" alt="" width="150" height="150">
-                <input type="file" title="變更大頭貼照">
+                <p>大頭貼照</p>
+                <div class="imgBox">
+                    <img src="../public/images/圖片.jpg" alt="" width="150" height="150">
+                </div>
+                
+                <input class="newAvatar" type="file" title="變更大頭貼照">
             </div>
             <div class="info">
                 <div class="inputGroup">
                     <label for="">電子郵件</label>
-                    <input type="text" value="test@yahoo.com.tw" readonly>
+                    <input id="email" type="text" value="test@yahoo.com.tw" readonly>
                 </div>
 
                 <div class="inputGroup">
                     <label for="">用戶名稱</label>
-                    <input type="text" value="aru">
+                    <input id="username" type="text" value="aru">
                 </div>
 
                 <div class="inputGroup">
@@ -32,8 +36,8 @@
                 </div>
 
                 <div class="inputGroup">
-                    <label for=""></label>
-                    <input type="submit" class="px-3 py-2">
+                    
+                    <input id="submit" type="submit" class="">
                 </div>
 
             </div>

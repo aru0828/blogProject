@@ -23,8 +23,7 @@ router.use(express.json());
 // 檢查登入狀況
 router.get('/api/user', (req, res) => {
     
-    console.log(req.session.user)
-    // console.log(req.session.user)
+    
     if (req.session.user) {
         res.send({
             'data': req.session.user,
@@ -194,6 +193,7 @@ router.patch('/api/user', (req, res) => {
                             'email': result[0].email,
                             'username': result[0].username,
                             'avatar': result[0].avatar,
+                            'description':result[0].description
                         };
                         
                         res.send({
@@ -277,7 +277,7 @@ function thirdPartyLogin() {
                 'email': result[0].email,
                 'username': result[0].username,
             };
-            console.log(req.session.user)
+            
 
             res.send({
                 'ok': true,

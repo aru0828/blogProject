@@ -1,20 +1,139 @@
-
 <%- include('includes/head') -%>
 <title>首頁</title>
 </head>
 
-<body class="bg-primary-light">
+<body class="">
     <%- include('includes/header') -%>
 
 
+    <div class="banner ">
+        <img src="/public/images/banner210722.jpg" alt="">
+    </div>
 
-    
+
+    <!-- <ul class="toggleShow container">
+        <li>最新文章</li>
+        <li data-display="hot">熱門文章</li>
+        <li data-display="following">追蹤中</li>
+    </ul> -->
 
 
-    <div class="index-main container">
+    <div class="index-main container main">
+
         <main>
+            <div class="index-section">
+                <div class="index-section-header">
+                    <h3>最新文章</h3>
+                    <a href="/articles">查看更多</a>
+                </div>
+                <div class="index-section-articles">
+                    <ul class="newest-article-list ">
+                        <!-- <li>
+                            <a href="">
+                                <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            </a>
+                            
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li> -->
 
-            <!-- <div class="article">
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="index-section">
+                <div class="index-section-header">
+                    <h3>人氣最高 <i class="fas fa-crown"></i> </h3>
+                    <a href="/articles?display=hot">查看更多</a>
+                </div>
+                <div class="index-section-articles">
+                    <ul class="popular-article-list">
+                        <!-- <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li>
+
+                        <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                台東最威親子飯店【禾風新棧度假飯店】是台東市區於 2019 年才新開幕的親子度假飯店，鄰近台東火車站，
+
+                                飯店有球池遊戲室、氣墊床樂園、卡丁車賽道、露天SPA泳池...休閒設施超豐富，小朋友很有得玩，
+
+                                還有溜滑梯主題房、四單床房型、聯通八人房～適合各種族群入住。下午時段還有免費冰
+                            </p>
+                        </li>
+
+                        <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="index-section">
+                <div class="index-section-header">
+                    <h3>討論度最高 <i class="fas fa-fire-alt"></i></h3>
+                    <!-- <a href="">查看更多</a> -->
+                </div>
+                <div class="index-section-articles">
+                    <ul class="discussion-article-list">
+                        <!-- <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li>
+
+                        <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                台東最威親子飯店【禾風新棧度假飯店】是台東市區於 2019 年才新開幕的親子度假飯店，鄰近台東火車站，
+
+                                飯店有球池遊戲室、氣墊床樂園、卡丁車賽道、露天SPA泳池...休閒設施超豐富，小朋友很有得玩，
+
+                                還有溜滑梯主題房、四單床房型、聯通八人房～適合各種族群入住。下午時段還有免費冰
+                            </p>
+                        </li>
+
+                        <li>
+                            <img class="article-img"
+                                src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/b2d5d953c5eca98b0ca7b8818e798aa8"
+                                alt="">
+                            <p class="article-content">
+                                【影評人】《破處》　褲子都脫了給我看這個
+                            </p>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+
+
+
+        </main>
+
+        <!-- <main>
+
+            <div class="article">
                 <div class="article-header">
                     <div class="author">
                         <img src="../public/images/default-user-icon.jpg" alt="" width="30" height="30">
@@ -37,7 +156,7 @@
                     <p></p>
                     summary
                 </div>
-                
+
                 <p class="show-comment">查看更多留言</p>
                 <div class="article-comment">
                     <div class="commentRow">
@@ -56,9 +175,9 @@
                     <textarea name="" id="comment" cols="30" rows="1" placeholder="留言..."></textarea>
                     <a href="" class="sendComment" data-artid=1>發佈</a>
                 </div>
-            </div> -->
+            </div>
             <ul class="main-list">
-                <!-- <li>
+                <li>
                     <a href="">
                         <img class="coverPhoto" src="../public/images/圖片.jpg" alt="">
                         <div class="summary">
@@ -69,7 +188,8 @@
                             <h3 class="title">Mini GT civic</h3>
                             <p class="price">$1200</p>
                             <h3 class="description">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                                Quae, voluptatum ea? Veritatis impedit accusantium ea? Pariatur accusantium sapiente sequi
+                                Quae, voluptatum ea? Veritatis impedit accusantium ea? Pariatur accusantium sapiente
+                                sequi
                                 fugiat?</h3>
 
                             <div class="features">
@@ -79,16 +199,16 @@
                             </div>
                         </div>
                     </a>
-                    
-                </li> -->
+
+                </li>
 
 
             </ul>
-        </main>
+        </main> -->
 
 
         <aside class="asideBar">
-            <h3 class="aside-title">最新發布的收藏</h3>
+            <h3 class="aside-title">發現有趣的收藏</h3>
             <ul class="aside-list">
                 <!-- <li>
                     <img src="../public/images/圖片.jpg" alt="" >
@@ -113,7 +233,7 @@
 
 
     <style>
-        
+
     </style>
     <script type="module" src="../public/js/layout.js"></script>
     <script type="module" src="../public/js/index.js"></script>

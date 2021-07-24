@@ -7,10 +7,9 @@
 
 .member-info {
   width: 80%;
-  height: 200px;
   display: flex;
   margin-bottom: 48px;
-  background: #f4f4f4;
+  background: white;
 }
 
 .member-info .member-summary {
@@ -21,14 +20,52 @@
   padding: 15px 0px;
 }
 
-.member-info .member-summary .d-flex p {
+.member-info .member-summary .member-avatar {
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+.member-info .member-summary .member-name {
+  margin-bottom: 8px;
+}
+
+.member-info .member-summary .member-qty {
+  display: flex;
+}
+
+.member-info .member-summary .member-qty p {
   padding: 4px 8px;
   letter-spacing: 0.025rem;
+}
+
+.member-info .member-summary .follow-btn.hidden {
+  display: none;
+}
+
+.member-info .member-summary .follow-btn {
+  font-size: 14px;
+  background: #4286F5;
+  padding: 8px 24px;
+  color: white;
+  border-radius: 5px;
+  margin-top: 8px;
+}
+
+.member-info .member-summary .isFollowing {
+  background: white;
+  color: black;
+  border: 2px solid #f4f4f4;
 }
 
 .member-info .member-description {
   width: 60%;
   padding: 30px 30px 15px 30px;
+}
+
+.member-info .member-description p {
+  height: 100%;
 }
 
 .member-post {
@@ -47,6 +84,7 @@
 
 .member-post li img {
   object-fit: cover;
+  aspect-ratio: 4/4;
   max-width: 100%;
   width: 100%;
   height: 100%;
@@ -75,11 +113,39 @@
   text-align: center;
 }
 
+.member-post li .hover-effect .bi-heart-fill {
+  color: white;
+}
+
 .member-post li:hover .hover-effect {
   background: rgba(0, 0, 0, 0.3);
 }
 
 .member-post li:hover p {
   display: block;
+}
+
+@media (max-width: 576px) {
+  .member-info {
+    width: 95%;
+    display: flex;
+    margin-bottom: 48px;
+    background: white;
+  }
+  .member-info .member-summary .member-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  .member-info .member-qty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .member-post {
+    width: 90%;
+  }
+  .member-post li {
+    width: 48%;
+  }
 }
 /*# sourceMappingURL=member.css.map */

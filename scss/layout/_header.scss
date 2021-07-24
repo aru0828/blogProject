@@ -4,22 +4,31 @@ header{
     background: white;
     nav{
         display:flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
+        position: relative;
         padding: 8px 0px;
         position: relative;
         color:black;
         background: white;
         h1{
-            width: 30%;
+            
+        }
+
+        .keyWordSearch{
+            position: absolute;
+            left:50%;
+            transform: translate(-50%, 0);
         }
 
         .header-nav-list{
             display: flex;
+            
             flex-direction: row-reverse;
             align-items: center;
             color: black;
-            width: 30%;
+        
+            
             
             .memberImg{
                 border-radius: 50%;
@@ -33,6 +42,7 @@ header{
             li:first-child{
                 margin-right: 0;
             }
+            
 
             .member-only, .visitor-only{
                 display:none;
@@ -73,3 +83,33 @@ header{
         }
     }
 }
+
+
+
+
+
+@media(max-width:768px){
+    
+header{
+    border:0.5px solid #cacaca;
+    background: white;
+    nav{
+       padding:8px 8px;
+       .phoneHidden{
+           display:none;
+       }
+    }
+}
+}
+
+
+@media(max-width:576px){
+    
+    header{
+      
+        nav{
+           padding:8px 8px;
+          
+        }
+    }
+    }

@@ -1,39 +1,104 @@
 
 
-let pathParams = window.location.pathname.split("/");
-userid = pathParams[pathParams.length-1];
+import {checkUser} from './checkUser.js';
 
+let pathParams = window.location.pathname.split("/");
+let memberId = pathParams[pathParams.length-1];
+
+
+let followBtn = document.querySelector('.follow-btn');
+
+followBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    controller.followMember();
+
+})
 
 
 let model = {
-    data :null,
+    userData:{},
+    memberData :{},
+    isFollowed:false,
+
+    getUserData:function(){
+        return checkUser().then(result=>{
+            if(result.message==='登入中'){
+                model.userData = result.data;
+            }
+        })
+    },
     getPageData:function(){
-        return fetch(`/api/member/${userid}`)
+        return fetch(`/api/member/${memberId}`)
+        .then(response => response.json())
+        .then(result => {       
+            console.log(result)
+            
+            if(result.ok){        
+                model.memberData = result.data;
+            }
+            else if(result.error){
+                // window.location.href = '/';
+            }
+        })
+    },
+
+    followMember:function(){
+        
+        let requestData = {
+            'follow_id':memberId
+        }
+        return fetch('/api/follow', {
+            'method':'POST',
+            'body':JSON.stringify(requestData),
+            'headers':{
+                'content-type':'application/json'
+            }
+        })
         .then(response => response.json())
         .then(result => {
-            model.data = result;
+            console.log(result);
+            if(result.error){
+                alert(result.message);
+            }
         })
-    }
+    },
+
+    getFollowData:function(){
+        let followId = memberId;
+        console.log('fetch follow')
+        return fetch(`/api/follow/${followId}`)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            if(result.ok){
+                model.isFollowed = result.data.isFollowed;
+            }
+        })
+
+    },
 }
 
 let view = {
-    renderMemberPage:function(){
-        console.log(model.data);
 
-       
+    renderMemberInfo:function(){
         // 會員資訊
-        let user = model.data.data.user;
+        let user = model.memberData.memberData;
         let avatar = document.querySelector('.member-summary img');
+        let memberName = document.querySelector('.member-name');
         let postQty = document.querySelector('.post-qty');
         let followerQty = document.querySelector('.follower-qty');
-        let memeberDescription = document.querySelector('.member-description')
+        let memeberDescription = document.querySelector('.member-description p')
 
 
-        avatar.setAttribute('src', !user.avatar ?  '../public/images/default-user-icon.jpg' : user.avatar)
-        postQty.textContent = `${user.postNum > 0 ? user.postNum : 0} 個收藏`;
-        followerQty.textContent = `22 位追蹤者`;
-        console.log(user.description)
+        avatar.setAttribute('src', !user.avatar ?  '../public/images/default-user-icon.jpg' : user.avatar);
+        memberName.textContent = user.username;
+        postQty.textContent = `${model.memberData.articles.length > 0 ? model.memberData.articles.length : 0} 個收藏`;
+        followerQty.textContent = `${user.followQty > 0 ? user.followQty : 0} 位追蹤者`;
+        console.log(model.memberData)
+        console.log(model.memberData.followQty)
         memeberDescription.textContent = !user.description ? `大家好，我是${user.username}` : user.description;
+    },
+    renderMemberArticles:function(){
         // 會員資訊
 
         // 會員文章列表
@@ -42,7 +107,7 @@ let view = {
         let frag = document.createDocumentFragment();
         let memberPost = document.querySelector('.member-post');
 
-        console.log('會員文章', model.data.data.articles);
+       
          // <li>
         //     <img src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/48620200979d2e6e7e5e69458b7e3fea" alt="">
         //     <a href="/article/12">
@@ -57,14 +122,13 @@ let view = {
         //     </a>
         // </li>
 
-
-        if(!model.data.data.articles){
+        console.log(model.memberData);
+        if(model.memberData.articles.length < 1){
             let noPost = document.querySelector('.no-post')
-            alert('尚未發布收藏');
             noPost.textContent = '尚未發布收藏~'
         }
         else{
-            model.data.data.articles.forEach(item => {
+            model.memberData.articles.forEach(item => {
 
                 let postLi = document.createElement('li');
                 let postLink  = document.createElement('a');
@@ -74,11 +138,11 @@ let view = {
                 let chatFill  = document.createElement('p');
                 
                 let heartQty = document.createElement('span');
-                heartQty.textContent = '22';
+                heartQty.textContent = item.likeQty;
                 let chatQty = document.createElement('span');
-                chatQty.textContent = '18';
+                chatQty.textContent = item.commentQty;
 
-                console.log(heartQty, chatQty);
+                
                 heartFill.classList.add('bi', 'bi-heart-fill');
                 heartFill.appendChild(heartQty);
                 chatFill.classList.add('bi', 'bi-chat-fill');
@@ -104,13 +168,47 @@ let view = {
 
 
         // 會員文章列表
+    },
+
+    renderFollowBtn:function(){
+        let followBtn = document.querySelector('.follow-btn');
+        
+        // 如果在自己的會員頁 不顯示追蹤按鈕
+        if(model.userData.user_id === parseInt(memberId)){
+            followBtn.remove();
+        }
+        
+        if(model.isFollowed){
+            followBtn.classList.add('isFollowing');
+            followBtn.textContent = '追蹤中';
+        }else{
+            followBtn.classList.remove('isFollowing');
+            followBtn.textContent = '追蹤';
+        }
+
+        // <a href="" class="follow-btn">追蹤</a>
     }
 }
 
 let controller = {
     init:async function (){
+        await model.getUserData();
         await model.getPageData();
-        view.renderMemberPage();
+        view.renderMemberInfo();
+        view.renderMemberArticles();
+        controller.getFollowData();
+    },
+
+    getFollowData:async function(){
+        await model.getPageData();
+        await model.getFollowData();
+        view.renderMemberInfo();
+        view.renderFollowBtn();
+    },
+
+    followMember:async function(){
+        await model.followMember();
+        controller.getFollowData();
     }
 }
 

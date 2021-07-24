@@ -2,12 +2,28 @@
 
 a{
     text-decoration: none;
+    color:black;
+    cursor: pointer;
 }
 
+*, *::after, *::before{
+    box-sizing: border-box;
+}
+
+
+
+.main{
+    min-height: 90vh;
+}
 
 body{
     // letter-spacing: 0.125rem;
     font-family: 'Noto Sans TC', sans-serif;
+    background: #fafafa;
+}
+
+.none{
+    display:none;
 }
 
 .container{

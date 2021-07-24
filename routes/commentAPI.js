@@ -25,11 +25,11 @@ router.get('/api/comments/:articleid', function(req, res){
         //         ORDER BY comments.create_time ASC;`
         let sql ='';
         if(req.session.user){
-            sql = `select CommentAndAuthor.*,  IFNULL(count(comment_likes.comment_id), 0) as likeQty , GROUP_CONCAT(IF(comment_likes.user_id = ${req.session.user.user_id}, 'yes', '')) as user_is_liked from
+            sql = `select CommentAndAuthor.*,  IFNULL(count(comment_likes.comment_id), 0) as likeQty , GROUP_CONCAT(IF(comment_likes.user_id = ${req.session.user.user_id}, 'yes', '') SEPARATOR  '' ) as user_is_liked from
                     (SELECT comments.* , users.username, users.avatar FROM comments 
                                     INNER JOIN users 
                                     ON comments.user_id = users.user_id
-                                    WHERE comments.article_id = 21 AND comments.parent IS NULL
+                                    WHERE comments.article_id = ${articleid} AND comments.parent IS NULL
                                     ORDER BY comments.create_time ASC) as CommentAndAuthor
                     LEFT JOIN comment_likes
                     ON CommentAndAuthor.comment_id = comment_likes.comment_id 
@@ -40,7 +40,7 @@ router.get('/api/comments/:articleid', function(req, res){
             (SELECT comments.* , users.username, users.avatar FROM comments 
                             INNER JOIN users 
                             ON comments.user_id = users.user_id
-                            WHERE comments.article_id = 21 AND comments.parent IS NULL
+                            WHERE comments.article_id = ${articleid} AND comments.parent IS NULL
                             ORDER BY comments.create_time ASC) as CommentAndAuthor
             LEFT JOIN comment_likes
             ON CommentAndAuthor.comment_id = comment_likes.comment_id
@@ -79,7 +79,7 @@ router.get('/api/childcomments/:parentid', function(req, res){
     //             ORDER BY comments.create_time ASC;`
     let sql = '';
     if(req.session.user){
-        sql = `select CommentAndAuthor.*,  IFNULL(count(comment_likes.comment_id), 0) as likeQty , GROUP_CONCAT(IF(comment_likes.user_id = ${req.session.user.user_id}, 'yes', '')) as user_is_liked from
+        sql = `select CommentAndAuthor.*,  IFNULL(count(comment_likes.comment_id), 0) as likeQty , GROUP_CONCAT(IF(comment_likes.user_id = ${req.session.user.user_id}, 'yes', '') SEPARATOR  '' ) as user_is_liked from
                 (SELECT comments.* , users.username, users.avatar,  users.user_id AS who_liked FROM comments 
                 INNER JOIN users 
                 ON comments.user_id = users.user_id
@@ -131,7 +131,7 @@ router.post('/api/comment', function(req, res){
     let user = req.session.user;
     
     if(user){
-        console.log(user.user_id);
+        
 
         let comment = req.body.comment;
         let article_id = req.body.article_id;
@@ -149,7 +149,7 @@ router.post('/api/comment', function(req, res){
         }
         
         pool.getConnection((err, conn) => {
-            console.log(sql)
+           
             conn.query(sql, (err, result)=>{
                 if(err){
                     res.send({

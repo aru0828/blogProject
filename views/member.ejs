@@ -4,18 +4,20 @@
 <link rel="stylesheet" href="../public/css/member.css">
 </head>
 
-<body class="bg-primary-light">
+<body class="">
     <%- include('includes/header') -%>
 
 
-    <div class="member-main container">
+    <div class="member-main container main">
         <div class="member-info">
-            <div class="member-summary ">
-                <img class="rounded-circle mb-auto" width="120" height="120" src="https://lh3.googleusercontent.com/a/AATXAJzEfmaKrkMGShzwYDv8nixCyyyWHd9wDi7Iig6a=s96-c" alt="">
-                <div class="d-flex">
+            <div class="member-summary">
+                <img class="member-avatar" src="https://lh3.googleusercontent.com/a/AATXAJzEfmaKrkMGShzwYDv8nixCyyyWHd9wDi7Iig6a=s96-c" alt="">
+                <div class="member-name">aru</div>
+                <div class="member-qty">
                     <p class="follower-qty"><span></span> 位追蹤者</p>
                     <p class="post-qty">21 個收藏</p>
                 </div>
+                <a href="" class="follow-btn">追蹤</a>
             </div>
             <div class="member-description">
                 <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint, cum reprehenderit consectetur modi quasi fugit repudiandae quis. Provident error perspiciatis quis temporibus, sequi facilis suscipit aut unde alias excepturi libero.</p>
@@ -23,7 +25,7 @@
         </div> 
         <p class="no-post"></p>
         <ul class="member-post">
-            <li>
+            <!-- <li>
                 <img src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/48620200979d2e6e7e5e69458b7e3fea" alt="">
                 <a href="/article/12">
                     <div class="hover-effect">
@@ -35,7 +37,7 @@
                         </p>
                     </div>
                 </a>
-            </li>
+            </li> -->
             <!-- <li>
                 <a href="">
                     <img src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/6293df2f108967b2a21748b5e926a14e" alt="">
@@ -75,7 +77,7 @@
         
     </style>
     <script type="module" src="../public/js/layout.js"></script>
-    <script src="../public/js/member.js"></script>
+    <script type="module" src="../public/js/member.js"></script>
 </body>
 
 </html>

@@ -7,51 +7,78 @@ let model = {
         let email = document.getElementById('regEmail').value;
         let password = document.getElementById('regPassword').value;
         let name = document.getElementById('regName').value;
-       
-        let requestData = {
-            'email':email,
-            'password':password,
-            'name':name,
-            'source':'local'
-        }
+        
+        let emailRule = /^\S+@\S+\.\S+$/;
+        let passwordLength = password.split("").length;
+        let nameLength = name.split("").length;
 
-        fetch('/api/user', {
-            'method':"POST",
-            'body':JSON.stringify(requestData),
-            'headers':{
-                'content-type':'application/json'
+        if(emailRule.test(email) && passwordLength >= 6 && nameLength >= 3){
+            
+            let requestData = {
+                'email':email,
+                'password':password,
+                'name':name,
+                'source':'local'
             }
-        })
-        .then(response => response.json())
-        .then(result => {
-            console.log(result)
-        })
+    
+            fetch('/api/user', {
+                'method':"POST",
+                'body':JSON.stringify(requestData),
+                'headers':{
+                    'content-type':'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.ok){
+                    alert(result.message);
+                    window.location.reload();
+                }
+                else{
+                    alert(result.message);
+                }
+            })
+        }
+        else{
+            alert('信箱不符合格式或密碼長度小於6使用者名稱長度小於3');
+        }
+        
     },
 
     login:function(){
+        
         let email = document.getElementById('loginEmail').value;
         let password = document.getElementById('loginPassword').value;
+        let emailRule = /^\S+@\S+\.\S+$/;
+        let passwordLength = password.split("").length;
         
-        let requestData = {
-            'email':email,
-            'password':password,
-            'source':'local'
+        // 基本email驗證以及密碼長度>=6
+        if(emailRule.test(email) && passwordLength >= 6){
+            let requestData = {
+                'email':email,
+                'password':password,
+                'source':'local'
+            }
+            fetch('/api/user', {
+                method:'PATCH',
+                body: JSON.stringify(requestData),
+                headers:{
+                    'content-type':'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                if(result.ok){
+                    window.location.href="/";
+                }
+            })
+        }
+        else{
+            alert('信箱格式不符或密碼長度小於6');
         }
 
-        console.log('login')
-        fetch('/api/user', {
-            method:'PATCH',
-            body: JSON.stringify(requestData),
-            headers:{
-                'content-type':'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(result => {
-            if(result.ok){
-                window.location.href="/";
-            }
-        })
+        
     }
 }
 
