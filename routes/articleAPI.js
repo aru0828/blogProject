@@ -278,10 +278,12 @@ router.get('/api/articles', function (req, res) {
             
                           LEFT JOIN comments
                           ON articleAndUsersAndLike.article_id = comments.article_id
-                          GROUP BY comments.article_id) AS articles
+                          GROUP BY articleAndUsersAndLike.article_id) AS articles
             JOIN article_tags
             ON articles.article_id = article_tags.article_id
-            WHERE article_tags.tag_id = ${req.query.tag}`
+            WHERE article_tags.tag_id = ${req.query.tag}
+            ORDER BY articles.create_time DESC`
+            
   }
   else if(req.query.display==='hot'){
     console.log('display hot')
@@ -738,7 +740,7 @@ router.get('/api/randompost', function (req, res) {
 })
 
 
-// 取得隨機文章
+// 取得首頁文章
 router.get('/api/index', function (req, res) {
 
   pool.getConnection((err, conn) => {

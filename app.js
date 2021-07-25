@@ -10,6 +10,8 @@ const memberAPI  = require('./routes/memberAPI');
 const commentAPI  = require('./routes/commentAPI');
 const likeAPI  = require('./routes/likeAPI');
 const followAPI  = require('./routes/followAPI');
+
+require('dotenv').config();
 // 第一個參數為虛擬目錄 url 須 localhost/static
 // 第二個參數為static資料夾名稱
 app.use('/public', express.static('public'));
@@ -64,6 +66,6 @@ app.get('/post/edit/:articleId',  function(req, res) {
 });
 
 
-app.listen(3000, function() {
+app.listen(process.env["SERVER_PORT"], function() {
   console.log('Example app listening on port 3000!');
 });

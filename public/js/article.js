@@ -316,7 +316,7 @@ let view = {
             authorImgLink.setAttribute('href', `/member/${comment.user_id}`);
             let commentAuthorImg = document.createElement('img');
             commentAuthorImg.classList.add('comment-author-img');
-            commentAuthorImg.setAttribute('src', comment.avatar ? comment.avatar : `../public/images/default-user-icon.jpg` );
+            commentAuthorImg.setAttribute('src', comment.avatar ? comment.avatar : `/public/images/default-user-icon.jpg` );
             authorImgLink.appendChild(commentAuthorImg);
 
             let commentContent = document.createElement('div');
@@ -401,7 +401,7 @@ let controller = {
 
         let commentAuthorImg = document.querySelector('.user-avatar');
         console.log(model.userData)
-        commentAuthorImg.setAttribute('src', model.userData  ? model.userData.avatar : '../public/images/default-user-icon.jpg');
+        commentAuthorImg.setAttribute('src', model.userData.hasOwnProperty('avatar')  ? model.userData.avatar : '/public/images/default-user-icon.jpg');
       
     },
 

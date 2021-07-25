@@ -24,7 +24,7 @@ module.exports.uploadToS3 = function(file){
     ACL:'public-read'
   };
   // call S3 to retrieve upload file to specified bucket
-
+  console.log(uploadParams);
   return s3.upload(uploadParams).promise()
 
   
