@@ -33,9 +33,13 @@ router.get('/api/tag', function(req, res){
 
 // 發布文章
 router.post('/api/article', upload.single('coverPhoto'), async function (req, res) {
+  console.log('get tag array')
+  console.log(req.body.tagArray)
 
-  
   let tagArray = req.body.tagArray.split(",");
+  if(tagArray[0] === ''){
+    tagArray = [];
+  }
   console.log(tagArray)
   let title = req.body.title;
   let coverPhoto = req.file;
@@ -71,26 +75,36 @@ router.post('/api/article', upload.single('coverPhoto'), async function (req, re
             'error': true,
             'message': '新增文章失敗'
           });
+          return;
         }
         else {
           // 新增文章成功後 利用result的id儲存標籤資料
-          tagArray.forEach(tagId => {
-            sql = `INSERT INTO article_tags set article_id = ${result.insertId}, tag_id = ${parseInt(tagId)}`;
-  
-            conn.query(sql, (err, result)=> {
-              if(err){
-                res.send({
-                  'error':true,
-                  'message':'新增標籤錯誤'
-                })
-                return;
-              }
-            });
-          })
+          console.log(tagArray);
+          if(tagArray.length>0){
+            tagArray.forEach(tagId => {
+              sql = `INSERT INTO article_tags set article_id = ${result.insertId}, tag_id = ${parseInt(tagId)}`;
+              console.log(sql);
+              conn.query(sql, (err, result)=> {
+                if(err){
+                  res.send({
+                    'error':true,
+                    'message':'新增標籤錯誤'
+                  })
+                  return;
+                }
+              });
+            })
+            res.send({
+              'ok': true,
+              'article_id': result.insertId
+            })
+            return;
+          }
           res.send({
             'ok': true,
             'article_id': result.insertId
           })
+         
         }
       })
       pool.releaseConnection(conn);

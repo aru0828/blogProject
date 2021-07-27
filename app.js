@@ -17,7 +17,7 @@ require('dotenv').config();
 app.use('/public', express.static('public'));
 app.use("/", express.static('node_modules'));
 app.set('view engine', 'ejs');
-
+app.use(express.urlencoded({ extended: true }));
 app.use(articlesAPI);
 app.use(userAPI);
 app.use(oauthAPI);
