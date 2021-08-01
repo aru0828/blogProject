@@ -1,4 +1,5 @@
 
+
 import {checkUser} from './checkUser.js';
 import {sweetAlert} from './sweetAlert.js';
 import {loading} from './loading.js';
@@ -111,6 +112,44 @@ let view = {
 let controller = {
   init:async function(){
     loading.toggleLoading();
+    await tinymce.init({
+      selector: 'textarea',  
+      plugins: 'image link media emoticons',  
+      width:1000,
+      height:600,
+      language: 'zh_TW',
+      // 預設toolbar
+      // toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent'
+      toolbar: ' fontsizeselect forecolor backcolor |  bold italic underline emoticons |  aligncenter | indent  | link image media ',
+      menubar: false,
+    
+    
+      // image plugins設定
+      // 取消自定義寬高
+      image_dimensions: false,
+      // 限制上傳檔案type
+      images_file_types: 'jpg,png,jpeg.gif',
+      automatic_uploads: false,
+      images_upload_url: 'postAcceptor.php',
+    
+    
+      // link plugins設定
+      // 預設點擊連結會另開視窗
+      default_link_target: '_blank',
+      // 在編輯狀態中"能"使用連結
+      link_context_toolbar: true,
+      // 取消設定link時的title欄位
+      link_title: false,
+    
+      // media plugins設定
+      // 取消設定media時的source欄位
+      // media_alt_source: true
+      // 取消自定義寬高
+      media_dimensions: false,
+      media_poster: false,
+      content_style: "body { line-height:16px; }",
+    });
+    
     await model.getUserData();
     await model.getTagData();
     view.renderTags();
@@ -120,41 +159,3 @@ let controller = {
 
 
 controller.init();
-
-tinymce.init({
-    selector: 'textarea',  
-    plugins: 'image link media emoticons',  
-    width:1000,
-    height:600,
-    language: 'zh_TW',
-    // 預設toolbar
-    // toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent'
-    toolbar: ' fontsizeselect forecolor backcolor |  bold italic underline emoticons |  aligncenter | indent  | link image media ',
-    menubar: false,
-
-  
-    // image plugins設定
-    // 取消自定義寬高
-    image_dimensions: false,
-    // 限制上傳檔案type
-    images_file_types: 'jpg,png,jpeg.gif',
-    automatic_uploads: false,
-    images_upload_url: 'postAcceptor.php',
-
-
-    // link plugins設定
-    // 預設點擊連結會另開視窗
-    default_link_target: '_blank',
-    // 在編輯狀態中"能"使用連結
-    link_context_toolbar: true,
-    // 取消設定link時的title欄位
-    link_title: false,
-
-    // media plugins設定
-    // 取消設定media時的source欄位
-    // media_alt_source: true
-    // 取消自定義寬高
-    media_dimensions: false,
-    media_poster: false,
-    content_style: "body { line-height:16px; }",
-  });

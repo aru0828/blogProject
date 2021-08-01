@@ -74,6 +74,7 @@ let model = {
             .then(response => response.json())
             .then(result => {
                 if(result.ok){
+                    // window.location.href="/";
                     window.location.href="/";
                 }
                 else{

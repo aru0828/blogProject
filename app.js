@@ -6,7 +6,6 @@ const path = require('path');
 const articlesAPI = require('./routes/articleAPI');
 const userAPI = require('./routes/userAPI');
 const oauthAPI  = require('./routes/oauthAPI');
-const FBoauthAPI  = require('./routes/fbOauthAPI');
 const GithuboauthAPI  = require('./routes/githubOauthAPI');
 const memberAPI  = require('./routes/memberAPI');
 const commentAPI  = require('./routes/commentAPI');
@@ -28,7 +27,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(userAPI);
 app.use(oauthAPI);
-app.use(FBoauthAPI);
 app.use(GithuboauthAPI);
 app.use(articlesAPI);
 app.use(memberAPI);
