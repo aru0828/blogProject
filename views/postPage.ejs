@@ -1,70 +1,66 @@
-
-    <%- include('includes/head') -%>
-    <script src="/tinymce/tinymce.min.js" ></script>
-    <title>發布文章</title>
+<%- include('includes/head') -%>
+<script src="/tinymce/tinymce.min.js"></script>
+<title>發布蒐藏</title>
 </head>
 
 <body class="bg-primary-light">
     <%- include('includes/header') -%>
 
-    
+
     <div class="postPage-main container main">
-        <form action="" id="postForm">
-            <h2 class="">發布新文章</h2>
+        <form id="postForm" novalidate>
+            <h2 class="">分享蒐藏</h2>
 
             <div class="inputGroup tagGroup">
-                <label for="title">文章標籤 :&nbsp;</label>
-                
+                <label for="title">&ensp;蒐藏標籤 :&nbsp;</label>
+
                 <!-- <input type="checkbox" value="模型車">模型車
                 <input type="checkbox" value="郵票">Tomica -->
-             </div>
+            </div>
 
             <div class="inputGroup">
-                <label for="title">文章標題 :&nbsp;</label>
+                <label for="title"><i>*</i>蒐藏標題 :&nbsp;</label>
                 <input type="text" id="title" required>
-             </div>
+            </div>
 
-        
+
             <div class="inputGroup">
-                <label for="summary">文章摘要 :&nbsp;</label>
+                <label for="summary">&ensp;蒐藏摘要 :&nbsp;</label>
                 <input type="text" id="summary">
             </div>
 
             <div class="inputGroup">
-                <label for="">上傳照片 :&nbsp;</label>
+                <label for=""><i>*</i>上傳照片 :&nbsp;</label>
                 <input type="file" id="coverPhoto" name="coverphoto" accept="image/gif, image/jpeg, image/png" required>
             </div>
 
             <div class="inputGroup">
-                <label for="">入手價格 :&nbsp;</label>
+                <label for="">&ensp;入手價格 :&nbsp;</label>
                 <input type="number" id="price">
             </div>
 
             <div class="inputGroup ">
-                <!-- <label for="">文章內容 :&nbsp;</label> -->
-                <textarea id="editor" required>Hello, World!</textarea>
-             </div>
-             
-             <div class="inputGroup">
-                <input type="submit" class="submitBtn"></input>
-             </div>
-                
-             
-        
-        </form>
-        
-    </div>
-    
-   
-<%- include('includes/footer') %>
+                <!-- <label for="">蒐藏內容 :&nbsp;</label> -->
+                <textarea id="editor" required placeholder=""></textarea>
+            </div>
 
-    
-  
+            <div class="inputGroup">
+                <input type="submit" class="submitBtn"></input>
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+    <%- include('includes/loading') %>
+    <%- include('includes/footer') %>
+
+
+
 </body>
 <script type="module" src="../public/js/layout.js"></script>
 <script type="module" src="../public/js/postPage.js"></script>
+
 </html>
-
-
-
-    

@@ -1,6 +1,7 @@
 
 
 import {checkUser} from './checkUser.js';
+import {sweetAlert} from './sweetAlert.js';
 
 let model = {
     register:function(){
@@ -20,7 +21,7 @@ let model = {
                 'name':name,
                 'source':'local'
             }
-    
+            
             fetch('/api/user', {
                 'method':"POST",
                 'body':JSON.stringify(requestData),
@@ -31,16 +32,20 @@ let model = {
             .then(response => response.json())
             .then(result => {
                 if(result.ok){
-                    alert(result.message);
-                    window.location.reload();
+                    sweetAlert.alert('success', result.message).then(result => {
+                        if(result.isConfirmed){
+                            window.location.reload();
+                        }
+                    });
                 }
                 else{
-                    alert(result.message);
+                    sweetAlert.alert('error', result.message);
+
                 }
             })
         }
         else{
-            alert('信箱不符合格式或密碼長度小於6使用者名稱長度小於3');
+            sweetAlert.alert('error', '信箱不符合格式或密碼長度小於6使用者名稱長度小於3');
         }
         
     },
@@ -68,14 +73,17 @@ let model = {
             })
             .then(response => response.json())
             .then(result => {
-                console.log(result)
                 if(result.ok){
                     window.location.href="/";
+                }
+                else{
+                    sweetAlert.alert('error', result.message);
                 }
             })
         }
         else{
-            alert('信箱格式不符或密碼長度小於6');
+            sweetAlert.alert('error', '信箱格式不符或密碼長度小於6');
+          
         }
 
         
@@ -91,7 +99,6 @@ let view = {
     renderForm : function(mode){
         let form = document.querySelector(`#${mode}`);
         form.classList.add('active');
-        // console.log(loginForm)
     },
     closeForm : function(formDOM){
         formDOM.classList.remove('active');
@@ -108,8 +115,6 @@ let controller = {
     },
 
     login:function(){
-        // let loginForm = document.getElementById('login');
-        // console.log(loginForm)
         model.login();
     },
 
@@ -138,16 +143,3 @@ view.registerBtn.addEventListener('click', function(e){
     e.preventDefault();
     controller.register();
 })
-
-
-
-
-
-// checkUser()
-// .then(result => {
-//     console.log(result)
-// });
-
-// setTimeout(function(){
-//     console.log(model.isLogined)
-// },3000)

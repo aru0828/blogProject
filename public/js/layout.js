@@ -7,7 +7,9 @@ let memberImg = document.querySelector('.memberImg');
 let collapase = document.querySelector('.collapase');
 let toMember = document.querySelector('.toMember');
 let keyWordSearch = document.querySelector('.keyWordSearch');
+let searchBtn = document.querySelector('.searchBtn');
 console.log(keyWordSearch);
+
 
 keyWordSearch.addEventListener('keypress', (e)=>{
     if(e.key==='Enter'){
@@ -17,6 +19,16 @@ keyWordSearch.addEventListener('keypress', (e)=>{
             window.location.href =`/articles/?keyword=${keyword}`;
         }
     }
+})
+
+searchBtn.addEventListener('click', (e)=>{
+    
+    let keyword = keyWordSearch.value;
+    
+    if(keyword){
+        window.location.href =`/articles/?keyword=${keyword}`;
+    }
+    
 })
 // 登出且重新導向網址
 logoutBtn.addEventListener('click', function(e){

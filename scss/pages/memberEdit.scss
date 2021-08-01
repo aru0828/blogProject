@@ -1,23 +1,25 @@
+@import '../helpers/allShare';
 
 .memberEdit{
     display:flex;
     justify-content: center;
+    align-items: center;
     .member-card{
         display: flex;
         justify-content: space-between;
         
         max-width: 60%;
+        height: 400px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         
-        border:1px solid black;
-        margin-top: 60px;
-        margin-bottom: 100px;
 
         .avatar{
             width: 45%;
             text-align: center;
-            padding:48px 30px 24px 30px;
+            padding:60px 30px 48px 30px;
             background: #1057AD;
             text-align: center;
+            border-radius: 5px;
             p{
                 color:white;
                 margin-bottom: 15px;
@@ -26,6 +28,8 @@
 
             .imgBox{
                 width: 100%;
+                display:flex;
+                justify-content: center;
             }
             img{
                 width: 125px;
@@ -45,8 +49,9 @@
 
         .info{
             width: 60%;
-
-            padding:48px 15px 24px 15px;
+            background: $light-gray-color;
+            padding:60px 15px 48px 15px;
+            border-radius: 5px;
             .inputGroup{
                 margin-bottom: 15px;
                 width: 100%;
@@ -68,6 +73,10 @@
                     color:white;
                     border:0px;
                     padding:4px 12px;
+                    cursor: pointer;
+                }
+                input[type=submit]:hover{
+                    background: #0b4386;
                 }
             }
             .inputGroup:last-child{
@@ -95,9 +104,12 @@
         .member-card{
             max-width: 90%;
             flex-direction: column;
-           
+            height: auto;
+            margin:60px 0;
+          
             .avatar{
                 width: 100%;
+                padding:30px 30px 24px 30px;
             }
             .info{
                 width: 100%;

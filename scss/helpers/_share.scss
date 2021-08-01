@@ -1,35 +1,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&display=swap');
 
+
+$primary-color: #1057AD;
+$light-gray-color:#fbfbfb;
+// // $primary-color: #222;
+// $primary-color: #3d3a3a;
+
+.container{
+    max-width: 975px;
+    margin:0 auto;
+}
+input[type=submit]:hover{
+    background: #0b4386;
+}
 a{
     text-decoration: none;
     color:black;
     cursor: pointer;
 }
 
+a:hover{
+    text-decoration: underline;
+}
+
 *, *::after, *::before{
     box-sizing: border-box;
 }
 
+img{
+    display:block;
+}
 
 
 .main{
-    min-height: 90vh;
+    min-height: 80vh;
 }
 
 body{
     // letter-spacing: 0.125rem;
     font-family: 'Noto Sans TC', sans-serif;
-    background: #fafafa;
+    // background: #fafafa;
+    background: #eee;
 }
 
 .none{
     display:none;
 }
 
-.container{
-    max-width: 975px;
-    margin:0 auto;
-}
+
 
 .bi-heart-fill{
     color:red;

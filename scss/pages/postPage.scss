@@ -1,18 +1,27 @@
-
+@import '../helpers/allShare';
 
 .postPage-main{
-    margin-top: 60px;
+ margin-top: 60px;  
 }
-#postForm{
+#postForm, #editForm{
+    margin-top: 60px;
     width: 75%;
-    background: white;
-    margin:0 auto;
-
+    background: $light-gray-color;
+    margin:0 auto 60px auto;
     .tagGroup{
         gap:8px;
+        label{
+            flex-shrink: 0;
+        }
+        .tags{
+            display: flex;
+            flex-wrap: wrap;
+            gap:4px;
+        }
         .tag{
             display:flex;
         }
+        
     }
     .inputGroup{
         display:flex;
@@ -21,21 +30,40 @@
         padding:8px;
         border-bottom: 1px solid rgba(var(--b6a, 219, 219, 219), 1);
     
-        input{
+        label{
+            i{
+                color:#d00000;
+            }
+        }
+
+        input[type="text"], input[type="number"]{
             border:0px;
             padding:5px;
             flex-grow:1;
+            background: $light-gray-color;
         }
+        iframe{
+            background: $light-gray-color;
+        }
+        .tox .tox-toolbar, .tox .tox-toolbar__overflow, .tox .tox-toolbar__primary{
+            background: $light-gray-color ;
+        }
+        .tox .tox-statusbar{
+            background: $light-gray-color ;
+        }
+        
         input:focus-visible{
             outline: 0;
         }
+
+
     }
 
 }
 
 .postPage-main{
     h2{ 
-        background:#4286F5;
+        background:$primary-color;
         padding:8px 0;
         text-align:center;
         color:white;
@@ -47,6 +75,15 @@
         color:white;
         cursor: pointer;
         font-weight: bold;
-        background: #4286F5;
+        border:0px;
+        padding:5px;
+        flex-grow:1;
+        background: $primary-color;
+    }
+}
+
+@media(max-width:768px){
+    #postForm, #editForm{
+        width: 95%;
     }
 }

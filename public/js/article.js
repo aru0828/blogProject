@@ -1,6 +1,7 @@
 // const { text } = require("express");
 import {checkUser} from './checkUser.js';
-
+import {sweetAlert} from './sweetAlert.js';
+import {loading} from './loading.js';
 
 
 
@@ -23,14 +24,8 @@ threeDots.addEventListener('click', function(e){
 })
 
 
-
-
-let content = document.querySelector('.article-content');
-let title = document.querySelector('.article-title');
 let likeIcon = document.querySelector('.likeIcon'); 
-let authorName = document.querySelector('.author-info .name');
-let authorAvatar = document.querySelector('.author-info .avatar');
-let publishTime = document.querySelector('.author-info .date');
+
 
 // path params articleid
 let pathParams = window.location.pathname.split("/");
@@ -44,10 +39,12 @@ let authorEdit = document.querySelector('.author-feature-edit');
 
 
 authorDel.addEventListener('click', function(){
-    let confirmResult = confirm('確定要刪除文章嗎?');
-    if(confirmResult){
-        controller.delArticle();
-    }
+    sweetAlert.confirmAlert('warning', '確定要刪除文章嗎?').then(result => {
+        if(result.isConfirmed){
+            controller.delArticle();
+        }
+    });
+    
 })
 
 authorEdit.addEventListener('click', function(e){
@@ -76,20 +73,13 @@ likeIcon.addEventListener('click', function(e){
    controller.likeEvent();
 })
 
-var textarea = document.querySelector(".comment-textarea");
 
-let limit = 80;
-// textarea.oninput = function() {
-//     textarea.style.height = "";
-//     textarea.style.height = Math.min(textarea.scrollHeight, limit) + "px";
-// };
 
 
 let model = {
     userData:{},
     article:{},
     comments:[],
-    // commentlikes:[],
     //新增完記得設為null
     commentLevels:[],
 
@@ -127,7 +117,7 @@ let model = {
         return fetch(`/api/comments/${articleId}`)
         .then(response => response.json())
         .then(result => {
-            
+            console.log(result);
             model.comments = result.data;
         })
     },
@@ -143,22 +133,16 @@ let model = {
         })
     },
 
-    // getCommentLikes:function(params) {
-    //     fetch('/api/commentlike')
-    //     .then(response => response.json())
-    //     .then(result => {
-    //         // console.log('按讚資料')
-    //         // console.log(result);
-    //         model.commentlikes = result.data;
-    //         // console.log(model.commentlikes);
-    //     })
-    // },
-
     submitComment:function(artId, comment, parent=null){
         console.log('送出留言' + parent);
         console.log(model.userData)
         if(model.userData === {}){
-            alert('登入後才能使用留言功能~');
+            sweetAlert.alert('error', '登入後才能使用留言功能~')
+            // alert('登入後才能使用留言功能~');
+            return;
+        }
+        else if(!comment){
+            sweetAlert.alert('warning', '請輸入訊息~')
             return;
         }
         let requsetData = {
@@ -177,20 +161,6 @@ let model = {
     },
 
 
-    // 整篇文章
-    getLikeData:function(){
-        return fetch(`/api/like/${articleId}`)
-        .then(response => response.json())
-        .then(result => {
-            
-            // 利用key = user_id value= article_id 存放誰按過此篇文章
-            let obj = {};
-            result.data.forEach(item => {
-                obj[`${item.user_id}`] = item.article_id;
-            })
-            model.article.likes = obj;
-        })
-    },
 
     likeEvent:function(){
         console.log()
@@ -277,7 +247,7 @@ let view = {
 
         let dateArray = article.create_time.split(/[T|\.|\:]/);
         let articleTime = document.querySelector('.article-create-time');
-        articleTime.textContent = `${dateArray[0]} ${parseInt(dateArray[1])+8}:${dateArray[2]}`
+        articleTime.textContent = `${dateArray[0]} ${parseInt(dateArray[1])}:${dateArray[2]}`
         
         
     },
@@ -333,22 +303,47 @@ let view = {
             
             
 
-            let commentBtn = document.createElement('p');
-            commentBtn.textContent = '回覆';
+            let commentBtn = document.createElement('a');
+            commentBtn.textContent = `回覆`;
             commentBtn.setAttribute('data-commentid', comment.comment_id);
             commentBtn.addEventListener('click', function (e) {
+                e.preventDefault();
                 let commentId = e.target.dataset.commentid;
                 controller.subCommentMode(commentId)
             })
-            commentInfo.appendChild(time);
+            
             if(comment.likeQty){
                 let likeQty = document.createElement('p');
                 likeQty.textContent= `${comment.likeQty} 個讚`;
                 commentInfo.appendChild(likeQty);
             }
             commentInfo.appendChild(commentBtn);
-
+            commentInfo.appendChild(time);
             commentContent.appendChild(commentInfo);
+        
+
+        //  顯示留言底下還有幾則第一層留言,回覆留言情況下取得的第一筆資料為parent不顯示訊息
+            if(comment.commentQty>0 && (index !== 0 || model.commentLevels.length === 0)){
+                let viewSubComment = document.createElement('a');
+                let viewSubCommentIcon = document.createElement('i');
+                let viewSubCommentQty = document.createElement('span');
+                viewSubComment.classList.add('view-sub-comment');
+                viewSubCommentQty.textContent = `${comment.commentQty}則留言`;
+                viewSubCommentIcon.classList.add('fas', 'fa-level-down-alt');
+                
+                viewSubComment.setAttribute('data-commentid', comment.comment_id);
+                viewSubComment.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    let commentId = e.currentTarget.dataset.commentid;
+                    controller.subCommentMode(commentId)
+                }, false)
+                viewSubComment.appendChild(viewSubCommentIcon);
+                viewSubComment.appendChild(viewSubCommentQty);
+                commentContent.appendChild(viewSubComment);
+
+            }
+            
 
             let likeIcon = document.createElement('i');
             if(comment.user_is_liked ){
@@ -390,10 +385,11 @@ let controller = {
     init:async function () { 
         // 取得文章及第一層留言了
         // 想辦法得到指定的第二層留言
+        loading.toggleLoading();
+
         await model.checkUser();
         await model.getArticleData();
-        
-        await model.getLikeData();
+
         view.renderArticle();
         view.renderArticleFeatrues();
         await model.getLevelOneComments();
@@ -402,7 +398,8 @@ let controller = {
         let commentAuthorImg = document.querySelector('.user-avatar');
         console.log(model.userData)
         commentAuthorImg.setAttribute('src', model.userData.hasOwnProperty('avatar')  ? model.userData.avatar : '/public/images/default-user-icon.jpg');
-      
+        
+        loading.toggleLoading();
     },
 
     submitComment:async function(artId, comment) {
@@ -413,7 +410,7 @@ let controller = {
             let result = await model.submitComment(artId, comment, model.commentLevels[model.commentLevels.length-1])
             
             if(result.error){
-                alert(result.message);
+                sweetAlert.alert('error', result.message);
                 return;
             }
 
@@ -425,7 +422,7 @@ let controller = {
             let result = await model.submitComment(artId, comment);
             console.log(result)
             if(result.error){
-                alert(result.message);
+                sweetAlert.alert('error', result.message);
                 return;
             }
             await model.getLevelOneComments();
@@ -459,11 +456,10 @@ let controller = {
     },
 
     likeEvent:async function(){
-        console.log('按讚事件')
         let likeResult =await model.likeEvent();
         await model.getArticleData();
         if(likeResult.error){
-            alert(likeResult.message);
+            sweetAlert.alert('error', likeResult.message);
             return;
         }
         view.renderArticleFeatrues();
@@ -472,7 +468,7 @@ let controller = {
     likeCommentEvent:async function(commentId){
         let result = await model.likeCommentEvent(commentId);
         if(result.error){
-            alert(result.message);
+            sweetAlert.alert('error', '登入後才能使用會員功能');
             return;
         }
 
@@ -491,7 +487,7 @@ let controller = {
         if(result.ok){
             window.location.href="/";
         }
-        alert(result.message);
+        sweetAlert.alert('success', result.message);
     }
 
     // submitSubComment: async function(artId, comment, parent) {

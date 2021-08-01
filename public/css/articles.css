@@ -1,3 +1,7 @@
+.articles-main {
+  margin-top: 36px;
+}
+
 .tagGroup a {
   margin-right: 5px;
 }
@@ -40,7 +44,7 @@
 }
 
 .tag::after {
-  background: #fff;
+  background: #f3f3f3;
   border-bottom: 13px solid transparent;
   border-left: 10px solid #eee;
   border-top: 13px solid transparent;
@@ -51,11 +55,12 @@
 }
 
 .tag:hover, .tag.active {
-  background-color: crimson;
+  background-color: #1057AD;
   color: white;
+  text-decoration: none;
 }
 
 .tag:hover::after, .tag.active::after {
-  border-left-color: crimson;
+  border-left-color: #1057AD;
 }
 /*# sourceMappingURL=articles.css.map */

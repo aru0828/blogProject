@@ -1,4 +1,6 @@
 import {checkUser} from './checkUser.js';
+import {sweetAlert} from './sweetAlert.js';
+import {loading} from './loading.js';
 
 
 
@@ -38,13 +40,7 @@ let model= {
             'body':formData
         })
         .then(response => response.json())
-        .then(result => {
-            if(result.ok){
-                alert('成功編輯個人資料');
-                window.location.href=`/member/${model.userData.user_id}`;
-            }
-            console.log(result);
-        })
+        
     }
 }
 
@@ -69,12 +65,22 @@ let view ={
 
 let controller = {
     init:async function(){
+        loading.toggleLoading();
         await model.getUserData();
         view.renderUserCard();
+        
+        loading.toggleLoading();
     },
 
     submitUserEdit:async function(){
-        await model.submitUserEdit();
+        let editUserResult = await model.submitUserEdit();
+        if(editUserResult.ok){
+            sweetAlert.alert('success', editUserResult.message).then(result => {
+                if(result.isConfirmed){
+                    window.location.href = `/member/${model.userData.user_id}`;
+                }
+            })
+        }
         controller.init();
     },
 

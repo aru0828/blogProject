@@ -9,14 +9,9 @@
 
     
     <div class="editPostForm postPage-main container main">
-        <form action="" id="postForm">
+        <form action="" id="editForm">
             <h2 class="">編輯文章</h2>
-<!-- 
-            <div class="inputGroup">
-                <label for="title">文章標籤 :&nbsp;</label>
-                <input type="checkbox" value="模型車">模型車
-                <input type="checkbox" value="郵票">Tomica
-             </div> -->
+           
 
             <div class="inputGroup">
                 <label for="title">文章標題 :&nbsp;</label>
@@ -36,7 +31,7 @@
 
             <div class="inputGroup ">
                 <!-- <label for="">文章內容 :&nbsp;</label> -->
-                <textarea id="editor" required></textarea>
+                <textarea id="editor"></textarea>
              </div>
              
              <div class="inputGroup">
@@ -50,7 +45,7 @@
         
     </div>
     
-   
+<%- include('includes/loading') %>
 <%- include('includes/footer') %>
 
     

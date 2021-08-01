@@ -1,6 +1,8 @@
 
 
 import {checkUser} from './checkUser.js';
+import {loading} from './loading.js';
+import {sweetAlert} from './sweetAlert.js';
 
 let pathParams = window.location.pathname.split("/");
 let memberId = pathParams[pathParams.length-1];
@@ -56,9 +58,8 @@ let model = {
         })
         .then(response => response.json())
         .then(result => {
-            console.log(result);
             if(result.error){
-                alert(result.message);
+                sweetAlert.alert('error', result.message);
             }
         })
     },
@@ -192,11 +193,16 @@ let view = {
 
 let controller = {
     init:async function (){
+        loading.toggleLoading();
+
         await model.getUserData();
         await model.getPageData();
         view.renderMemberInfo();
         view.renderMemberArticles();
-        controller.getFollowData();
+        await controller.getFollowData();
+
+        console.log('結束loading');
+        loading.toggleLoading();
     },
 
     getFollowData:async function(){
@@ -204,6 +210,7 @@ let controller = {
         await model.getFollowData();
         view.renderMemberInfo();
         view.renderFollowBtn();
+        console.log('完成get followdata')
     },
 
     followMember:async function(){

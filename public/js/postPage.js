@@ -1,15 +1,13 @@
 
 import {checkUser} from './checkUser.js';
-
+import {sweetAlert} from './sweetAlert.js';
+import {loading} from './loading.js';
 
 
 let postForm = document.querySelector('#postForm');
 let coverPhoto = document.querySelector('#coverPhoto');
 
-//預覽功能
-coverPhoto.addEventListener('change', function(e){
-  console.log(e);
-})
+
 
 
 postForm.addEventListener('submit', function(e){
@@ -17,6 +15,7 @@ postForm.addEventListener('submit', function(e){
 
   e.preventDefault();
     
+   loading.toggleLoading(true);
     
     
     let tagChecked = document.querySelectorAll('.tagGroup input:checked')
@@ -25,7 +24,6 @@ postForm.addEventListener('submit', function(e){
       tagArray.push(parseInt(item.value));
     })
 
-    console.log(tagArray);
 
     let title   = document.querySelector('#title').value;
     let coverPhoto = document.querySelector('#coverPhoto').files[0];
@@ -47,10 +45,15 @@ postForm.addEventListener('submit', function(e){
     })
     .then(response => response.json())
     .then(result => {
-      console.log(result)
       if(result.ok){
-        window.location.href=`/article/${result.article_id}`;
+        sweetAlert.alert('success', '發布成功').then(SWresult => {
+          if(SWresult.isConfirmed){
+            window.location.href=`/article/${result.article_id}`;
+          }
+        })
+        
       }
+      loading.toggleLoading();
     })
   
 })
@@ -83,9 +86,9 @@ let model = {
 
 let view = {
   renderTags:function(){
-    console.log('render')
     let tagGroup = document.querySelector('.tagGroup');
-    console.log(model.tagss)
+    let tags = document.createElement('div');
+    tags.classList.add('tags');
     model.tags.forEach(item=>{
       let tag = document.createElement('div');
       tag.classList.add('tag');
@@ -98,18 +101,20 @@ let view = {
       tag.appendChild(checkBox);
       tag.appendChild(label);
 
-      tagGroup.appendChild(tag);
+      tags.appendChild(tag);
       
     })
-    // s<input type="checkbox" value="模型車">模型車
+    tagGroup.appendChild(tags);
   }
 }
 
 let controller = {
   init:async function(){
+    loading.toggleLoading();
     await model.getUserData();
     await model.getTagData();
     view.renderTags();
+    loading.toggleLoading();
   }
 }
 
@@ -137,13 +142,6 @@ tinymce.init({
     images_upload_url: 'postAcceptor.php',
 
 
-  //   images_upload_handler: function (blobInfo, success, failure) {
-  //     console.log('觸發upload')
-  //     /* no matter what you upload, we will turn it into TinyMCE logo :)*/
-  //     success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
-    
-  // },
-
     // link plugins設定
     // 預設點擊連結會另開視窗
     default_link_target: '_blank',
@@ -158,4 +156,5 @@ tinymce.init({
     // 取消自定義寬高
     media_dimensions: false,
     media_poster: false,
+    content_style: "body { line-height:16px; }",
   });
