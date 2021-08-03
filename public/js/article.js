@@ -60,7 +60,7 @@ let sendCommentBtn = document.querySelector('.sendComment')
 sendCommentBtn.addEventListener('click', async function(e){
     e.preventDefault();
     let commentContent = document.querySelector('#comment').value;
-    
+    console.log(commentContent)
     controller.submitComment(articleId, commentContent);
 })
 
@@ -485,9 +485,12 @@ let controller = {
     delArticle:async function(){
         let result = await model.delArticle();
         if(result.ok){
-            window.location.href="/";
+            sweetAlert.alert('success', result.message).then(result=>{
+                if(result.isConfirmed){
+                    window.location.href="/";
+                }
+            });    
         }
-        sweetAlert.alert('success', result.message);
     }
 
     // submitSubComment: async function(artId, comment, parent) {

@@ -6,6 +6,14 @@
     align-items: center;
     margin: 30px auto 48px auto;
     
+    .no-post{
+        text-align: center;
+        width: 80%;
+        padding:30px 15px  30px 15px ;
+        background: $light-gray-color;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+    
 }
 .member-info{
     width: 80%;
@@ -72,7 +80,9 @@
         }
     }
 }
-
+.member-post.hidden{
+    display: none;
+}
 .member-post{
     width: 80%;
     

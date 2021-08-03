@@ -1,20 +1,38 @@
 
 let loading = {
+    fullLoadingDom : document.querySelector('.full-loading'),
     loadingDom : document.querySelector('.loading'),
     isLoading:false,
+    isLoading_S:false,
     toggleLoading:function(transparent = false){
 
         loading.isLoading = !loading.isLoading;
         
         if(transparent){
-            loading.loadingDom.classList.add('loading-transparent');
+            loading.fullLoadingDom.classList.add('loading-transparent');
         }
         console.log(loading.isLoading);
         if(loading.isLoading){
+            loading.fullLoadingDom.classList.remove('hidden');
+        }
+        else{
+            loading.fullLoadingDom.classList.add('hidden');
+        }
+        
+    },
+
+
+    toggleLoading_S:function(){
+
+        loading.isLoading_S = !loading.isLoading_S;
+        console.log(loading.isLoading_S)
+        if(loading.isLoading_S){
             loading.loadingDom.classList.remove('hidden');
+            console.log('hidden')
         }
         else{
             loading.loadingDom.classList.add('hidden');
+            console.log('show')
         }
         
     }

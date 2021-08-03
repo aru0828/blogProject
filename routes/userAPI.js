@@ -29,54 +29,81 @@ router.get('/api/user', (req, res) => {
 router.post('/api/user', (req, res) => {
 
     let source = req.body.source;
+    let email = req.body.email;
+    let emailRule = /^\S+@\S+\.\S+$/;
+    let password = req.body.password;
+    let name = req.body.name;
+    // 基本驗證
+    if (!emailRule.test(email)) {
+        res.send({
+            'error': true,
+            'message': '信箱格式不正確'
+        })
+        return;
+    }
+    else if (password.length < 6) {
+        res.send({
+            'error': true,
+            'message': '密碼長度不得小於6個字元'
+        })
+        return;
+    }
+    else if (name.length < 1) {
+        res.send({
+            'error': true,
+            'message': '請輸入使用者名稱'
+        })
+        return;
+    }
+    // 通過後端驗證 執行註冊
+    else {
+        // 本地註冊
+        if (source === 'local') {
 
-    // 本地註冊
-    if (source === 'local') {
-        let email = req.body.email;
-        let password = req.body.password;
-        let name = req.body.name;
-        // bcrypt加密
-        const hash = bcrypt.hashSync(password, saltRounds);
+            // bcrypt加密
+            const hash = bcrypt.hashSync(password, saltRounds);
 
-        pool.getConnection((err, conn) => {
+            pool.getConnection((err, conn) => {
 
-            // 檢查相同source下的email是否註冊過
-            let sql = `select * from users
+                // 檢查相同source下的email是否註冊過
+                let sql = `select * from users
                         WHERE email = '${email}' AND source = '${source}'`
-            conn.query(sql, (err, result) => {
-                if (result.length > 0) {
+                conn.query(sql, (err, result) => {
+                    if (result.length > 0) {
 
-                    res.send({
-                        'error': true,
-                        'message': '此帳號已經註冊過'
-                    })
-                }
-                else {
-                    sql = `INSERT INTO users set
+                        res.send({
+                            'error': true,
+                            'message': '此帳號已經註冊過'
+                        })
+                    }
+                    else {
+                        sql = `INSERT INTO users set
                             email = '${email}',
                             password = '${hash}',
                             username = '${name}',
                             source = '${source}'`
 
-                    conn.query(sql, (err, result) => {
-                        if (result) {
-                            res.send({
-                                'ok': true,
-                                'message': '註冊成功'
-                            })
-                        }
-                        else {
-                            res.send({
-                                'error': true,
-                                'message': '註冊失敗，請重新嘗試'
-                            })
-                        }
-                    })
-                }
+                        conn.query(sql, (err, result) => {
+                            if (result) {
+                                res.send({
+                                    'ok': true,
+                                    'message': '註冊成功'
+                                })
+                            }
+                            else {
+                                res.send({
+                                    'error': true,
+                                    'message': '註冊失敗，請重新嘗試'
+                                })
+                            }
+                        })
+                    }
+                })
+                pool.releaseConnection(conn);
             })
-            pool.releaseConnection(conn);
-        })
+        }
     }
+
 })
 
 // 登入

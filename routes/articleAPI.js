@@ -220,12 +220,18 @@ router.delete('/api/article', function (req, res) {
 router.get('/api/articles', function (req, res) {
 
 
+  let page = parseInt(req.query.page);
   let sql = '';
-
+  let dataLen = null;
   // 關鍵字搜尋
   if (req.query.keyword) {
 
-    sql = `SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
+    pool.getConnection((err, conn) => {
+      conn.query(`SELECT count(*) AS dataLen FROM articles WHERE title like '${req.query.keyword}';`, (err, result) => {
+
+        dataLen = result[0].dataLen;
+
+        sql = `SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
                   (
                   SELECT 
                     articles.article_id, articles.coverPhoto, articles.title, articles.summary, articles.price, articles.content,
@@ -241,126 +247,14 @@ router.get('/api/articles', function (req, res) {
                     ON articles.article_id = article_likes.article_id
                     GROUP BY articles.article_id
                     ORDER BY articles.create_time DESC
+                    
                   ) as articleAndUsersAndLike
 
                   LEFT JOIN comments
                   ON articleAndUsersAndLike.article_id = comments.article_id
                   WHERE articleAndUsersAndLike.title LIKE '%${req.query.keyword}%'
-                  GROUP BY comments.article_id`
-  }
-  else if (req.query.tag) {
-    sql = `SELECT * FROM
-            (SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
-                          (
-                          SELECT
-                            articles.article_id, articles.coverPhoto, articles.title, articles.summary, articles.price, articles.content,
-                            CONVERT_TZ(articles.create_time, '+00:00', '+08:00') as create_time,
-                            CONVERT_TZ(articles.update_time, '+00:00', '+08:00') as update_time,
-                            users.user_id, users.username, users.avatar , 
-                            IFNULL(COUNT(article_likes.article_id), 0) as likeQty,
-                            GROUP_CONCAT(IF(article_likes.user_id =  ${req.session.user ? req.session.user.user_id : null},  'yes', '') SEPARATOR '' ) AS user_is_liked
-                            FROM articles
-                            INNER JOIN users
-                            ON articles.user_id = users.user_id
-                            LEFT JOIN article_likes
-                            ON articles.article_id = article_likes.article_id
-                            GROUP BY articles.article_id
-                            ORDER BY articles.create_time DESC
-                          ) as articleAndUsersAndLike
-            
-                          LEFT JOIN comments
-                          ON articleAndUsersAndLike.article_id = comments.article_id
-                          GROUP BY articleAndUsersAndLike.article_id) AS articles
-            JOIN article_tags
-            ON articles.article_id = article_tags.article_id
-            WHERE article_tags.tag_id = ${req.query.tag}
-            ORDER BY articles.create_time DESC`
-
-  }
-  else if (req.query.display === 'hot') {
-
-
-    sql = `SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
-                (
-                SELECT
-                  articles.article_id, articles.coverPhoto, articles.title, articles.summary, articles.price, articles.content,
-                  CONVERT_TZ(articles.create_time, '+00:00', '+08:00') as create_time,
-                  CONVERT_TZ(articles.update_time, '+00:00', '+08:00') as update_time,
-                  users.user_id, users.username, users.avatar , 
-                  IFNULL(COUNT(article_likes.article_id), 0) as likeQty,
-                  GROUP_CONCAT(IF(article_likes.user_id = ${req.session.user ? req.session.user.user_id : null}, 'yes', '') SEPARATOR '' ) AS user_is_liked
-                  FROM articles
-                  INNER JOIN users
-                  ON articles.user_id = users.user_id
-                  LEFT JOIN article_likes
-                  ON articles.article_id = article_likes.article_id
-                  GROUP BY articles.article_id
-                  ORDER BY articles.create_time DESC
-                ) as articleAndUsersAndLike
-
-                LEFT JOIN comments
-                ON articleAndUsersAndLike.article_id = comments.article_id
-                GROUP BY articleAndUsersAndLike.article_id
-                ORDER BY articleAndUsersAndLike.likeQty DESC`
-  }
-  else if (req.query.display === 'following') {
-
-
-    // 避免透過其他手段呼叫 沒有user_id會跳錯
-    if (req.session.user) {
-      sql = `SELECT follow FROM follows WHERE user_id = ${req.session.user.user_id}`
-    }
-    else {
-      res.send({
-        'error': true,
-        'message': '登入後才能使用此功能'
-      })
-      return;
-    }
-    pool.getConnection((err, conn) => {
-      conn.query(sql, (err, result) => {
-
-        let whereSQL = ""
-        if (result.length > 0) {
-          for (let i = 0; i < result.length; i++) {
-            whereSQL += `articleAndUsersAndLike.user_id = ${result[i].follow}`;
-            if (i === result.length - 1) {
-              break;
-            }
-            whereSQL += ' OR ';
-          }
-        }
-
-        // 可以取得追蹤的人發的文 接著處理likeqty commentqty user_is_liked等資料
-        // let sql =`SELECT * from articles WHERE ${whereSQL}`;
-
-
-        sql = `SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
-                (
-                  SELECT
-
-                    articles.article_id, articles.coverPhoto, articles.title, articles.summary, articles.price, articles.content,
-                    CONVERT_TZ(articles.create_time, '+00:00', '+08:00') as create_time,
-                    CONVERT_TZ(articles.update_time, '+00:00', '+08:00') as update_time,
-                    users.user_id, users.username, users.avatar , 
-                    IFNULL(COUNT(article_likes.article_id), 0) as likeQty,
-                    GROUP_CONCAT(IF(article_likes.user_id = ${req.session.user ? req.session.user.user_id : null}, 'yes', '') SEPARATOR '' ) AS user_is_liked
-               
-                  FROM articles
-                  INNER JOIN users
-                  ON articles.user_id = users.user_id
-                  LEFT JOIN article_likes
-                  ON articles.article_id = article_likes.article_id
-                  GROUP BY articles.article_id
-                  ORDER BY articles.create_time DESC
-                  ) as articleAndUsersAndLike
-
-                LEFT JOIN comments
-                ON articleAndUsersAndLike.article_id = comments.article_id
-                WHERE ${whereSQL}
-                GROUP BY comments.article_id
-                ORDER BY articleAndUsersAndLike.create_time DESC`
-
+                  GROUP BY articleAndUsersAndLike.article_id
+                  LIMIT ${page * 6}, 6 `
         conn.query(sql, (err, result) => {
           if (err) {
             res.send({
@@ -393,21 +287,308 @@ router.get('/api/articles', function (req, res) {
             })
             res.send({
               'ok': true,
-              'data': responseData
+              'data': {
+                'articles': responseData,
+                'nextPage': (dataLen - ((page + 1) * 6)) > 0 ? parseInt(page) + 1 : null
+              }
             })
           }
         })
+      })
+      pool.releaseConnection(conn);
+    })
 
+  }
+
+  else if (req.query.tag) {
+    let tag = parseInt(req.query.tag);
+    // 取得資料長度 並用dataLen紀錄
+    pool.getConnection((err, conn) => {
+      conn.query(`SELECT count(*) as dataLen FROM articles
+                    INNER JOIN article_tags
+                    ON articles.article_id = article_tags.article_id
+                    WHERE article_tags.tag_id = ${tag}`, (err, result) => {
+
+        dataLen = result[0].dataLen;
+
+        sql = `SELECT * FROM
+            (SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
+                          (
+                          SELECT
+                            articles.article_id, articles.coverPhoto, articles.title, articles.summary, articles.price, articles.content,
+                            CONVERT_TZ(articles.create_time, '+00:00', '+08:00') as create_time,
+                            CONVERT_TZ(articles.update_time, '+00:00', '+08:00') as update_time,
+                            users.user_id, users.username, users.avatar , 
+                            IFNULL(COUNT(article_likes.article_id), 0) as likeQty,
+                            GROUP_CONCAT(IF(article_likes.user_id =  ${req.session.user ? req.session.user.user_id : null},  'yes', '') SEPARATOR '' ) AS user_is_liked
+                            FROM articles
+                            INNER JOIN users
+                            ON articles.user_id = users.user_id
+                            LEFT JOIN article_likes
+                            ON articles.article_id = article_likes.article_id
+                            GROUP BY articles.article_id
+                            ORDER BY articles.create_time DESC
+                          ) as articleAndUsersAndLike
+            
+                          LEFT JOIN comments
+                          ON articleAndUsersAndLike.article_id = comments.article_id
+                          GROUP BY articleAndUsersAndLike.article_id) AS articles
+            JOIN article_tags
+            ON articles.article_id = article_tags.article_id
+            WHERE article_tags.tag_id = ${tag}
+            ORDER BY articles.create_time DESC
+            LIMIT ${page * 6}, 6 `
+
+
+        conn.query(sql, (err, result) => {
+
+          if (err) {
+            res.send({
+              'error': true,
+              'message': '無法取得文章列表'
+            })
+            return;
+          }
+          else {
+            let responseData = [];
+
+            result.forEach(item => {
+              responseData.push({
+                'article_id': item.article_id,
+                'title': item.title,
+                'content': item.content,
+                'coverPhoto': item.coverPhoto,
+                'create_time': item.create_time,
+                'update_time': item.update_time,
+                'likeQty': item.likeQty,
+                'commentQty': item.commentQty,
+                'summary': item.summary,
+                'user_is_liked': item.user_is_liked,
+                'author': {
+                  'user_id': item.user_id,
+                  'username': item.username,
+                  'avatar': item.avatar
+                }
+              })
+            })
+            res.send({
+              'ok': true,
+              'data': {
+                'articles': responseData,
+                'nextPage': (dataLen - ((page + 1) * 6)) > 0 ? parseInt(page) + 1 : null
+              }
+            })
+          }
+        })
       })
 
+      pool.releaseConnection(conn);
+    })
+
+
+
+  }
+  else if (req.query.display === 'hot') {
+    pool.getConnection((err, conn) => {
+      conn.query(`SELECT count(*) as dataLen FROM articles ORDER BY create_time DESC`, (err, result) => {
+        dataLen = result[0].dataLen;
+        sql = `SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
+                (
+                SELECT
+                  articles.article_id, articles.coverPhoto, articles.title, articles.summary, articles.price, articles.content,
+                  CONVERT_TZ(articles.create_time, '+00:00', '+08:00') as create_time,
+                  CONVERT_TZ(articles.update_time, '+00:00', '+08:00') as update_time,
+                  users.user_id, users.username, users.avatar , 
+                  IFNULL(COUNT(article_likes.article_id), 0) as likeQty,
+                  GROUP_CONCAT(IF(article_likes.user_id = ${req.session.user ? req.session.user.user_id : null}, 'yes', '') SEPARATOR '' ) AS user_is_liked
+                  FROM articles
+                  INNER JOIN users
+                  ON articles.user_id = users.user_id
+                  LEFT JOIN article_likes
+                  ON articles.article_id = article_likes.article_id
+                  GROUP BY articles.article_id
+                  ORDER BY articles.create_time DESC
+                  
+                ) as articleAndUsersAndLike
+
+                LEFT JOIN comments
+                ON articleAndUsersAndLike.article_id = comments.article_id
+                GROUP BY articleAndUsersAndLike.article_id
+                ORDER BY articleAndUsersAndLike.likeQty DESC
+                LIMIT ${page * 6}, 6 `
+        conn.query(sql, (err, result) => {
+
+          if (err) {
+            res.send({
+              'error': true,
+              'message': '無法取得文章列表'
+            })
+            return;
+          }
+          else {
+            let responseData = [];
+
+            result.forEach(item => {
+              responseData.push({
+                'article_id': item.article_id,
+                'title': item.title,
+                'content': item.content,
+                'coverPhoto': item.coverPhoto,
+                'create_time': item.create_time,
+                'update_time': item.update_time,
+                'likeQty': item.likeQty,
+                'commentQty': item.commentQty,
+                'summary': item.summary,
+                'user_is_liked': item.user_is_liked,
+                'author': {
+                  'user_id': item.user_id,
+                  'username': item.username,
+                  'avatar': item.avatar
+                }
+              })
+            })
+            res.send({
+              'ok': true,
+              'data': {
+                'articles': responseData,
+                'nextPage': (dataLen - ((page + 1) * 6)) > 0 ? parseInt(page) + 1 : null
+              }
+            })
+          }
+        })
+      })
+      pool.releaseConnection(conn);
+    })
+
+
+  }
+  else if (req.query.display === 'following') {
+
+
+    // 避免透過其他手段呼叫 沒有user_id會跳錯
+    if (req.session.user) {
+      sql = `SELECT follow FROM follows WHERE user_id = ${req.session.user.user_id}`
+    }
+    else {
+      res.send({
+        'error': true,
+        'message': '登入後才能使用此功能'
+      })
+      return;
+    }
+    pool.getConnection((err, conn) => {
+      conn.query(sql, (err, result) => {
+
+        let whereSQL = ""
+        // 取得 where 條件
+        if (result.length > 0) {
+          for (let i = 0; i < result.length; i++) {
+            whereSQL += `articleAndUsersAndLike.user_id = ${result[i].follow}`;
+            if (i === result.length - 1) {
+              break;
+            }
+            whereSQL += ' OR ';
+          }
+        }
+
+        // 沒有追蹤使用者,直接回傳空資料
+        if(whereSQL === ""){
+          res.send({
+            'ok':true,
+            'data':{
+              'articles':[],
+              'nextPage':null
+            }
+          })
+        }
+        else{
+          conn.query(`SELECT count(*) as dataLen FROM articles AS articleAndUsersAndLike WHERE ${whereSQL}`, (err, result) => {
+            console.log(`SELECT count(*) as dataLen FROM articles AS articleAndUsersAndLike WHERE ${whereSQL}`)
+            if (result.length > 0) {
+              dataLen = result[0].dataLen;
+              sql = `SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
+                    (
+                      SELECT
+    
+                        articles.article_id, articles.coverPhoto, articles.title, articles.summary, articles.price, articles.content,
+                        CONVERT_TZ(articles.create_time, '+00:00', '+08:00') as create_time,
+                        CONVERT_TZ(articles.update_time, '+00:00', '+08:00') as update_time,
+                        users.user_id, users.username, users.avatar , 
+                        IFNULL(COUNT(article_likes.article_id), 0) as likeQty,
+                        GROUP_CONCAT(IF(article_likes.user_id = ${req.session.user ? req.session.user.user_id : null}, 'yes', '') SEPARATOR '' ) AS user_is_liked
+                   
+                      FROM articles
+                      INNER JOIN users
+                      ON articles.user_id = users.user_id
+                      LEFT JOIN article_likes
+                      ON articles.article_id = article_likes.article_id
+                      GROUP BY articles.article_id
+                      ORDER BY articles.create_time DESC
+                      ) as articleAndUsersAndLike
+    
+                    LEFT JOIN comments
+                    ON articleAndUsersAndLike.article_id = comments.article_id
+                    WHERE ${whereSQL}
+                    GROUP BY articleAndUsersAndLike.article_id
+                    ORDER BY articleAndUsersAndLike.create_time DESC
+                    LIMIT ${page * 6}, 6`
+              conn.query(sql, (err, result) => {
+                if (err) {
+                  res.send({
+                    'error': true,
+                    'message': '無法取得文章列表'
+                  })
+                  return;
+                }
+                else {
+                  let responseData = [];
+  
+                  result.forEach(item => {
+                    responseData.push({
+                      'article_id': item.article_id,
+                      'title': item.title,
+                      'content': item.content,
+                      'coverPhoto': item.coverPhoto,
+                      'create_time': item.create_time,
+                      'update_time': item.update_time,
+                      'likeQty': item.likeQty,
+                      'commentQty': item.commentQty,
+                      'user_is_liked': item.user_is_liked,
+                      'summary': item.summary,
+                      'author': {
+                        'user_id': item.user_id,
+                        'username': item.username,
+                        'avatar': item.avatar
+                      }
+                    })
+                  })
+                  res.send({
+                    'ok': true,
+                    'data': {
+                      'articles': responseData,
+                      'nextPage': (dataLen - ((page + 1) * 6)) > 0 ? parseInt(page) + 1 : null
+                    }
+                  })
+                }
+              })
+            }
+  
+          })
+        }
+       
+      })
       pool.releaseConnection(conn);
 
     })
 
   }
   else {
+    // 取得資料長度 並用dataLen紀錄
+    pool.getConnection((err, conn) => {
+      conn.query(`SELECT count(*) as dataLen FROM articles ORDER BY create_time DESC`, (err, result) => {
+        dataLen = result[0].dataLen;
 
-    sql = `SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
+        sql = `SELECT articleAndUsersAndLike.* , IFNULL(COUNT(comments.article_id), 0) as commentQty FROM
             (
             SELECT 
 
@@ -425,58 +606,61 @@ router.get('/api/articles', function (req, res) {
               ON articles.article_id = article_likes.article_id
               GROUP BY articles.article_id
               ORDER BY articles.create_time DESC
+              LIMIT ${page * 6}, 6 
               ) as articleAndUsersAndLike
 
             LEFT JOIN comments
             ON articleAndUsersAndLike.article_id = comments.article_id
             GROUP BY articleAndUsersAndLike.article_id
             ORDER BY articleAndUsersAndLike.create_time DESC`
-  }
 
-  // 避免重複發送res導致錯誤
-  if (req.query.display === 'following') {
-    return;
-  }
-  pool.getConnection((err, conn) => {
+        conn.query(sql, (err, result) => {
 
-    conn.query(sql, (err, result) => {
-      if (err) {
-        res.send({
-          'error': true,
-          'message': '無法取得文章列表'
-        })
-        return;
-      }
-      else {
-        let responseData = [];
+          if (err) {
+            res.send({
+              'error': true,
+              'message': '無法取得文章列表'
+            })
+            return;
+          }
+          else {
+            let responseData = [];
 
-        result.forEach(item => {
-          responseData.push({
-            'article_id': item.article_id,
-            'title': item.title,
-            'content': item.content,
-            'coverPhoto': item.coverPhoto,
-            'create_time': item.create_time,
-            'update_time': item.update_time,
-            'likeQty': item.likeQty,
-            'commentQty': item.commentQty,
-            'summary': item.summary,
-            'user_is_liked': item.user_is_liked,
-            'author': {
-              'user_id': item.user_id,
-              'username': item.username,
-              'avatar': item.avatar
-            }
-          })
+            result.forEach(item => {
+              responseData.push({
+                'article_id': item.article_id,
+                'title': item.title,
+                'content': item.content,
+                'coverPhoto': item.coverPhoto,
+                'create_time': item.create_time,
+                'update_time': item.update_time,
+                'likeQty': item.likeQty,
+                'commentQty': item.commentQty,
+                'summary': item.summary,
+                'user_is_liked': item.user_is_liked,
+                'author': {
+                  'user_id': item.user_id,
+                  'username': item.username,
+                  'avatar': item.avatar
+                }
+              })
+            })
+            res.send({
+              'ok': true,
+              'data': {
+                'articles': responseData,
+                'nextPage': (dataLen - ((page + 1) * 6)) > 0 ? parseInt(page) + 1 : null
+              }
+            })
+          }
         })
-        res.send({
-          'ok': true,
-          'data': responseData
-        })
-      }
+      })
+
+      pool.releaseConnection(conn);
     })
-    pool.releaseConnection(conn)
-  })
+
+
+  }
 })
 
 
@@ -601,7 +785,8 @@ router.get('/api/index', function (req, res) {
     conn.query(sql, (err, result) => {
       responseData.newestArticles = result;
 
-      sql = `SELECT articles.*, IFNULL(count(article_likes.article_id), 0) AS likeQty FROM articles
+      sql = `SELECT articles.*, IFNULL(count(article_likes.article_id), 0) AS likeQty 
+             FROM articles
                   LEFT JOIN article_likes
                   ON articles.article_id = article_likes.article_id
                   WHERE date_add(current_timestamp, INTERVAL -7 day) < articles.create_time
@@ -615,7 +800,8 @@ router.get('/api/index', function (req, res) {
 
 
         // 一周內comment最多的文章 如果like相同則以發布時間為先
-        sql = `SELECT articles.*, IFNULL(count(comments.article_id), 0) AS commentQty FROM articles
+        sql = `SELECT articles.*, IFNULL(count(comments.article_id), 0) AS commentQty
+               FROM articles
                 LEFT JOIN comments
                 ON articles.article_id = comments.article_id
                 WHERE date_add(current_timestamp, INTERVAL -7 day) < articles.create_time

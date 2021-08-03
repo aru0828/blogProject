@@ -306,18 +306,18 @@
     aside{
         width: 25%;
         background: $light-gray-color;
-        padding:30px 15px;
+        padding:30px 8px;
         border-radius: 5px;
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         .aside-title{
             border-left:3px solid #1057AD;
             
-            
-            padding-left: 8px;
+            margin-left: 4px;
+            padding-left: 4px;
         }
         .aside-list{
            
-            padding:24px 8px 0 8px;
+            padding:24px 4px 0 4px;
             display:flex;
             flex-direction: column;
 
@@ -589,6 +589,9 @@
                     font-size: 14px;
                     .article-title{
                         margin-bottom: 8px;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
                     }
                     .article-summary{
                         color:#757575;

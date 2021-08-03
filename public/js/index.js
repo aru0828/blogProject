@@ -64,7 +64,8 @@ let view = {
             let articleContent = document.createElement('div');
             articleContent.classList.add('article-content')
 
-            let articleTitle = document.createElement('p');
+            let articleTitle = document.createElement('a');
+            articleTitle.setAttribute('href', `/article/${article.article_id}`);
             articleTitle.classList.add('article-title');
             articleTitle.textContent = article.title;
 

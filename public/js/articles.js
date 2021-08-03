@@ -1,8 +1,24 @@
 import { checkUser } from './checkUser.js';
 import { loading } from './loading.js';
-import { sweetAlert} from './sweetAlert.js';
+import { sweetAlert } from './sweetAlert.js';
 
+let rectObject = document.querySelector('body').getBoundingClientRect();
+console.log(rectObject);
 
+let test=  document.querySelector('.test');
+let body = document.querySelector('body');
+console.log(body.scrollHeight);
+
+window.addEventListener('scroll', function(){
+    if( (window.screen.height + window.pageYOffset)+1 > body.clientHeight){
+        
+        if(model.getPage !== null && model.apiDone){
+            
+            console.log(model.currentPage)
+            controller.getMainList();
+        }
+    } 
+})
 
 let toggleShow = document.querySelectorAll('.toggleShow li a');
 toggleShow.forEach(item => {
@@ -28,6 +44,8 @@ let model = {
     mainListData: [],
     asideListData: [],
     tags: [],
+    getPage: 0,
+    apiDone:true,
 
     getUserData: function () {
         return checkUser().then(result => {
@@ -47,55 +65,57 @@ let model = {
         let params = new URLSearchParams(querystring);
         let keyword = params.get('keyword');
         let display = params.get('display');
+       
         let tag = params.get('tag');
-        
+
+        console.log('get main data')
         if (keyword) {
-            return fetch(`/api/articles?keyword=${keyword}`)
+            return fetch(`/api/articles?keyword=${keyword}&page=${model.getPage}`)
                 .then(response => response.json())
                 .then(result => {
                     console.log(result)
-                    if(result.ok){
-                        model.mainListData = result.data;
+                    if (result.ok) {
+                        model.mainListData = result.data.articles;
+                        model.getPage  = result.data.nextPage;
                     }
-                    
+
                     // view.renderMainList();
                     // view.renderTags();
                 })
         }
         else if (display) {
-            return fetch(`/api/articles?display=${display}`)
+            return fetch(`/api/articles?display=${display}&page=${model.getPage}`)
                 .then(response => response.json())
                 .then(result => {
-                    if(result.ok){
-                        model.mainListData = result.data;
+                    if (result.ok) {
+                        model.mainListData = result.data.articles;
+                        model.getPage  = result.data.nextPage;
                     }
-                    
-                    // view.renderMainList();
-                    // view.renderTags();
+
                 })
         }
-        else if(tag){
-            return fetch(`/api/articles?tag=${tag}`)
+        else if (tag) {
+            return fetch(`/api/articles?tag=${tag}&page=${model.getPage}`)
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result)
-                    if(result.ok){
-                        model.mainListData = result.data;
+                    
+                    if (result.ok) {
+                        model.mainListData = result.data.articles;
+                        model.getPage  = result.data.nextPage;
                     }
-                    // view.renderMainList();
-                    // view.renderTags();
                 })
         }
         else {
-            return fetch('/api/articles')
+            console.log(model.getPage)
+            return fetch(`/api/articles?page=${model.getPage}`)
                 .then(response => response.json())
                 .then(result => {
                     console.log(result)
-                    if(result.ok){
-                        model.mainListData = result.data;
+                    if (result.ok) {
+                        model.mainListData = result.data.articles;
+                        model.getPage  = result.data.nextPage;
                     }
-                    // view.renderMainList();
-                    // view.renderTags();
+                  
                 })
         }
 
@@ -119,7 +139,7 @@ let model = {
             })
     },
 
-    likeEvent:function(artId){
+    likeEvent: function (artId) {
         return fetch('/api/like', {
             'method': 'POST',
             'body': JSON.stringify({
@@ -129,14 +149,14 @@ let model = {
                 'content-type': 'application/json'
             }
         })
-        .then(response => response.json());
+            .then(response => response.json());
     }
 }
 
 let view = {
-   
 
-    renderAsideList: function(){
+
+    renderAsideList: function () {
 
         model.asideListData.forEach(newPost => {
             let link = document.createElement('a');
@@ -148,7 +168,7 @@ let view = {
             let span = document.createElement('span');
             let imgContainer = document.createElement('div');
             imgContainer.classList.add('aside-coverPhoto');
-            
+
             img.setAttribute('src', newPost.coverPhoto);
             imgContainer.appendChild(img);
             h3.classList.add('newPost-title');
@@ -167,7 +187,7 @@ let view = {
             link.classList.add('aside-article-link');
             li.appendChild(link);
             let asideList = document.querySelector('.aside-list');
-           
+
             asideList.appendChild(li);
         })
     },
@@ -176,18 +196,18 @@ let view = {
         let frag = document.createDocumentFragment();
         let mainList = document.querySelector('.main-list');
 
-        mainList.innerHTML="";
-        if(model.mainListData.length === 0){
+        // mainList.innerHTML = "";
+        if (model.mainListData.length === 0) {
             let li = document.createElement('li');
             let h3 = document.createElement('h3');
-            
+
             h3.textContent = '沒有符合的文章~ 試試其他搜尋吧'
             h3.classList.add('not-found')
             li.appendChild(h3);
             mainList.appendChild(li);
             return;
         }
-        else{
+        else {
             model.mainListData.forEach((item) => {
                 let li = document.createElement('li');
                 let coverPhotoLink = document.createElement('a');
@@ -207,28 +227,28 @@ let view = {
                 let commentQty = document.createElement('span');
                 let messageIcon = document.createElement('a');
                 let date = document.createElement('p');
-                
+
 
                 coverPhotoLink.classList.add('coverPhotoLink');
                 coverPhoto.classList.add('coverPhoto')
                 coverPhoto.setAttribute('src', item.coverPhoto);
                 coverPhotoLink.appendChild(coverPhoto);
-    
+
                 summary.classList.add('summary');
                 author.classList.add('author');
                 author.setAttribute('href', `/member/${item.author.user_id}`);
                 // author.textContent = item.article.user_id;
-    
+
                 // 如果使用者沒有avatar就使用預設照片
                 avatar.setAttribute('src', item.author.avatar ? item.author.avatar : '../public/images/default-user-icon.jpg');
-    
+
                 username.textContent = item.author.username;
                 let dateArray = item.create_time.split(/[T|\.|\:]/)
                 createTime.textContent = `${dateArray[0]} ${parseInt(dateArray[1])}:${dateArray[2]}`
                 author.appendChild(avatar);
                 author.appendChild(username);
                 author.appendChild(createTime);
-                
+
                 title.classList.add('title');
                 title.textContent = item.title;
                 titleLink.appendChild(title);
@@ -237,10 +257,10 @@ let view = {
                 price.classList.add('price');
                 content.classList.add('content');
                 content.textContent = item.summary;
-    
-    
-    
-    
+
+
+
+
                 features.classList.add('features');
                 if (item.user_is_liked === 'yes') {
                     heartIcon.classList.add('bi', 'bi-heart-fill');
@@ -248,17 +268,17 @@ let view = {
                 else {
                     heartIcon.classList.add('bi', 'bi-heart');
                 }
-    
+
                 messageIcon.classList.add('bi', 'bi-chat-dots')
-    
+
                 likeQty.textContent = item.likeQty === 0 ? "" : item.likeQty;
                 heartIcon.appendChild(likeQty);
                 heartIcon.setAttribute('data-artid', item.article_id);
-    
+
                 commentQty.textContent = item.commentQty === 0 ? "" : item.commentQty;
                 messageIcon.appendChild(commentQty);
                 messageIcon.setAttribute('href', `/article/${item.article_id}`);
-    
+
                 heartIcon.addEventListener('click', function (e) {
                     // console.log(e.target.dataset.artid)
                     // fetch('/api/like', {
@@ -278,74 +298,74 @@ let view = {
                     // })
                     controller.likeEvent(e.target.dataset.artid);
                 })
-    
+
                 features.appendChild(heartIcon);
                 features.appendChild(messageIcon);
                 features.appendChild(date);
-    
+
                 summary.appendChild(author);
                 summary.appendChild(titleLink);
                 summary.appendChild(price);
                 summary.appendChild(content);
                 summary.appendChild(features);
-    
+
                 coverPhotoLink.setAttribute('href', `/article/${item.article_id}`);
                 // a.appendChild(summary);
                 li.appendChild(coverPhotoLink);
                 li.appendChild(summary);
-    
+
                 frag.appendChild(li);
             })
             mainList.appendChild(frag);
         }
-        
+
     },
 
     renderTags: function () {
-        
+
         let querystring = window.location.search;
         let params = new URLSearchParams(querystring);
         let tag = params.get('tag');
         let display = params.get('display');
 
-    
-        if(display=== null){
+
+        if (display === null) {
             let newest = document.querySelector('.newest');
             newest.classList.add('active');
         }
-        else if(display=== 'hot'){
+        else if (display === 'hot') {
             let hot = document.querySelector('.hot');
             hot.classList.add('active');
         }
-        else if(display=== 'following'){
+        else if (display === 'following') {
             // 避免沒有登入的情況下直接輸入網址導致錯誤
-            if(model.userData.hasOwnProperty('user_id')){
+            if (model.userData.hasOwnProperty('user_id')) {
                 let following = document.querySelector('.following');
                 following.classList.add('active');
             }
-            else{
-                window.location.href ='/articles';
+            else {
+                window.location.href = '/articles';
             }
         }
 
         let tags = document.querySelector('.tags');
 
-      
+
         model.tags.forEach(item => {
             let li = document.createElement('li');
             let a = document.createElement('a');
             a.classList.add('tag');
-            if(item.tag_id === parseInt(tag)){
-                a.classList.add('active'); 
+            if (item.tag_id === parseInt(tag)) {
+                a.classList.add('active');
             }
             a.setAttribute('data-tag', item.tag_id);
-        
+
             a.textContent = item.tag;
 
             li.appendChild(a);
             tags.appendChild(li);
 
-            a.addEventListener('click', function(e){
+            a.addEventListener('click', function (e) {
                 let tagId = e.target.dataset.tag;
                 window.location.href = `/articles?tag=${tagId}`;
             })
@@ -357,7 +377,7 @@ let view = {
 
 let controller = {
     init: async function () {
-        
+
         loading.toggleLoading();
 
         await model.getUserData();
@@ -378,9 +398,14 @@ let controller = {
 
     // 拿掉
     getMainList: async function () {
-        console.log('controll get main')
+        
+        model.apiDone = false;
+        loading.toggleLoading_S();
         await model.getMainListData();
         view.renderMainList();
+        loading.toggleLoading_S();
+        model.apiDone = true;
+       
     },
 
     getAsideList: async function () {
@@ -394,17 +419,17 @@ let controller = {
         console.log('get玩tag')
     },
 
-    likeEvent:async function(artId){
+    likeEvent: async function (artId) {
         let likeResult = await model.likeEvent(artId);
         console.log(likeResult);
-        if(likeResult.ok){
+        if (likeResult.ok) {
             controller.getMainList();
         }
-        else{
+        else {
             sweetAlert.alert('error', likeResult.message);
-            
+
         }
-        
+
     },
 
 }

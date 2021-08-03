@@ -106,6 +106,7 @@ let view = {
       
     })
     tagGroup.appendChild(tags);
+   
   }
 }
 

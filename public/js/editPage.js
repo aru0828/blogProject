@@ -118,8 +118,8 @@ let model = {
 }
 
 let view = {
-    renderOldData: function () {
-
+    renderOldData:  function () {
+        tinymce.get("editor").setContent(model.oldData.content);
         let title = document.querySelector('#title');
         let summary = document.querySelector('#summary');
         let price = document.querySelector('#price');
@@ -127,8 +127,8 @@ let view = {
         title.value = model.oldData.title;
         summary.value = model.oldData.summary ? model.oldData.summary : '';
         price.value = model.oldData.price ? model.oldData.price : 0;
-        tinymce.get("editor").setContent(model.oldData.content);
         
+      
     }
 
 }
@@ -170,7 +170,7 @@ let controller = {
         await model.getUserData();
         await model.getOldData();
         view.renderOldData();
-        
+          
         loading.toggleLoading();
     }
 }

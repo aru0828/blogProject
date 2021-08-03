@@ -108,25 +108,12 @@ let view = {
         let frag = document.createDocumentFragment();
         let memberPost = document.querySelector('.member-post');
 
-       
-         // <li>
-        //     <img src="https://aru0828practicebucket.s3.ap-northeast-2.amazonaws.com/48620200979d2e6e7e5e69458b7e3fea" alt="">
-        //     <a href="/article/12">
-        //         <div class="hover-effect">
-        //             <p class="bi bi-heart-fill">
-        //                 <span>16</span>
-        //             </p>
-        //             <p class="bi bi-chat-fill">
-        //                 <span>22</span>
-        //             </p>
-        //         </div>
-        //     </a>
-        // </li>
 
         console.log(model.memberData);
         if(model.memberData.articles.length < 1){
             let noPost = document.querySelector('.no-post')
-            noPost.textContent = '尚未發布收藏~'
+            noPost.textContent = '尚未發布蒐藏~'
+            memberPost.classList.add('hidden');
         }
         else{
             model.memberData.articles.forEach(item => {
@@ -200,8 +187,6 @@ let controller = {
         view.renderMemberInfo();
         view.renderMemberArticles();
         await controller.getFollowData();
-
-        console.log('結束loading');
         loading.toggleLoading();
     },
 
@@ -210,7 +195,6 @@ let controller = {
         await model.getFollowData();
         view.renderMemberInfo();
         view.renderFollowBtn();
-        console.log('完成get followdata')
     },
 
     followMember:async function(){
