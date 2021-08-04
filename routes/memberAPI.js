@@ -58,11 +58,21 @@ router.get('/api/member/:userid', function (req, res) {
                     return;
                 }
 
-                responseData.articles = result
-                res.send({
-                    'ok': true,
-                    'data': responseData
-                })
+                if(result.length>0){
+                    responseData.articles = result
+                    res.send({
+                        'ok': true,
+                        'data': responseData
+                    })
+                }
+                else{
+                    res.send({
+                        'error': true,
+                        'message':'查無會員資料!',
+                        'data': null
+                    })
+                }
+                
             })
         })
 
@@ -102,7 +112,7 @@ router.post('/api/member', upload.single('newAvatar'), (req, res) => {
                 if (err) {
                     res.send({
                         'error': true,
-                        'message': '伺服器內部錯誤'
+                        'message': '編輯個人資料錯誤'
                     })
                     return;
                 }
@@ -110,6 +120,13 @@ router.post('/api/member', upload.single('newAvatar'), (req, res) => {
                 sql = `SELECT user_id, email,  description, username, avatar FROM users
                         WHERE user_id = ${req.session.user.user_id};`
                 conn.query(sql, (err, result) => {
+                    if(err){
+                        res.send({
+                            'error': true,
+                            'message': '取得個人資料失敗'
+                        })
+                        return;
+                    }
                     req.session.user = result[0];
                     res.send({
                         'ok': true,

@@ -53,6 +53,11 @@ table {
   border-spacing: 0;
 }
 
+body {
+  letter-spacing: 0.2px;
+  padding-top: 57px;
+}
+
 .container {
   max-width: 975px;
   margin: 0 auto;
@@ -98,13 +103,18 @@ body {
 }
 
 header {
-  border-bottom: 1px solid #eee;
   background: #1057AD;
   color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  margin-bottom: 57px;
 }
 
 header nav {
   padding: 12px 0px;
+  height: 57px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -264,7 +274,7 @@ footer .container {
   bottom: 0;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 101;
   display: flex;
   align-items: center;
   background: #ffffff;
@@ -525,7 +535,9 @@ footer .container {
   font-weight: bold;
 }
 
-.article-main main .article-summary {
+.article-main main .article-summary, .article-main main .article-price {
+  color: #757575;
+  font-size: 14px;
   margin-bottom: 16px;
 }
 
@@ -542,9 +554,67 @@ footer .container {
   margin: 0 auto;
 }
 
+.article-main main .article-tags {
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.article-main main .tags li {
+  float: left;
+}
+
+.article-main main .article-tag {
+  background: #eee;
+  border-radius: 3px 0 0 3px;
+  color: #999;
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 20px 0 23px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+}
+
+.article-main main .article-tag::before {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+  content: '';
+  height: 6px;
+  left: 10px;
+  position: absolute;
+  width: 6px;
+  top: 10px;
+}
+
+.article-main main .article-tag::after {
+  background: #fbfbfb;
+  border-bottom: 13px solid transparent;
+  border-left: 10px solid #eee;
+  border-top: 13px solid transparent;
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.article-main main .article-tag:hover, .article-main main .article-tag.active {
+  background-color: #1057AD;
+  color: white;
+  text-decoration: none;
+}
+
+.article-main main .article-tag:hover::after, .article-main main .article-tag.active::after {
+  border-left-color: #1057AD;
+}
+
 .article-main main .article-content {
   margin-bottom: 15px;
-  line-height: 32px;
+  line-height: 1.4;
 }
 
 .article-main main .article-content img {
@@ -726,6 +796,7 @@ aside .article-comment-input .user-avatar {
   width: 30px;
   height: 30px;
   margin-right: 8px;
+  flex-shrink: 0;
 }
 
 aside .article-comment-input textarea {

@@ -133,7 +133,15 @@ router.patch('/api/article', async function (req, res) {
                   content = '${content}',
                   price   =  ${price}
                   WHERE article_id = ${articleId}`
+
           conn.query(sql, (err, result) => {
+            if(err){
+              res.send({
+                'error': true,
+                'message': '編輯失敗'
+              })
+              return;
+            }
             res.send({
               'ok': true,
               'message': '成功編輯文章~'
@@ -227,7 +235,7 @@ router.get('/api/articles', function (req, res) {
   if (req.query.keyword) {
 
     pool.getConnection((err, conn) => {
-      conn.query(`SELECT count(*) AS dataLen FROM articles WHERE title like '${req.query.keyword}';`, (err, result) => {
+      conn.query(`SELECT count(*) AS dataLen FROM articles WHERE title like '%${req.query.keyword}%';`, (err, result) => {
 
         dataLen = result[0].dataLen;
 
@@ -492,16 +500,16 @@ router.get('/api/articles', function (req, res) {
         }
 
         // 沒有追蹤使用者,直接回傳空資料
-        if(whereSQL === ""){
+        if (whereSQL === "") {
           res.send({
-            'ok':true,
-            'data':{
-              'articles':[],
-              'nextPage':null
+            'ok': true,
+            'data': {
+              'articles': [],
+              'nextPage': null
             }
           })
         }
-        else{
+        else {
           conn.query(`SELECT count(*) as dataLen FROM articles AS articleAndUsersAndLike WHERE ${whereSQL}`, (err, result) => {
             console.log(`SELECT count(*) as dataLen FROM articles AS articleAndUsersAndLike WHERE ${whereSQL}`)
             if (result.length > 0) {
@@ -542,7 +550,7 @@ router.get('/api/articles', function (req, res) {
                 }
                 else {
                   let responseData = [];
-  
+
                   result.forEach(item => {
                     responseData.push({
                       'article_id': item.article_id,
@@ -572,10 +580,10 @@ router.get('/api/articles', function (req, res) {
                 }
               })
             }
-  
+
           })
         }
-       
+
       })
       pool.releaseConnection(conn);
 
@@ -720,28 +728,45 @@ router.get('/api/article/:articleid', function (req, res) {
       }
 
       if (result.length > 0) {
-        res.send({
-          'ok': true,
-          'data': {
-            'article': {
-              'article_id': result[0].article_id,
-              'summary': result[0].summary,
-              'price': result[0].price,
-              'title': result[0].title,
-              'content': result[0].content,
-              'coverPhoto': result[0].coverPhoto,
-              'create_time': result[0].create_time,
-              'update_time': result[0].update_time,
-              'likeQty': result[0].likeQty,
-              'user_is_liked': result[0].user_is_liked,
-              'author': {
-                'user_id': result[0].user_id,
-                'username': result[0].username,
-                'avatar': result[0].avatar
-              }
-            },
-          }
-        });
+
+        let getTagsSQL = `SELECT tags.tag, tags.tag_id
+                          FROM article_tags
+                          INNER JOIN tags
+                          ON article_tags.tag_id = tags.tag_id 
+                          WHERE  article_id = ${articleId}`
+        let artTags = [];
+        conn.query(getTagsSQL, (err, tags) => {
+          // if (tags.length > 0) {
+          //   artTags = tags[0].tags.split(',');
+          // }
+
+  
+          res.send({
+            'ok': true,
+            'data': {
+              'article': {
+                'article_id': result[0].article_id,
+                'summary': result[0].summary,
+                'price': result[0].price,
+                'title': result[0].title,
+                'content': result[0].content,
+                'coverPhoto': result[0].coverPhoto,
+                'create_time': result[0].create_time,
+                'update_time': result[0].update_time,
+                'likeQty': result[0].likeQty,
+                'user_is_liked': result[0].user_is_liked,
+                'author': {
+                  'user_id': result[0].user_id,
+                  'username': result[0].username,
+                  'avatar': result[0].avatar
+                },
+                'tags':tags
+              },
+            }
+          });
+
+        })
+        
       }
       else {
         res.send({

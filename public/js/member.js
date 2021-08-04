@@ -39,7 +39,12 @@ let model = {
                 model.memberData = result.data;
             }
             else if(result.error){
-                // window.location.href = '/';
+                sweetAlert.alert('error', result.message).then(result=>{
+                    if(result.isConfirmed){
+                        window.location.href = '/';
+                    }
+                })
+                
             }
         })
     },
@@ -114,6 +119,7 @@ let view = {
             let noPost = document.querySelector('.no-post')
             noPost.textContent = '尚未發布蒐藏~'
             memberPost.classList.add('hidden');
+            noPost.classList.add('active');
         }
         else{
             model.memberData.articles.forEach(item => {

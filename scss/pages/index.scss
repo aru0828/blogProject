@@ -65,95 +65,6 @@
    
 }
 
-// .article{
-//     background: white;
-//     border: 1px solid rgba(var(--b6a,219,219,219),1);
-//     margin-bottom: 24px;
-//     .article-header{
-//         display:flex;
-//         justify-content: space-between;
-//         padding:16px;
-//         border-bottom: 1px solid rgba(var(--b6a,219,219,219),1);
-//         .author{
-//             display:flex;
-//             align-items:center;
-//             img{
-//                 border-radius: 50%;
-//                 width: 30px;
-//                 height: 30px;
-//                 margin-right: 8px;
-//             }
-//         }
-        
-//     }
-//     .article-coverPhoto img{
-//         width: 100%;
-//         height: auto;
-//         margin-bottom: 8px;
-//     }
-
-//     .article-features{
-//         padding:0 16px;
-//         margin-bottom:4px;
-//         font-size:24px;
-//         i{
-//             margin-right: 8px;
-//         }
-//         p{
-//             margin:8px 0;
-//             font-size: 16px;
-//         }
-//     }
-//     .article-content{
-//         padding:0 16px;
-//         margin-bottom: 4px;
-//     }
-
-//     .show-comment{
-//         padding:0 16px;
-//         margin: 4px 0;
-//         display:inline-block;
-//     }
-//     .article-time{
-//         padding:0 16px;
-//         margin: 8px 0 ;
-//     }
-//     .article-comment{
-//         padding:0 16px;
-//         margin-bottom: 8px;
-//         .commentRow{
-//             display:flex;
-
-//             margin-bottom: 4px;
-//             i{
-//                 margin-left: auto;
-//                 font-size: 12px;
-//             }
-//         }
-//     }
-//     .article-comment-input{
-//         padding:0 16px;
-//         display:flex;
-//         border-top: 1px solid black;
-        
-//         padding:8px 16px;
-
-//         .user-avatar{
-//             width: 25px;
-//             height: 25px;
-//         }
-//         textarea{
-//             width: auto;
-//             flex-grow: 1;
-//             resize: vertical;
-//             border: none;
-//             overflow: auto;
-//             outline: none;
-//             box-shadow: none;
-//         }
-//     }
-// }
-
 .index-main{
     display:flex;
     position: relative;
@@ -161,6 +72,7 @@
     // padding-top: 30px;
     align-items: flex-start;
     main{
+        min-height: 680px;
         width: 75%;
         margin-right: 32px;
         background: $light-gray-color;
@@ -491,7 +403,7 @@
             overflow:hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-              
+            line-height: normal;  
         }
         .newPost-price{
             font-size: 12px;
@@ -592,6 +504,7 @@
                         white-space: nowrap;
                         text-overflow: ellipsis;
                         overflow: hidden;
+                        line-height: normal;
                     }
                     .article-summary{
                         color:#757575;

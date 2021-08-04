@@ -2,12 +2,19 @@
 
 header{
    
-    border-bottom:1px solid #eee;
+   
     background: $primary-color;
     
     color:white;
+    position: fixed;
+    top:0;
+    width: 100%;
+   
+    z-index: 100;
+    margin-bottom: 57px;
     nav{
         padding:12px 0px;
+        height: 57px;
         display:flex;
         align-items: center;
         justify-content: space-between;

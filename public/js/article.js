@@ -99,17 +99,6 @@ let model = {
                 window.location.href= "/articles"
             }
             model.article = result.data.article;
-    
-            // if(result.ok){
-            //     let article = result.data.article;
-            //     title.innerHTML   = article.title;
-            //     content.innerHTML = article.content;
-            //     authorName.textContent = article.author.username;
-            //     // authorAvatar.setAttribute('src', article.avatar);
-            //     publishTime.textContent = `${dateArray[0]} ${parseInt(dateArray[1])+8}:${dateArray[2]}`;
-            // }
-
-            
         })
     },
     getLevelOneComments:function(){
@@ -232,11 +221,28 @@ let view = {
         let authorName = document.querySelector('.author h3');
         authorName.textContent = article.author.username;
 
+        let articleTags = document.querySelector('.article-tags');
+        if(!article.tags.length){
+            articleTags.classList.add('hidden');
+        }
+        article.tags.forEach(tagObj => {
+            let tagDom = document.createElement('a');
+            tagDom.setAttribute('href', `/articles?tag=${tagObj.tag_id}`);
+            tagDom.classList.add('article-tag');
+            tagDom.textContent = tagObj.tag;
+
+            articleTags.appendChild(tagDom);
+        })
+        // articleTitle.textContent = article.title;
+
         let articleTitle = document.querySelector('.article-title');
         articleTitle.textContent = article.title;
 
         let articleSummary = document.querySelector('.article-summary');
         articleSummary.textContent = article.summary;
+
+        let articlPirce = document.querySelector('.article-price');
+        articlPirce.textContent = `入手價格:${article.price ? article.price : ' 不公開'}`;
 
         let coverPhotoImg = document.querySelector('.article-coverPhoto img');
         coverPhotoImg.setAttribute('src', article.coverPhoto);

@@ -25,14 +25,6 @@ editPostForm.addEventListener('submit', function (e) {
     let content = tinymce.get('editor').getContent();
     let price = document.querySelector('#price').value;
     let summary = document.querySelector('#summary').value;
-
-
-    // let formData = new FormData();
-    // formData.append('title', title);
-    // formData.append('content', content);
-    // formData.append('price', price);
-    // formData.append('summary', summary);
-
     let requestData = {
         'article_id': articleId,
         'title': title,
@@ -50,16 +42,13 @@ editPostForm.addEventListener('submit', function (e) {
     })
         .then(response => response.json())
         .then(result => {
-            console.log(result)
             loading.toggleLoading();
             if (result.ok) {
-
                 sweetAlert.alert('success', result.message).then(result => {
                     if (result.isConfirmed) {
                         window.location.href = `/article/${articleId}`;
                     }
                 })
-
             }
             else {
                 sweetAlert.alert('error', result.message).then(result => {
@@ -163,7 +152,7 @@ let controller = {
             media_poster: false,
         
             // 修改編輯器內部樣式
-            content_style: "body { line-height:16px; }",
+            content_style: "body {  }",
         });
 
 

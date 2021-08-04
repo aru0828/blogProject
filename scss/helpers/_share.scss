@@ -6,6 +6,12 @@ $light-gray-color:#fbfbfb;
 // // $primary-color: #222;
 // $primary-color: #3d3a3a;
 
+
+body{
+    letter-spacing: 0.2px;
+    //header高度
+    padding-top: 57px;
+}
 .container{
     max-width: 975px;
     margin:0 auto;

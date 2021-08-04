@@ -6,8 +6,12 @@
     align-items: center;
     margin: 30px auto 48px auto;
     
+    .no-post.active{
+        display:block;
+    }
     .no-post{
         text-align: center;
+        display:none;
         width: 80%;
         padding:30px 15px  30px 15px ;
         background: $light-gray-color;
@@ -44,6 +48,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: normal;
         }
         .member-qty{
             display:flex;
@@ -146,6 +151,12 @@
 }
 
 @media(max-width:575px){
+
+    .member-main{
+        .no-post{
+            width: 95%;
+        }
+    }
 
     .member-info{
         width: 95%;

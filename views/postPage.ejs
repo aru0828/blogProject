@@ -1,6 +1,6 @@
 <%- include('includes/head') -%>
 <script src="/tinymce/tinymce.min.js"></script>
-<title>發布蒐藏</title>
+<title>分享蒐藏</title>
 </head>
 
 <body class="bg-primary-light">
@@ -8,14 +8,12 @@
 
 
     <div class="postPage-main container main">
-        <form id="postForm" novalidate>
+        <form id="postForm">
             <h2 class="">分享蒐藏</h2>
 
             <div class="inputGroup tagGroup">
                 <label for="title">&ensp;蒐藏標籤 :&nbsp;</label>
 
-                <!-- <input type="checkbox" value="模型車">模型車
-                <input type="checkbox" value="郵票">Tomica -->
             </div>
 
             <div class="inputGroup">
@@ -41,7 +39,7 @@
 
             <div class="inputGroup ">
                 <!-- <label for="">蒐藏內容 :&nbsp;</label> -->
-                <textarea id="editor" required placeholder=""></textarea>
+                <textarea id="editor"  placeholder=""></textarea>
             </div>
 
             <div class="inputGroup">

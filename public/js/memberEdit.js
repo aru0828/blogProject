@@ -73,9 +73,18 @@ let controller = {
     },
 
     submitUserEdit:async function(){
+        loading.toggleLoading(true);
         let editUserResult = await model.submitUserEdit();
+        loading.toggleLoading();
         if(editUserResult.ok){
             sweetAlert.alert('success', editUserResult.message).then(result => {
+                if(result.isConfirmed){
+                    window.location.href = `/member/${model.userData.user_id}`;
+                }
+            })
+        }
+        else{
+            sweetAlert.alert('error', editUserResult.message).then(result => {
                 if(result.isConfirmed){
                     window.location.href = `/member/${model.userData.user_id}`;
                 }

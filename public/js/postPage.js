@@ -52,7 +52,13 @@ postForm.addEventListener('submit', function(e){
             window.location.href=`/article/${result.article_id}`;
           }
         })
-        
+      }
+      else{
+        sweetAlert.alert('error', '發布失敗').then(SWresult => {
+          if(SWresult.isConfirmed){
+            window.location.href=`/article/${result.article_id}`;
+          }
+        })
       }
       loading.toggleLoading();
     })
@@ -148,7 +154,7 @@ let controller = {
       // 取消自定義寬高
       media_dimensions: false,
       media_poster: false,
-      content_style: "body { line-height:16px; }",
+      content_style: "body {  }",
     });
     
     await model.getUserData();

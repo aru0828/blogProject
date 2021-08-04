@@ -53,6 +53,11 @@ table {
   border-spacing: 0;
 }
 
+body {
+  letter-spacing: 0.2px;
+  padding-top: 57px;
+}
+
 .container {
   max-width: 975px;
   margin: 0 auto;
@@ -98,13 +103,18 @@ body {
 }
 
 header {
-  border-bottom: 1px solid #eee;
   background: #1057AD;
   color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  margin-bottom: 57px;
 }
 
 header nav {
   padding: 12px 0px;
+  height: 57px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -264,7 +274,7 @@ footer .container {
   bottom: 0;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 101;
   display: flex;
   align-items: center;
   background: #ffffff;
@@ -532,6 +542,7 @@ footer .container {
 }
 
 .index-main main {
+  min-height: 680px;
   width: 75%;
   margin-right: 32px;
   background: #fbfbfb;
@@ -809,6 +820,7 @@ footer .container {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: normal;
 }
 
 .newPost-info .newPost-text .newPost-price {
@@ -898,6 +910,7 @@ footer .container {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  line-height: normal;
 }
 
 .index-section .index-section-articles .article-list li .article-content .article-summary, .index-section .index-section-articles .newest-article-list li .article-content .article-summary, .index-section .index-section-articles .popular-article-list li .article-content .article-summary, .index-section .index-section-articles .discussion-article-list li .article-content .article-summary {

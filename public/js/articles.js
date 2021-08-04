@@ -280,22 +280,6 @@ let view = {
                 messageIcon.setAttribute('href', `/article/${item.article_id}`);
 
                 heartIcon.addEventListener('click', function (e) {
-                    // console.log(e.target.dataset.artid)
-                    // fetch('/api/like', {
-                    //     'method': 'POST',
-                    //     'body': JSON.stringify({
-                    //         'article_id': e.target.dataset.artid
-                    //     }),
-                    //     'headers': {
-                    //         'content-type': 'application/json'
-                    //     }
-                    // })
-                    // .then(response => response.json())
-                    // .then(result => {
-                    //     if (result.ok) {
-                    //         controller.getMainList();
-                    //     }
-                    // })
                     controller.likeEvent(e.target.dataset.artid);
                 })
 
@@ -370,8 +354,25 @@ let view = {
                 window.location.href = `/articles?tag=${tagId}`;
             })
         })
-    }
+    },
 
+    rerenderArticleLikes:function(likeData){
+        if(likeData.length>0){
+            let likeDom = document.querySelector(`.features [data-artid= '${likeData[0].article_id}']`);
+            let likeQty = document.querySelector(`.features [data-artid= '${likeData[0].article_id}'] span`);
+            likeQty.textContent = likeData[0].likeQty;
+            if(likeData[0].user_is_liked === 'yes'){
+                likeDom.classList.remove('bi-heart');
+                likeDom.classList.add('bi-heart-fill');
+            }
+            else{
+                likeDom.classList.remove('bi-heart-fill');
+                likeDom.classList.add('bi-heart');
+            }
+        }
+       
+        console.log(likeData);
+    }
 }
 
 
@@ -422,8 +423,18 @@ let controller = {
     likeEvent: async function (artId) {
         let likeResult = await model.likeEvent(artId);
         console.log(likeResult);
+       
+        
+      
         if (likeResult.ok) {
-            controller.getMainList();
+            fetch(`/api/like?articleid=${artId}`)
+            .then(response => response.json())
+            .then(result => {
+                if(result.ok){
+                    view.rerenderArticleLikes(result.data)
+                }
+                console.log(result);
+            })
         }
         else {
             sweetAlert.alert('error', likeResult.message);

@@ -53,6 +53,11 @@ table {
   border-spacing: 0;
 }
 
+body {
+  letter-spacing: 0.2px;
+  padding-top: 57px;
+}
+
 .container {
   max-width: 975px;
   margin: 0 auto;
@@ -98,13 +103,18 @@ body {
 }
 
 header {
-  border-bottom: 1px solid #eee;
   background: #1057AD;
   color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  margin-bottom: 57px;
 }
 
 header nav {
   padding: 12px 0px;
+  height: 57px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -264,7 +274,7 @@ footer .container {
   bottom: 0;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 101;
   display: flex;
   align-items: center;
   background: #ffffff;
@@ -486,8 +496,13 @@ footer .container {
   margin: 30px auto 48px auto;
 }
 
+.member-main .no-post.active {
+  display: block;
+}
+
 .member-main .no-post {
   text-align: center;
+  display: none;
   width: 80%;
   padding: 30px 15px  30px 15px;
   background: #fbfbfb;
@@ -524,6 +539,7 @@ footer .container {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: normal;
 }
 
 .member-info .member-summary .member-qty {
@@ -636,6 +652,9 @@ footer .container {
 }
 
 @media (max-width: 575px) {
+  .member-main .no-post {
+    width: 95%;
+  }
   .member-info {
     width: 95%;
     display: flex;
