@@ -23,6 +23,13 @@ router.get('/api/member/:userid', function (req, res) {
                     GROUP BY follow`
 
         conn.query(sql, (err, result) => {
+            if(result.length === 0){
+                res.send({
+                    'error':true,
+                    'message':'此會員不存在'
+                })
+                return;
+            }
             responseData.memberData = result[0];
 
             // 取得會員文章以及讚數留言數
@@ -58,20 +65,13 @@ router.get('/api/member/:userid', function (req, res) {
                     return;
                 }
 
-                if(result.length>0){
-                    responseData.articles = result
-                    res.send({
-                        'ok': true,
-                        'data': responseData
-                    })
-                }
-                else{
-                    res.send({
-                        'error': true,
-                        'message':'查無會員資料!',
-                        'data': null
-                    })
-                }
+               
+                responseData.articles = result
+                res.send({
+                    'ok': true,
+                    'data': responseData
+                })
+               
                 
             })
         })

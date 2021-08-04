@@ -4,6 +4,14 @@ import { checkUser } from './checkUser.js';
 import { sweetAlert } from './sweetAlert.js';
 
 let model = {
+
+    getUserData:function(){
+        return checkUser().then(result=>{
+            if(result.message==='登入中'){
+                window.location.href='/';
+            }
+        })
+    },
     register: function () {
         let email = document.getElementById('regEmail').value;
         let password = document.getElementById('regPassword').value;
@@ -115,6 +123,9 @@ let view = {
 }
 
 let controller = {
+    init:function(){
+        model.getUserData();
+    },
     // 登入:login 註冊register
     toggleFormMode: function (mode = 'login') {
         let closeDom = document.querySelector(`#${mode === "login" ? "register" : "login"}`);
@@ -131,6 +142,8 @@ let controller = {
         model.register();
     }
 }
+
+controller.init();
 
 view.toRegisterBtn.addEventListener('click', function (e) {
     e.preventDefault();

@@ -403,7 +403,13 @@ let controller = {
 
         let commentAuthorImg = document.querySelector('.user-avatar');
         console.log(model.userData)
-        commentAuthorImg.setAttribute('src', model.userData.hasOwnProperty('avatar')  ? model.userData.avatar : '/public/images/default-user-icon.jpg');
+        if(model.userData){
+            commentAuthorImg.setAttribute('src', model.userData.avatar  ? model.userData.avatar : '/public/images/default-user-icon.jpg');
+        }
+        else{
+            commentAuthorImg.setAttribute('src', '/public/images/default-user-icon.jpg');
+        }
+        
         
         loading.toggleLoading();
     },

@@ -370,8 +370,6 @@ let view = {
                 likeDom.classList.add('bi-heart');
             }
         }
-       
-        console.log(likeData);
     }
 }
 
