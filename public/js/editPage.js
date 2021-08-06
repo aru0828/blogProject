@@ -10,16 +10,11 @@ let pathParams = window.location.pathname.split("/");
 let articleId = pathParams[pathParams.length - 1];
 
 
-//預覽功能
-// coverPhoto.addEventListener('change', function(e){
-//   console.log(e);
-// })
 
 
 editPostForm.addEventListener('submit', function (e) {
     e.preventDefault();
     loading.toggleLoading(true);
-    console.log('submit edit')
 
     let title = document.querySelector('#title').value;
     let content = tinymce.get('editor').getContent();
@@ -57,16 +52,9 @@ editPostForm.addEventListener('submit', function (e) {
                     }
                 })
             }
-    })
+        })
 
 })
-
-
-
-
-
-
-console.log(articleId)
 
 
 let model = {
@@ -89,8 +77,6 @@ let model = {
             .then(result => {
                 if (result.ok) {
 
-                    console.log(result.data.article.author.user_id);
-                    console.log(model.userData.user_id);
                     if (result.data.article.author.user_id !== model.userData.user_id) {
                         window.location.href = '/';
                     }
@@ -107,7 +93,7 @@ let model = {
 }
 
 let view = {
-    renderOldData:  function () {
+    renderOldData: function () {
         tinymce.get("editor").setContent(model.oldData.content);
         let title = document.querySelector('#title');
         let summary = document.querySelector('#summary');
@@ -116,8 +102,8 @@ let view = {
         title.value = model.oldData.title;
         summary.value = model.oldData.summary ? model.oldData.summary : '';
         price.value = model.oldData.price ? model.oldData.price : 0;
-        
-      
+
+
     }
 
 }
@@ -136,8 +122,8 @@ let controller = {
             // toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent'
             toolbar: ' fontsizeselect forecolor backcolor |  bold italic underline emoticons |  aligncenter | indent  | link image media ',
             menubar: false,
-        
-        
+
+
             // image plugins設定
             // 取消自定義寬高
             image_dimensions: false,
@@ -150,7 +136,7 @@ let controller = {
             link_title: false,
             media_dimensions: false,
             media_poster: false,
-        
+
             // 修改編輯器內部樣式
             content_style: "body {  }",
         });
@@ -159,7 +145,7 @@ let controller = {
         await model.getUserData();
         await model.getOldData();
         view.renderOldData();
-          
+
         loading.toggleLoading();
     }
 }

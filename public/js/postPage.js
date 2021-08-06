@@ -1,8 +1,8 @@
 
 
-import {checkUser} from './checkUser.js';
-import {sweetAlert} from './sweetAlert.js';
-import {loading} from './loading.js';
+import { checkUser } from './checkUser.js';
+import { sweetAlert } from './sweetAlert.js';
+import { loading } from './loading.js';
 
 
 let postForm = document.querySelector('#postForm');
@@ -11,96 +11,96 @@ let coverPhoto = document.querySelector('#coverPhoto');
 
 
 
-postForm.addEventListener('submit', function(e){
+postForm.addEventListener('submit', function (e) {
 
 
   e.preventDefault();
-    
-   loading.toggleLoading(true);
-    
-    
-    let tagChecked = document.querySelectorAll('.tagGroup input:checked')
-    let tagArray = [];
-    tagChecked.forEach(item => {
-      tagArray.push(parseInt(item.value));
-    })
+
+  loading.toggleLoading(true);
 
 
-    let title   = document.querySelector('#title').value;
-    let coverPhoto = document.querySelector('#coverPhoto').files[0];
-    let content = tinymce.get('editor').getContent();
-    let price = document.querySelector('#price').value;
-    let summary = document.querySelector('#summary').value;
-    
+  let tagChecked = document.querySelectorAll('.tagGroup input:checked')
+  let tagArray = [];
+  tagChecked.forEach(item => {
+    tagArray.push(parseInt(item.value));
+  })
 
-    let formData = new FormData();
-    formData.append('title', title);
-    formData.append('coverPhoto', coverPhoto);
-    formData.append('content', content);
-    formData.append('price', price);
-    formData.append('summary', summary);
-    formData.append('tagArray', tagArray);
-    fetch('/api/article', {
-      method:'POST',
-      body:formData,
-    })
+
+  let title = document.querySelector('#title').value;
+  let coverPhoto = document.querySelector('#coverPhoto').files[0];
+  let content = tinymce.get('editor').getContent();
+  let price = document.querySelector('#price').value;
+  let summary = document.querySelector('#summary').value;
+
+
+  let formData = new FormData();
+  formData.append('title', title);
+  formData.append('coverPhoto', coverPhoto);
+  formData.append('content', content);
+  formData.append('price', price);
+  formData.append('summary', summary);
+  formData.append('tagArray', tagArray);
+  fetch('/api/article', {
+    method: 'POST',
+    body: formData,
+  })
     .then(response => response.json())
     .then(result => {
-      if(result.ok){
+      if (result.ok) {
         sweetAlert.alert('success', '發布成功').then(SWresult => {
-          if(SWresult.isConfirmed){
-            window.location.href=`/article/${result.article_id}`;
+          if (SWresult.isConfirmed) {
+            window.location.href = `/article/${result.article_id}`;
           }
         })
       }
-      else{
+      else {
         sweetAlert.alert('error', '發布失敗').then(SWresult => {
-          if(SWresult.isConfirmed){
-            window.location.href=`/article/${result.article_id}`;
+          if (SWresult.isConfirmed) {
+            window.location.href = `/article/${result.article_id}`;
           }
         })
       }
       loading.toggleLoading();
     })
-  
+
 })
 
 
 let model = {
-  userData:{},
-  tags:[],
-  getUserData:function(){
+  userData: {},
+  tags: [],
+  getUserData: function () {
     return checkUser().then(result => {
-      if(result.message==='登入中'){
+      if (result.message === '登入中') {
         model.userData = result.data;
-      }else{
-        window.location.href='/';
+      } else {
+        window.location.href = '/';
       }
       // 未登入導覽至首頁or login
     })
   },
 
-  getTagData:async function(){
+  getTagData: async function () {
     return fetch('/api/tag')
-    .then(response => response.json())
-    .then(result  => {
-      if(result.ok){
-        model.tags = result.data;
-      }
-    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.ok) {
+          model.tags = result.data;
+        }
+      })
   },
 }
 
 let view = {
-  renderTags:function(){
+  renderTags: function () {
     let tagGroup = document.querySelector('.tagGroup');
     let tags = document.createElement('div');
     tags.classList.add('tags');
-    model.tags.forEach(item=>{
+    model.tags.forEach(item => {
       let tag = document.createElement('div');
       tag.classList.add('tag');
       let checkBox = document.createElement('input');
-      let label  =document.createElement('label');
+      let label = document.createElement('label');
       checkBox.setAttribute('type', 'checkBox');
       checkBox.setAttribute('value', item.tag_id);
       label.textContent = item.tag;
@@ -109,28 +109,28 @@ let view = {
       tag.appendChild(label);
 
       tags.appendChild(tag);
-      
+
     })
     tagGroup.appendChild(tags);
-   
+
   }
 }
 
 let controller = {
-  init:async function(){
+  init: async function () {
     loading.toggleLoading();
     await tinymce.init({
-      selector: 'textarea',  
-      plugins: 'image link media emoticons',  
-      width:1000,
-      height:600,
+      selector: 'textarea',
+      plugins: 'image link media emoticons',
+      width: 1000,
+      height: 600,
       language: 'zh_TW',
       // 預設toolbar
       // toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent'
       toolbar: ' fontsizeselect forecolor backcolor |  bold italic underline emoticons |  aligncenter | indent  | link image media ',
       menubar: false,
-    
-    
+
+
       // image plugins設定
       // 取消自定義寬高
       image_dimensions: false,
@@ -138,8 +138,8 @@ let controller = {
       images_file_types: 'jpg,png,jpeg.gif',
       automatic_uploads: false,
       images_upload_url: 'postAcceptor.php',
-    
-    
+
+
       // link plugins設定
       // 預設點擊連結會另開視窗
       default_link_target: '_blank',
@@ -147,7 +147,7 @@ let controller = {
       link_context_toolbar: true,
       // 取消設定link時的title欄位
       link_title: false,
-    
+
       // media plugins設定
       // 取消設定media時的source欄位
       // media_alt_source: true
@@ -156,7 +156,7 @@ let controller = {
       media_poster: false,
       content_style: "body {  }",
     });
-    
+
     await model.getUserData();
     await model.getTagData();
     view.renderTags();

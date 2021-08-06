@@ -1,4 +1,4 @@
-import {checkUser} from './checkUser.js';
+import { checkUser } from './checkUser.js';
 
 
 let logoutBtn = document.querySelector('.logoutBtn');
@@ -8,78 +8,75 @@ let collapase = document.querySelector('.collapase');
 let toMember = document.querySelector('.toMember');
 let keyWordSearch = document.querySelector('.keyWordSearch');
 let searchBtn = document.querySelector('.searchBtn');
-console.log(keyWordSearch);
 
 
-keyWordSearch.addEventListener('keypress', (e)=>{
-    if(e.key==='Enter'){
+keyWordSearch.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
         let keyword = keyWordSearch.value;
-        
-        if(keyword){
-            window.location.href =`/articles/?keyword=${keyword}`;
+
+        if (keyword) {
+            window.location.href = `/articles/?keyword=${keyword}`;
         }
     }
 })
 
-searchBtn.addEventListener('click', (e)=>{
-    
+searchBtn.addEventListener('click', (e) => {
+
     let keyword = keyWordSearch.value;
-    
-    if(keyword){
-        window.location.href =`/articles/?keyword=${keyword}`;
+
+    if (keyword) {
+        window.location.href = `/articles/?keyword=${keyword}`;
     }
-    
+
 })
 // 登出且重新導向網址
-logoutBtn.addEventListener('click', function(e){
+logoutBtn.addEventListener('click', function (e) {
     e.preventDefault();
     model.logout();
 })
 
 
-memberLink.addEventListener('click', function(e){
+memberLink.addEventListener('click', function (e) {
     e.preventDefault();
-    console.log('toggle')
     collapase.classList.toggle('active');
 })
 
 
 let model = {
-    isLogined:false,
-    userData : {},
-    checkUser:function(){
-        return  checkUser().then(result => {
-                    if(result.data){
-                        model.isLogined = true;
-                        model.userData = result.data;
-                    }
-                    console.log('登入狀態: ',result);
-                });
+    isLogined: false,
+    userData: {},
+    checkUser: function () {
+        return checkUser().then(result => {
+            if (result.data) {
+                model.isLogined = true;
+                model.userData = result.data;
+            }
+        });
     },
 
 
-    logout:function(){
-        fetch('/api/user',{'method':'DELETE'})
-        .then(response => response.json())
-        .then(result   => {
-            if(result.ok){
-                window.location.href ='/';
-            }
-        })
+    logout: function () {
+        fetch('/api/user', { 'method': 'DELETE' })
+            .then(response => response.json())
+            .then(result => {
+                if (result.ok) {
+                    window.location.href = '/';
+                }
+            })
     }
 }
 
 let view = {
-    
 
-    renderNavbar:function(){
-        if(model.isLogined){
+
+    renderNavbar: function () {
+        if (model.isLogined) {
             document.querySelectorAll('.member-only').forEach(item => {
                 item.classList.add('active');
-                toMember.href=`/member/${model.userData.user_id}`;
+                toMember.href = `/member/${model.userData.user_id}`;
                 memberImg.setAttribute('src', !model.userData.avatar ? '../../public/images/default-user-icon.jpg' : model.userData.avatar);
             })
-        }else{
+        } else {
             document.querySelectorAll('.visitor-only').forEach(item => {
                 item.classList.add('active');
             })
@@ -88,7 +85,7 @@ let view = {
 }
 
 let controller = {
-    init:async function(){
+    init: async function () {
         await model.checkUser();
         view.renderNavbar();
     }

@@ -64,8 +64,6 @@ router.get('/api/member/:userid', function (req, res) {
                     })
                     return;
                 }
-
-               
                 responseData.articles = result
                 res.send({
                     'ok': true,

@@ -1,16 +1,16 @@
 
 
-import {checkUser} from './checkUser.js';
-import {loading} from './loading.js';
-import {sweetAlert} from './sweetAlert.js';
+import { checkUser } from './checkUser.js';
+import { loading } from './loading.js';
+import { sweetAlert } from './sweetAlert.js';
 
 let pathParams = window.location.pathname.split("/");
-let memberId = pathParams[pathParams.length-1];
+let memberId = pathParams[pathParams.length - 1];
 
 
 let followBtn = document.querySelector('.follow-btn');
 
-followBtn.addEventListener('click', function(e){
+followBtn.addEventListener('click', function (e) {
     e.preventDefault();
     controller.followMember();
 
@@ -18,75 +18,74 @@ followBtn.addEventListener('click', function(e){
 
 
 let model = {
-    userData:{},
-    memberData :{},
-    isFollowed:false,
+    userData: {},
+    memberData: {},
+    isFollowed: false,
 
-    getUserData:function(){
-        return checkUser().then(result=>{
-            if(result.message==='登入中'){
+    getUserData: function () {
+        return checkUser().then(result => {
+            if (result.message === '登入中') {
                 model.userData = result.data;
             }
         })
     },
-    getPageData:function(){
+    getPageData: function () {
         return fetch(`/api/member/${memberId}`)
-        .then(response => response.json())
-        .then(result => {       
-            console.log(result)
-            
-            if(result.ok){        
-                model.memberData = result.data;
-            }
-            else if(result.error){
-                sweetAlert.alert('error', result.message).then(result=>{
-                    if(result.isConfirmed){
-                        window.location.href = '/';
-                    }
-                })
-                
-            }
-        })
+            .then(response => response.json())
+            .then(result => {
+
+                if (result.ok) {
+                    model.memberData = result.data;
+                }
+                else if (result.error) {
+                    sweetAlert.alert('error', result.message).then(result => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/';
+                        }
+                    })
+
+                }
+            })
     },
 
-    followMember:function(){
-        
+    followMember: function () {
+
         let requestData = {
-            'follow_id':memberId
+            'follow_id': memberId
         }
         return fetch('/api/follow', {
-            'method':'POST',
-            'body':JSON.stringify(requestData),
-            'headers':{
-                'content-type':'application/json'
+            'method': 'POST',
+            'body': JSON.stringify(requestData),
+            'headers': {
+                'content-type': 'application/json'
             }
         })
-        .then(response => response.json())
-        .then(result => {
-            if(result.error){
-                sweetAlert.alert('error', result.message);
-            }
-        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    sweetAlert.alert('error', result.message);
+                }
+            })
     },
 
-    getFollowData:function(){
+    getFollowData: function () {
         let followId = memberId;
-        console.log('fetch follow')
+
         return fetch(`/api/follow/${followId}`)
-        .then(response => response.json())
-        .then(result => {
-            console.log(result)
-            if(result.ok){
-                model.isFollowed = result.data.isFollowed;
-            }
-        })
+            .then(response => response.json())
+            .then(result => {
+
+                if (result.ok) {
+                    model.isFollowed = result.data.isFollowed;
+                }
+            })
 
     },
 }
 
 let view = {
 
-    renderMemberInfo:function(){
+    renderMemberInfo: function () {
         // 會員資訊
         let user = model.memberData.memberData;
         let avatar = document.querySelector('.member-summary img');
@@ -96,47 +95,44 @@ let view = {
         let memeberDescription = document.querySelector('.member-description p')
 
 
-        avatar.setAttribute('src', !user.avatar ?  '../public/images/default-user-icon.jpg' : user.avatar);
+        avatar.setAttribute('src', !user.avatar ? '../public/images/default-user-icon.jpg' : user.avatar);
         memberName.textContent = user.username;
         postQty.textContent = `${model.memberData.articles.length > 0 ? model.memberData.articles.length : 0} 個收藏`;
         followerQty.textContent = `${user.followQty > 0 ? user.followQty : 0} 位追蹤者`;
-        console.log(model.memberData)
-        console.log(model.memberData.followQty)
+
         memeberDescription.textContent = !user.description ? `大家好，我是${user.username}` : user.description;
     },
-    renderMemberArticles:function(){
+    renderMemberArticles: function () {
         // 會員資訊
 
         // 會員文章列表
 
-        
+
         let frag = document.createDocumentFragment();
         let memberPost = document.querySelector('.member-post');
 
-
-        console.log(model.memberData);
-        if(model.memberData.articles.length < 1){
+        if (model.memberData.articles.length < 1) {
             let noPost = document.querySelector('.no-post')
             noPost.textContent = '尚未發布蒐藏~'
             memberPost.classList.add('hidden');
             noPost.classList.add('active');
         }
-        else{
+        else {
             model.memberData.articles.forEach(item => {
 
                 let postLi = document.createElement('li');
-                let postLink  = document.createElement('a');
+                let postLink = document.createElement('a');
                 let postImg = document.createElement('img');
                 let hoverEffect = document.createElement('div');
                 let heartFill = document.createElement('p');
-                let chatFill  = document.createElement('p');
-                
+                let chatFill = document.createElement('p');
+
                 let heartQty = document.createElement('span');
                 heartQty.textContent = item.likeQty;
                 let chatQty = document.createElement('span');
                 chatQty.textContent = item.commentQty;
 
-                
+
                 heartFill.classList.add('bi', 'bi-heart-fill');
                 heartFill.appendChild(heartQty);
                 chatFill.classList.add('bi', 'bi-chat-fill');
@@ -157,25 +153,25 @@ let view = {
             })
             memberPost.appendChild(frag);
         }
-    
+
 
 
 
         // 會員文章列表
     },
 
-    renderFollowBtn:function(){
+    renderFollowBtn: function () {
         let followBtn = document.querySelector('.follow-btn');
-        
+
         // 如果在自己的會員頁 不顯示追蹤按鈕
-        if(model.userData.user_id === parseInt(memberId)){
+        if (model.userData.user_id === parseInt(memberId)) {
             followBtn.remove();
         }
-        
-        if(model.isFollowed){
+
+        if (model.isFollowed) {
             followBtn.classList.add('isFollowing');
             followBtn.textContent = '追蹤中';
-        }else{
+        } else {
             followBtn.classList.remove('isFollowing');
             followBtn.textContent = '追蹤';
         }
@@ -185,7 +181,7 @@ let view = {
 }
 
 let controller = {
-    init:async function (){
+    init: async function () {
         loading.toggleLoading();
 
         await model.getUserData();
@@ -196,14 +192,14 @@ let controller = {
         loading.toggleLoading();
     },
 
-    getFollowData:async function(){
+    getFollowData: async function () {
         await model.getPageData();
         await model.getFollowData();
         view.renderMemberInfo();
         view.renderFollowBtn();
     },
 
-    followMember:async function(){
+    followMember: async function () {
         await model.followMember();
         controller.getFollowData();
     }

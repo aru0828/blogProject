@@ -16,7 +16,6 @@ let model= {
     userData:{},
     getUserData:async function(){
         let result = await checkUser();
-        console.log(result);
         if(result.message==='登入中'){
             model.userData = result.data;
         }

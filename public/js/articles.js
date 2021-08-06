@@ -3,28 +3,22 @@ import { loading } from './loading.js';
 import { sweetAlert } from './sweetAlert.js';
 
 let rectObject = document.querySelector('body').getBoundingClientRect();
-console.log(rectObject);
 
-let test=  document.querySelector('.test');
 let body = document.querySelector('body');
-console.log(body.scrollHeight);
 
-window.addEventListener('scroll', function(){
-    if( (window.screen.height + window.pageYOffset)+1 > body.clientHeight){
-        
-        if(model.getPage !== null && model.apiDone){
-            
-            console.log(model.currentPage)
+window.addEventListener('scroll', function () {
+    if ((window.screen.height + window.pageYOffset) + 1 > body.clientHeight) {
+
+        if (model.getPage !== null && model.apiDone) {
             controller.getMainList();
         }
-    } 
+    }
 })
 
 let toggleShow = document.querySelectorAll('.toggleShow li a');
 toggleShow.forEach(item => {
     item.addEventListener('click', function (e) {
         e.preventDefault();
-        console.log(e.target.dataset.display)
         let display = e.target.dataset.display;
         if (!display) {
             window.location.href = `${window.location.pathname}`
@@ -32,7 +26,6 @@ toggleShow.forEach(item => {
         else {
             window.location.href = `${window.location.pathname}?display=${display}`
         }
-        console.log(`${window.location.pathname}?display=${display}`)
 
     })
 
@@ -45,7 +38,7 @@ let model = {
     asideListData: [],
     tags: [],
     getPage: 0,
-    apiDone:true,
+    apiDone: true,
 
     getUserData: function () {
         return checkUser().then(result => {
@@ -54,7 +47,7 @@ let model = {
             }
             else {
                 let displayFollowingBtn = document.querySelector('.displayFollowingBtn');
-                console.log(displayFollowingBtn)
+
                 displayFollowingBtn.remove();
             }
         })
@@ -65,18 +58,18 @@ let model = {
         let params = new URLSearchParams(querystring);
         let keyword = params.get('keyword');
         let display = params.get('display');
-       
+
         let tag = params.get('tag');
 
-        console.log('get main data')
+
         if (keyword) {
             return fetch(`/api/articles?keyword=${keyword}&page=${model.getPage}`)
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result)
+
                     if (result.ok) {
                         model.mainListData = result.data.articles;
-                        model.getPage  = result.data.nextPage;
+                        model.getPage = result.data.nextPage;
                     }
 
                     // view.renderMainList();
@@ -89,7 +82,7 @@ let model = {
                 .then(result => {
                     if (result.ok) {
                         model.mainListData = result.data.articles;
-                        model.getPage  = result.data.nextPage;
+                        model.getPage = result.data.nextPage;
                     }
 
                 })
@@ -98,24 +91,24 @@ let model = {
             return fetch(`/api/articles?tag=${tag}&page=${model.getPage}`)
                 .then(response => response.json())
                 .then(result => {
-                    
+
                     if (result.ok) {
                         model.mainListData = result.data.articles;
-                        model.getPage  = result.data.nextPage;
+                        model.getPage = result.data.nextPage;
                     }
                 })
         }
         else {
-            console.log(model.getPage)
+
             return fetch(`/api/articles?page=${model.getPage}`)
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result)
+
                     if (result.ok) {
                         model.mainListData = result.data.articles;
-                        model.getPage  = result.data.nextPage;
+                        model.getPage = result.data.nextPage;
                     }
-                  
+
                 })
         }
 
@@ -356,16 +349,16 @@ let view = {
         })
     },
 
-    rerenderArticleLikes:function(likeData){
-        if(likeData.length>0){
+    rerenderArticleLikes: function (likeData) {
+        if (likeData.length > 0) {
             let likeDom = document.querySelector(`.features [data-artid= '${likeData[0].article_id}']`);
             let likeQty = document.querySelector(`.features [data-artid= '${likeData[0].article_id}'] span`);
             likeQty.textContent = likeData[0].likeQty;
-            if(likeData[0].user_is_liked === 'yes'){
+            if (likeData[0].user_is_liked === 'yes') {
                 likeDom.classList.remove('bi-heart');
                 likeDom.classList.add('bi-heart-fill');
             }
-            else{
+            else {
                 likeDom.classList.remove('bi-heart-fill');
                 likeDom.classList.add('bi-heart');
             }
@@ -390,21 +383,21 @@ let controller = {
         await model.getTags();
         view.renderTags();
 
-        console.log('結束loading')
+
         loading.toggleLoading();
 
     },
 
     // 拿掉
     getMainList: async function () {
-        
+
         model.apiDone = false;
         loading.toggleLoading_S();
         await model.getMainListData();
         view.renderMainList();
         loading.toggleLoading_S();
         model.apiDone = true;
-       
+
     },
 
     getAsideList: async function () {
@@ -415,24 +408,21 @@ let controller = {
     getTags: async function () {
         await model.getTags();
         view.renderTags();
-        console.log('get玩tag')
     },
 
     likeEvent: async function (artId) {
         let likeResult = await model.likeEvent(artId);
-        console.log(likeResult);
-       
-        
-      
+
+
+
         if (likeResult.ok) {
             fetch(`/api/like?articleid=${artId}`)
-            .then(response => response.json())
-            .then(result => {
-                if(result.ok){
-                    view.rerenderArticleLikes(result.data)
-                }
-                console.log(result);
-            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.ok) {
+                        view.rerenderArticleLikes(result.data)
+                    }
+                })
         }
         else {
             sweetAlert.alert('error', likeResult.message);

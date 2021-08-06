@@ -1,35 +1,34 @@
 // const { text } = require("express");
-import {checkUser} from './checkUser.js';
-import {sweetAlert} from './sweetAlert.js';
-import {loading} from './loading.js';
+import { checkUser } from './checkUser.js';
+import { sweetAlert } from './sweetAlert.js';
+import { loading } from './loading.js';
 
 
 
 let cancelCurrentCommentId = document.querySelector('.cancel-currentCommentId');
 let prevCurrentCommentId = document.querySelector('.prev-currentCommentId');
-prevCurrentCommentId.addEventListener('click', function(){
+prevCurrentCommentId.addEventListener('click', function () {
     controller.prevSubComment();
 })
-cancelCurrentCommentId.addEventListener('click', function(){
+cancelCurrentCommentId.addEventListener('click', function () {
     controller.cancelSubCommentMode();
 })
 
 let threeDots = document.querySelector('.bi-three-dots');
 let authorFeatureCollapase = document.querySelector('.author-feature-collapase');
 
-threeDots.addEventListener('click', function(e){
+threeDots.addEventListener('click', function (e) {
     e.preventDefault();
-    console.log('toggle')
     authorFeatureCollapase.classList.toggle('active');
 })
 
 
-let likeIcon = document.querySelector('.likeIcon'); 
+let likeIcon = document.querySelector('.likeIcon');
 
 
 // path params articleid
 let pathParams = window.location.pathname.split("/");
-let articleId = pathParams[pathParams.length-1];
+let articleId = pathParams[pathParams.length - 1];
 // let queryString = new URLSearchParams(window.location.search)
 // let articleId = queryString.get("articleid")
 
@@ -38,29 +37,27 @@ let authorDel = document.querySelector('.author-feature-del');
 let authorEdit = document.querySelector('.author-feature-edit');
 
 
-authorDel.addEventListener('click', function(){
+authorDel.addEventListener('click', function () {
     sweetAlert.confirmAlert('warning', '確定要刪除文章嗎?').then(result => {
-        if(result.isConfirmed){
+        if (result.isConfirmed) {
             controller.delArticle();
         }
     });
-    
+
 })
 
-authorEdit.addEventListener('click', function(e){
+authorEdit.addEventListener('click', function (e) {
     e.preventDefault();
-    console.log('edit click')
-    
+
     window.location.href = `/post/edit/${articleId}`;
 })
 
 
 let sendCommentBtn = document.querySelector('.sendComment')
 
-sendCommentBtn.addEventListener('click', async function(e){
+sendCommentBtn.addEventListener('click', async function (e) {
     e.preventDefault();
     let commentContent = document.querySelector('#comment').value;
-    console.log(commentContent)
     controller.submitComment(articleId, commentContent);
 })
 
@@ -69,150 +66,141 @@ sendCommentBtn.addEventListener('click', async function(e){
 
 
 
-likeIcon.addEventListener('click', function(e){
-   controller.likeEvent();
+likeIcon.addEventListener('click', function (e) {
+    controller.likeEvent();
 })
 
 
 
 
 let model = {
-    userData:{},
-    article:{},
-    comments:[],
+    userData: {},
+    article: {},
+    comments: [],
     //新增完記得設為null
-    commentLevels:[],
+    commentLevels: [],
 
-    checkUser:async function(){
+    checkUser: async function () {
         let result = await checkUser();
-        if(result.message ==='登入中'){
+        if (result.message === '登入中') {
             model.userData = result.data;
         }
     },
 
-    getArticleData:function(){
+    getArticleData: function () {
         return fetch(`/api/article/${articleId}`)
-        .then(response =>response.json())
-        .then(result => {
-            console.log(result)
-            if(result.error){
-                window.location.href= "/articles"
-            }
-            model.article = result.data.article;
-        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.error) {
+                    window.location.href = "/articles"
+                }
+                model.article = result.data.article;
+            })
     },
-    getLevelOneComments:function(){
+    getLevelOneComments: function () {
         // fetch 第一層留言
         return fetch(`/api/comments/${articleId}`)
-        .then(response => response.json())
-        .then(result => {
-            console.log(result);
-            model.comments = result.data;
-        })
+            .then(response => response.json())
+            .then(result => {
+                model.comments = result.data;
+            })
     },
 
-    getSubComments:function(){
-        // fetch 
-        console.log(model.commentLevels)
-        return fetch(`/api/childcomments/${model.commentLevels[model.commentLevels.length-1]}`)
-        .then(response => response.json())
-        .then(result => {
-            model.comments = result.data;
-            console.log(result)
-        })
+    getSubComments: function () {
+        return fetch(`/api/childcomments/${model.commentLevels[model.commentLevels.length - 1]}`)
+            .then(response => response.json())
+            .then(result => {
+                model.comments = result.data;
+            })
     },
 
-    submitComment:function(artId, comment, parent=null){
-        console.log('送出留言' + parent);
-        console.log(model.userData)
-        if(model.userData === {}){
+    submitComment: function (artId, comment, parent = null) {
+        if (model.userData === {}) {
             sweetAlert.alert('error', '登入後才能使用留言功能~')
             // alert('登入後才能使用留言功能~');
             return;
         }
-        else if(!comment){
+        else if (!comment) {
             sweetAlert.alert('warning', '請輸入訊息~')
             return;
         }
         let requsetData = {
-            'article_id':artId,
-            'comment':comment,
-            'parent':parent,
+            'article_id': artId,
+            'comment': comment,
+            'parent': parent,
         }
-        return fetch('/api/comment',{
-            'method':'POST',
-            'body':JSON.stringify(requsetData),
-            'headers':{
-                'content-type':'application/json'
+        return fetch('/api/comment', {
+            'method': 'POST',
+            'body': JSON.stringify(requsetData),
+            'headers': {
+                'content-type': 'application/json'
             }
         })
-        .then(response => response.json())
+            .then(response => response.json())
     },
 
 
 
-    likeEvent:function(){
-        console.log()
+    likeEvent: function () {
         let requestBody = {
             // 改由後端利用session取得userid
             // 'userId':1,
-            'article_id':articleId,
+            'article_id': articleId,
         }
 
-        return fetch('/api/like',{
-            method:'POST',
+        return fetch('/api/like', {
+            method: 'POST',
             body: JSON.stringify(requestBody),
-            headers:{
-                'content-type':'application/json'
+            headers: {
+                'content-type': 'application/json'
             }
         })
-        .then(response => response.json())
-       
+            .then(response => response.json())
+
     },
 
 
-    likeCommentEvent:function(commentId){
+    likeCommentEvent: function (commentId) {
         let requestBody = {
             // 改由後端利用session取得userid
             // 'userId':1,
-            'comment_id':commentId,
+            'comment_id': commentId,
         }
 
-        return fetch('/api/commentlike',{
-            method:'POST',
+        return fetch('/api/commentlike', {
+            method: 'POST',
             body: JSON.stringify(requestBody),
-            headers:{
-                'content-type':'application/json'
+            headers: {
+                'content-type': 'application/json'
             }
         })
-        .then(response => response.json())
-       
+            .then(response => response.json())
+
     },
 
-    delArticle:function(){
-        return fetch('/api/article',{
-            'method':'DELETE',
-            'body':JSON.stringify({'article_id':articleId}),
-            'headers':{
-                'content-type':'application/json'
+    delArticle: function () {
+        return fetch('/api/article', {
+            'method': 'DELETE',
+            'body': JSON.stringify({ 'article_id': articleId }),
+            'headers': {
+                'content-type': 'application/json'
             }
         })
-        .then(response => response.json())
-        
+            .then(response => response.json())
+
     }
 
 }
 
 let view = {
 
-    renderArticle:function(){
+    renderArticle: function () {
         let article = model.article;
-        console.log(article)
-        
-        if(model.userData.user_id !== article.author.user_id){
+
+        if (model.userData.user_id !== article.author.user_id) {
             threeDots.remove();
         }
-       
+
         let authorLink = document.querySelector('.author');
         authorLink.setAttribute('href', `/member/${article.author.user_id}`);
 
@@ -222,7 +210,7 @@ let view = {
         authorName.textContent = article.author.username;
 
         let articleTags = document.querySelector('.article-tags');
-        if(!article.tags.length){
+        if (!article.tags.length) {
             articleTags.classList.add('hidden');
         }
         article.tags.forEach(tagObj => {
@@ -247,67 +235,67 @@ let view = {
         let coverPhotoImg = document.querySelector('.article-coverPhoto img');
         coverPhotoImg.setAttribute('src', article.coverPhoto);
 
-        
+
         let articleContent = document.querySelector('.article-content');
         articleContent.innerHTML = article.content;
 
         let dateArray = article.create_time.split(/[T|\.|\:]/);
         let articleTime = document.querySelector('.article-create-time');
         articleTime.textContent = `${dateArray[0]} ${parseInt(dateArray[1])}:${dateArray[2]}`
-        
-        
+
+
     },
 
-    renderArticleFeatrues:function(){
+    renderArticleFeatrues: function () {
         let heartIcon = document.querySelector('.likeIcon');
 
-        if(model.article.user_is_liked === 'yes'){
+        if (model.article.user_is_liked === 'yes') {
             heartIcon.classList.remove('bi-heart');
             heartIcon.classList.add('bi-heart-fill');
         }
-        else{
+        else {
             heartIcon.classList.remove('bi-heart-fill');
             heartIcon.classList.add('bi-heart');
         }
-        
+
         let articleLikeQty = document.querySelector('.articleLikeQty');
         articleLikeQty.textContent = model.article.likeQty;
     },
-    renderComments:function() {
-        
+    renderComments: function () {
+
         let comments = document.querySelector('.comments');
         let frag = document.createDocumentFragment();
         let commentTextArea = document.getElementById('comment');
         let replyTo = document.querySelector('.replyTo');
         replyTo.textContent = model.commentLevels.length > 0 ? `正在回覆${model.comments[0].username}...` : '';
         comments.innerHTML = "";
-        commentTextArea.value = "";          
+        commentTextArea.value = "";
         model.comments.forEach((comment, index) => {
             // li
             let commentLi = document.createElement('li');
             commentLi.classList.add('comment');
 
-            
+
             let authorImgLink = document.createElement('a');
             authorImgLink.setAttribute('href', `/member/${comment.user_id}`);
             let commentAuthorImg = document.createElement('img');
             commentAuthorImg.classList.add('comment-author-img');
-            commentAuthorImg.setAttribute('src', comment.avatar ? comment.avatar : `/public/images/default-user-icon.jpg` );
+            commentAuthorImg.setAttribute('src', comment.avatar ? comment.avatar : `/public/images/default-user-icon.jpg`);
             authorImgLink.appendChild(commentAuthorImg);
 
             let commentContent = document.createElement('div');
             commentContent.classList.add('comment-content');
             commentContent.innerHTML = `<a href="/member/${comment.user_id}">${comment.username}</a>  ${comment.comment}`;
-            
+
             let commentInfo = document.createElement('div');
             commentInfo.classList.add('comment-info');
             let time = document.createElement('p');
             let date = comment.create_time.split('T');
-            time.textContent= date[0];
-            
-            
-            
-            
+            time.textContent = date[0];
+
+
+
+
 
             let commentBtn = document.createElement('a');
             commentBtn.textContent = `回覆`;
@@ -317,30 +305,30 @@ let view = {
                 let commentId = e.target.dataset.commentid;
                 controller.subCommentMode(commentId)
             })
-            
-            if(comment.likeQty){
+
+            if (comment.likeQty) {
                 let likeQty = document.createElement('p');
-                likeQty.textContent= `${comment.likeQty} 個讚`;
+                likeQty.textContent = `${comment.likeQty} 個讚`;
                 commentInfo.appendChild(likeQty);
             }
             commentInfo.appendChild(commentBtn);
             commentInfo.appendChild(time);
             commentContent.appendChild(commentInfo);
-        
 
-        //  顯示留言底下還有幾則第一層留言,回覆留言情況下取得的第一筆資料為parent不顯示訊息
-            if(comment.commentQty>0 && (index !== 0 || model.commentLevels.length === 0)){
+
+            //  顯示留言底下還有幾則第一層留言,回覆留言情況下取得的第一筆資料為parent不顯示訊息
+            if (comment.commentQty > 0 && (index !== 0 || model.commentLevels.length === 0)) {
                 let viewSubComment = document.createElement('a');
                 let viewSubCommentIcon = document.createElement('i');
                 let viewSubCommentQty = document.createElement('span');
                 viewSubComment.classList.add('view-sub-comment');
                 viewSubCommentQty.textContent = `${comment.commentQty}則留言`;
                 viewSubCommentIcon.classList.add('fas', 'fa-level-down-alt');
-                
+
                 viewSubComment.setAttribute('data-commentid', comment.comment_id);
                 viewSubComment.addEventListener('click', function (e) {
                     e.preventDefault();
-                    
+
                     let commentId = e.currentTarget.dataset.commentid;
                     controller.subCommentMode(commentId)
                 }, false)
@@ -349,18 +337,18 @@ let view = {
                 commentContent.appendChild(viewSubComment);
 
             }
-            
+
 
             let likeIcon = document.createElement('i');
-            if(comment.user_is_liked ){
+            if (comment.user_is_liked) {
                 likeIcon.classList.add('bi', 'bi-heart-fill');
             }
-            else{
+            else {
                 likeIcon.classList.add('bi', 'bi-heart');
             }
-            
+
             likeIcon.setAttribute('data-commentid', comment.comment_id);
-            likeIcon.addEventListener('click', (e)=>{
+            likeIcon.addEventListener('click', (e) => {
                 let commentId = e.target.dataset.commentid;
                 controller.likeCommentEvent(commentId);
             })
@@ -370,10 +358,10 @@ let view = {
             commentLi.appendChild(likeIcon);
 
             // 回覆留言模式額外設定
-            if(model.commentLevels.length && index !== 0){
+            if (model.commentLevels.length && index !== 0) {
                 commentLi.classList.add('sub-comment');
             }
-            if(model.commentLevels.length && index === 0){
+            if (model.commentLevels.length && index === 0) {
                 commentBtn.textContent = '';
             }
 
@@ -382,13 +370,13 @@ let view = {
         })
         comments.appendChild(frag);
 
-       
+
     }
 }
 
 
 let controller = {
-    init:async function () { 
+    init: async function () {
         // 取得文章及第一層留言了
         // 想辦法得到指定的第二層留言
         loading.toggleLoading();
@@ -402,26 +390,25 @@ let controller = {
         view.renderComments();
 
         let commentAuthorImg = document.querySelector('.user-avatar');
-        console.log(model.userData)
-        if(model.userData){
-            commentAuthorImg.setAttribute('src', model.userData.avatar  ? model.userData.avatar : '/public/images/default-user-icon.jpg');
+        if (model.userData) {
+            commentAuthorImg.setAttribute('src', model.userData.avatar ? model.userData.avatar : '/public/images/default-user-icon.jpg');
         }
-        else{
+        else {
             commentAuthorImg.setAttribute('src', '/public/images/default-user-icon.jpg');
         }
-        
-        
+
+
         loading.toggleLoading();
     },
 
-    submitComment:async function(artId, comment) {
-        console.log('送出留言 parent = ' + model.commentLevels);
+    submitComment: async function (artId, comment) {
+
         // 回覆留言
-        if(model.commentLevels.length){
+        if (model.commentLevels.length) {
             // 第三個參數為回覆的留言ID = 資料庫中的parent
-            let result = await model.submitComment(artId, comment, model.commentLevels[model.commentLevels.length-1])
-            
-            if(result.error){
+            let result = await model.submitComment(artId, comment, model.commentLevels[model.commentLevels.length - 1])
+
+            if (result.error) {
                 sweetAlert.alert('error', result.message);
                 return;
             }
@@ -430,88 +417,80 @@ let controller = {
             view.renderComments();
         }
         // 回覆文章
-        else{
+        else {
             let result = await model.submitComment(artId, comment);
-            console.log(result)
-            if(result.error){
+            if (result.error) {
                 sweetAlert.alert('error', result.message);
                 return;
             }
             await model.getLevelOneComments();
             view.renderComments();
         }
-       
-        
+
+
     },
 
-    subCommentMode:async function(commentId) {
-      model.commentLevels.push(commentId);
-      await model.getSubComments();
-      view.renderComments();
+    subCommentMode: async function (commentId) {
+        model.commentLevels.push(commentId);
+        await model.getSubComments();
+        view.renderComments();
     },
 
-    cancelSubCommentMode: async function(){
+    cancelSubCommentMode: async function () {
         model.commentLevels = [];
-        console.log('取消回覆留言')
         await model.getLevelOneComments();
         view.renderComments();
     },
-    prevSubComment:async function(){
+    prevSubComment: async function () {
         model.commentLevels.pop();
-        if(!model.commentLevels.length){
-            await model.getLevelOneComments();   
+        if (!model.commentLevels.length) {
+            await model.getLevelOneComments();
         }
-        else{
+        else {
             await model.getSubComments();
         }
         view.renderComments();
     },
 
-    likeEvent:async function(){
-        let likeResult =await model.likeEvent();
+    likeEvent: async function () {
+        let likeResult = await model.likeEvent();
         await model.getArticleData();
-        if(likeResult.error){
+        if (likeResult.error) {
             sweetAlert.alert('error', likeResult.message);
             return;
         }
         view.renderArticleFeatrues();
     },
 
-    likeCommentEvent:async function(commentId){
+    likeCommentEvent: async function (commentId) {
         let result = await model.likeCommentEvent(commentId);
-        if(result.error){
+        if (result.error) {
             sweetAlert.alert('error', '登入後才能使用會員功能');
             return;
         }
 
-        if(!model.commentLevels.length){
-            await model.getLevelOneComments();   
+        if (!model.commentLevels.length) {
+            await model.getLevelOneComments();
         }
-        else{
+        else {
             await model.getSubComments();
         }
         view.renderComments();
-        
+
     },
 
-    delArticle:async function(){
+    delArticle: async function () {
         let result = await model.delArticle();
-        if(result.ok){
-            sweetAlert.alert('success', result.message).then(result=>{
-                if(result.isConfirmed){
-                    window.location.href="/";
+        if (result.ok) {
+            sweetAlert.alert('success', result.message).then(result => {
+                if (result.isConfirmed) {
+                    window.location.href = "/";
                 }
-            });    
+            });
         }
     }
 
-    // submitSubComment: async function(artId, comment, parent) {
-    //     let result = await model.submitComment(artId, comment, parent);
-    //     console.log(result);
-    //     view.renderComments();
-    // }
 }
 
 controller.init();
 
-// model.getCommentLikes();

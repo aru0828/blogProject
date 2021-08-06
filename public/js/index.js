@@ -1,53 +1,51 @@
 
 
-import {checkUser} from './checkUser.js';
-import {loading} from './loading.js';
+import { checkUser } from './checkUser.js';
+import { loading } from './loading.js';
 
 
 
 let model = {
-    mainData:null,
-    asideListData:null,
-    userLikes:[],
-    userData:{},
+    mainData: null,
+    asideListData: null,
+    userLikes: [],
+    userData: {},
 
-    checkUser:function(){
-        return  checkUser().then(result => {
-            if(result.data){
+    checkUser: function () {
+        return checkUser().then(result => {
+            if (result.data) {
                 model.isLogined = true;
                 model.userData = result.data;
             }
         });
     },
-    getMainData:function(keyword = null){
+    getMainData: function (keyword = null) {
         return fetch('/api/index')
-        .then(response => response.json())
-        .then(result => {
-            console.log(result);
-            model.mainData = result.data;
-        })
+            .then(response => response.json())
+            .then(result => {
+                model.mainData = result.data;
+            })
     },
 
 
-    getAsideData:function(){
+    getAsideData: function () {
         return fetch('/api/randompost')
-        .then(response => response.json())
-        .then(result => {
-            model.asideListData = result;
-        })
+            .then(response => response.json())
+            .then(result => {
+                model.asideListData = result;
+            })
     },
 
-    
-    
+
+
 }
 
 
 let view = {
-    
-    renderMain:function(dataSource){
+
+    renderMain: function (dataSource) {
         let indexSectionArticles = document.querySelector('.index-section-articles');
         let articleList = document.querySelector(`.${dataSource}-article-list`);
-        console.log(dataSource);
 
         model.mainData[`${dataSource}Articles`].forEach(article => {
             let li = document.createElement('li');
@@ -83,7 +81,7 @@ let view = {
 
     },
 
-    renderAsideList: function(){
+    renderAsideList: function () {
 
         model.asideListData.forEach(newPost => {
             let link = document.createElement('a');
@@ -95,7 +93,7 @@ let view = {
             let span = document.createElement('span');
             let imgContainer = document.createElement('div');
             imgContainer.classList.add('aside-coverPhoto');
-            
+
             img.setAttribute('src', newPost.coverPhoto);
             imgContainer.appendChild(img);
             h3.classList.add('newPost-title');
@@ -114,7 +112,7 @@ let view = {
             link.classList.add('aside-article-link');
             li.appendChild(link);
             let asideList = document.querySelector('.aside-list');
-           
+
             asideList.appendChild(li);
         })
     }
@@ -123,25 +121,25 @@ let view = {
 
 
 let controller = {
-    init:async function(){
-    
-        
-       
+    init: async function () {
+
+
+
         loading.toggleLoading()
-    
+
         await model.checkUser();
         await model.getMainData();
         await model.getAsideData();
-        
+
         view.renderMain('newest');
         view.renderMain('popular');
         view.renderMain('discussion');
         view.renderAsideList();
-        
-        
-       
+
+
+
         loading.toggleLoading()
-        
+
     },
 }
 
